@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/head.css' %}">
+    <link rel="stylesheet" href="{% static 'css/commons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'frame/font-awesome-4.7.0/css/font-awesome.css' %}">
+
+</head>
+<body>
+    <div class="header" id="head">
+        <div class="top_bar">
+            <div class="container clear_fix">
+                欢迎访问向勇的博客
+                <ul>
+                    <li>
+                        <a href="#">关于博客</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="loading"></div>
+        </div>
+        <div class="container clear_fix">
+            <div class="logo">
+              <img src="{% static 'images/logo.JPG' %}" height="150" width="150" style="border-radius:50px;"/>
+            </div>
+            <div class="nav">
+                <ul class="nav_list clear_fix">
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#">生活笔记</a></li>
+                    <li><a href="#">技术杂谈</a></li>
+                    <li><a href="#">福利专区</a></li>
+                    <li><a href="#">关于自己</a></li>
+                    <li><a href="#">给我留言</a></li>
+                    <li><a href="#">赞助作者</a></li>
+                    <li><a href="#">技术交流</a></li>
+                    <li><a href="{% url 'blog:login' %}">登录</a></li>
+                </ul>
+            </div>
+            <div style="clear: both"></div>
+            <div class="search">
+                <form>
+                    <input class="search_input" placeholder="Search" type="text"/>
+                    <button class="btn_search"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="banner">
+        <div class="container">
+            <div class="banner_1">
+                <h2>Marcus Blogs</h2>
+            </div>
+             <div class="banner_2">
+                原创独立个人博客网站
+            </div>
+            <div class="banner_3">
+                <h3>有些事情</h3>
+                <p>想着想着就错过了</p>
+                    <p>做着做着就成功了</p>
+            </div>
+            <div class="banner_4">
+                <h1>战术上勤奋掩盖不了战略上的懒惰</h1>
+            </div>
+
+        </div>
+    </div>
+    <div class="container clear_fix">
+        <div class="side_bar">
+            <div class="talking">
+               <div class="title">
+                   <h2>交流分享</h2>
+                   <h4>
+想一起交流学习经验吗？来进击的Coder瞧瞧吧</h4>
+               </div>
+               <div class="img">
+                   <img src="http://qiniu.cuiqingcai.com/wp-content/uploads/2016/12/QQqun.png" style="width:250px">
+               </div>
+               <div class="note">
+                   <p>学习？交流？分享？吐槽？</p>
+               </div>
+           </div>
+            <div class="hot_tag">
+                <div class="title">
+                     <h2>热门标签</h2>
+                </div>
+                <div class="tag_list">
+                    <ul class="b-all-tname clear_fix">
+                                                                                                                <li class="b-tname">
+                            <a class="tstyle-1" href="https://baijunyao.com/tag/20">Linux (7)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-2" href="https://baijunyao.com/tag/21">Centos (3)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-3" href="https://baijunyao.com/tag/22">Apache (5)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-4" href="https://baijunyao.com/tag/23">虚拟主机 (5)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-1" href="https://baijunyao.com/tag/24">wamp (3)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-2" href="https://baijunyao.com/tag/25">励志 (2)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-3" href="https://baijunyao.com/tag/26">html (13)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-4" href="https://baijunyao.com/tag/27">函数 (12)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-1" href="https://baijunyao.com/tag/28">jQuery (3)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-2" href="https://baijunyao.com/tag/29">css (6)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-3" href="https://baijunyao.com/tag/30">ueditor (2)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-4" href="https://baijunyao.com/tag/31">thinkphp (43)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-1" href="https://baijunyao.com/tag/32">MySQL (6)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-2" href="https://baijunyao.com/tag/33">php类 (3)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-3" href="https://baijunyao.com/tag/34">JavaScript (7)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-4" href="https://baijunyao.com/tag/35">读书 (2)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-1" href="https://baijunyao.com/tag/37">js插件 (2)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-2" href="https://baijunyao.com/tag/38">软件 (6)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-3" href="https://baijunyao.com/tag/39">php基础 (13)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-4" href="https://baijunyao.com/tag/40">echart (1)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-1" href="https://baijunyao.com/tag/41">mac (2)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-2" href="https://baijunyao.com/tag/42">laravel (31)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-3" href="https://baijunyao.com/tag/43">观影有感 (1)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-4" href="https://baijunyao.com/tag/44">vue.js (4)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-1" href="https://baijunyao.com/tag/45">node.js (6)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-2" href="https://baijunyao.com/tag/46">git (4)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-3" href="https://baijunyao.com/tag/47">composer (3)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-4" href="https://baijunyao.com/tag/48">phpstudy (1)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-1" href="https://baijunyao.com/tag/49">微信小程序 (1)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-2" href="https://baijunyao.com/tag/50">DNS (1)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-3" href="https://baijunyao.com/tag/51">word (1)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-4" href="https://baijunyao.com/tag/52">pdf (1)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-1" href="https://baijunyao.com/tag/53">模板 (1)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-2" href="https://baijunyao.com/tag/54">旅游 (1)</a>
+                        </li>
+                                                                                            <li class="b-tname">
+                            <a class="tstyle-3" href="https://baijunyao.com/tag/55">Elasticseach (2)</a>
+                        </li>
+                                    </ul>
+                </div>
+            </div>
+            <div class="recommend">
+                <div class="title"><h2>置顶推荐</h2></div>
+                <div class="recommend_list">
+                <ul>
+                    <Li>
+                         <i class="fa fa-thumbs-up"></i>
+                        <a href="#"> 最适合入门的laravel初级教程(一)序言1111111</a>
+                    </Li>
+                    <Li>
+                         <i class="fa fa-thumbs-up"></i>
+                        <a href="#"> 最适合入门的laravel初级教程(一)序言</a>
+                    </Li>
+                    <Li>
+                         <i class="fa fa-thumbs-up"></i>
+                        <a href="#"> 最适合入门的laravel初级教程(一)序言</a>
+                    </Li>
+                    <Li>
+                         <i class="fa fa-thumbs-up"></i>
+                        <a href="#"> 最适合入门的laravel初级教程(一)序言</a>
+                    </Li>
+                    <Li>
+                         <i class="fa fa-thumbs-up"></i>
+                        <a href="#"> 最适合入门的laravel初级教程(一)序言</a>
+                    </Li>
+                </ul>
+            </div>
+            </div>
+            <div class="new_comment">
+                <div class="title">
+                    <h2>最新评论</h2>
+                </div>
+                <div class="new_comment_list">
+                    <ul class="clear_fix">
+                        <li>
+                            <img src="https://baijunyao.com/uploads/avatar/2779.jpg" width="50" height="50">
+                        </li>
+                        <li class="nick_name">
+                            别说话吻我
+                            <span>1天前</span>
+                        </li>
+                        <li class="article_title">
+                            在
+                            <a href="#">laravel下TNTSearch+ji...</a>
+                            评论
+                        </li>
+                        <li class="content">
+                            你好   我想知道你的评论，是怎么过滤JavaScript代码发布显示的，我的网...
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="friend_href">
+                <div class="title">
+                    <h2>友情链接</h2>
+                </div>
+                <div class="friend_href_list">
+                    <ul>
+                        <li>
+                            <a class="b-link-a" href="http://laravelacademy.org" target="_blank"><span class="fa fa-link b-black"></span> Laravel学院</a>
+                        </li>
+                        <li>
+                            <a class="b-link-a" href="http://www.awaimai.com" target="_blank"><span class="fa fa-link b-black"></span> 歪麦博客</a>
+                        </li>
+                        <li>
+                            <a class="b-link-a" href="http://wujunze.com" target="_blank"><span class="fa fa-link b-black"></span> 吴钧泽博客</a>
+                        </li>
+                        <li>
+                            <a class="b-link-a" href="http://loveteemo.com/" target="_blank"><span class="fa fa-link b-black"></span> 青春博客</a>
+                        </li>
+                        <li>
+                            <a class="b-link-a" href="http://zqiqi.cn/" target="_blank"><span class="fa fa-link b-black"></span> 七七</a>
+                        </li>
+                        <li>
+                            <a class="b-link-a" href="http://www.payhearts.com" target="_blank"><span class="fa fa-link b-black"></span> 麦剑雄的个人博客</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="content_wrap">
+            <div class="content">
+                <div class="article clear_fix">
+                    <div class="title">
+                        <a class="label" href="#">Python</a>
+                        <i class="label_arrow"></i>
+                        <h2>
+                            <a href="#" target="_blank" title="Python中logging模块的基本用法">
+                                Python中logging模块的基本用法
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="img">
+                        <a target="_blank" href="#">
+                            <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://mmbiz.qpic.cn/mmbiz_png/riafuBXuN2hohUpic3yAULNt3jVsLEibedvUkDMKRaa7nuiaPL1aHUWLkENxwBPeQ9Wqy2cuMm9kHt64D2ZfBkzTvg/640?wx_fmt=png&h=123&w=200&q=90&zc=1&ct=1"
+                            alt="Python中logging模块的基本用法">
+                        </a>
+                    </div>
+                    <div class="note">
+                        <span>
+                               嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+
+
+                        </span>
+
+                    </div>
+                    <div class="auto">
+                        <span>
+                           <i class="fa fa-user"></i>
+                            <a href="#">向勇</a>
+                        </span>
+                        <span>
+                            <i class="fa fa-clock-o"></i>
+                             3小时前
+                        </span>
+                        <span>
+                            <i class="fa fa-eye"></i>
+                             11人浏览
+                        </span>
+                        <span>
+                            <i class="fa fa-comments-o"></i>
+                             <a href="#">10000评论</a>
+                        </span>
+                        <span class="like">
+                            <i class="fa fa-heart-o"></i>
+                           <a href="#">0喜欢</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_wrap">
+            <div class="content">
+                <div class="article clear_fix">
+                    <div class="title">
+                        <a class="label" href="#">Python</a>
+                        <i class="label_arrow"></i>
+                        <h2>
+                            <a href="#" target="_blank" title="Python中logging模块的基本用法">
+                                Python中logging模块的基本用法
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="img">
+                        <a target="_blank" href="#">
+                            <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://mmbiz.qpic.cn/mmbiz_png/riafuBXuN2hohUpic3yAULNt3jVsLEibedvUkDMKRaa7nuiaPL1aHUWLkENxwBPeQ9Wqy2cuMm9kHt64D2ZfBkzTvg/640?wx_fmt=png&h=123&w=200&q=90&zc=1&ct=1"
+                            alt="Python中logging模块的基本用法">
+                        </a>
+                    </div>
+                    <div class="note">
+                        <span>
+                               嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+
+
+                        </span>
+
+                    </div>
+                    <div class="auto">
+                        <span>
+                           <i class="fa fa-user"></i>
+                            <a href="#">向勇</a>
+                        </span>
+                        <span>
+                            <i class="fa fa-clock-o"></i>
+                             3小时前
+                        </span>
+                        <span>
+                            <i class="fa fa-eye"></i>
+                             11人浏览
+                        </span>
+                        <span>
+                            <i class="fa fa-comments-o"></i>
+                             <a href="#">10000评论</a>
+                        </span>
+                        <span class="like">
+                            <i class="fa fa-heart-o"></i>
+                           <a href="#">0喜欢</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_wrap">
+            <div class="content">
+                <div class="article clear_fix">
+                    <div class="title">
+                        <a class="label" href="#">Python</a>
+                        <i class="label_arrow"></i>
+                        <h2>
+                            <a href="#" target="_blank" title="Python中logging模块的基本用法">
+                                Python中logging模块的基本用法
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="img">
+                        <a target="_blank" href="#">
+                            <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://mmbiz.qpic.cn/mmbiz_png/riafuBXuN2hohUpic3yAULNt3jVsLEibedvUkDMKRaa7nuiaPL1aHUWLkENxwBPeQ9Wqy2cuMm9kHt64D2ZfBkzTvg/640?wx_fmt=png&h=123&w=200&q=90&zc=1&ct=1"
+                            alt="Python中logging模块的基本用法">
+                        </a>
+                    </div>
+                    <div class="note">
+                        <span>
+                               嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+
+
+                        </span>
+
+                    </div>
+                    <div class="auto">
+                        <span>
+                           <i class="fa fa-user"></i>
+                            <a href="#">向勇</a>
+                        </span>
+                        <span>
+                            <i class="fa fa-clock-o"></i>
+                             3小时前
+                        </span>
+                        <span>
+                            <i class="fa fa-eye"></i>
+                             11人浏览
+                        </span>
+                        <span>
+                            <i class="fa fa-comments-o"></i>
+                             <a href="#">10000评论</a>
+                        </span>
+                        <span class="like">
+                            <i class="fa fa-heart-o"></i>
+                           <a href="#">0喜欢</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_wrap">
+            <div class="content">
+                <div class="article clear_fix">
+                    <div class="title">
+                        <a class="label" href="#">Python</a>
+                        <i class="label_arrow"></i>
+                        <h2>
+                            <a href="#" target="_blank" title="Python中logging模块的基本用法">
+                                Python中logging模块的基本用法
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="img">
+                        <a target="_blank" href="#">
+                            <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://mmbiz.qpic.cn/mmbiz_png/riafuBXuN2hohUpic3yAULNt3jVsLEibedvUkDMKRaa7nuiaPL1aHUWLkENxwBPeQ9Wqy2cuMm9kHt64D2ZfBkzTvg/640?wx_fmt=png&h=123&w=200&q=90&zc=1&ct=1"
+                            alt="Python中logging模块的基本用法">
+                        </a>
+                    </div>
+                    <div class="note">
+                        <span>
+                               嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+
+
+                        </span>
+
+                    </div>
+                    <div class="auto">
+                        <span>
+                           <i class="fa fa-user"></i>
+                            <a href="#">向勇</a>
+                        </span>
+                        <span>
+                            <i class="fa fa-clock-o"></i>
+                             3小时前
+                        </span>
+                        <span>
+                            <i class="fa fa-eye"></i>
+                             11人浏览
+                        </span>
+                        <span>
+                            <i class="fa fa-comments-o"></i>
+                             <a href="#">10000评论</a>
+                        </span>
+                        <span class="like">
+                            <i class="fa fa-heart-o"></i>
+                           <a href="#">0喜欢</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_wrap">
+            <div class="content">
+                <div class="article clear_fix">
+                    <div class="title">
+                        <a class="label" href="#">Python</a>
+                        <i class="label_arrow"></i>
+                        <h2>
+                            <a href="#" target="_blank" title="Python中logging模块的基本用法">
+                                Python中logging模块的基本用法
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="img">
+                        <a target="_blank" href="#">
+                            <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://mmbiz.qpic.cn/mmbiz_png/riafuBXuN2hohUpic3yAULNt3jVsLEibedvUkDMKRaa7nuiaPL1aHUWLkENxwBPeQ9Wqy2cuMm9kHt64D2ZfBkzTvg/640?wx_fmt=png&h=123&w=200&q=90&zc=1&ct=1"
+                            alt="Python中logging模块的基本用法">
+                        </a>
+                    </div>
+                    <div class="note">
+                        <span>
+                               嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+
+
+                        </span>
+
+                    </div>
+                    <div class="auto">
+                        <span>
+                           <i class="fa fa-user"></i>
+                            <a href="#">向勇</a>
+                        </span>
+                        <span>
+                            <i class="fa fa-clock-o"></i>
+                             3小时前
+                        </span>
+                        <span>
+                            <i class="fa fa-eye"></i>
+                             11人浏览
+                        </span>
+                        <span>
+                            <i class="fa fa-comments-o"></i>
+                             <a href="#">10000评论</a>
+                        </span>
+                        <span class="like">
+                            <i class="fa fa-heart-o"></i>
+                           <a href="#">0喜欢</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_wrap">
+            <div class="content">
+                <div class="article clear_fix">
+                    <div class="title">
+                        <a class="label" href="#">Python</a>
+                        <i class="label_arrow"></i>
+                        <h2>
+                            <a href="#" target="_blank" title="Python中logging模块的基本用法">
+                                Python中logging模块的基本用法
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="img">
+                        <a target="_blank" href="#">
+                            <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://mmbiz.qpic.cn/mmbiz_png/riafuBXuN2hohUpic3yAULNt3jVsLEibedvUkDMKRaa7nuiaPL1aHUWLkENxwBPeQ9Wqy2cuMm9kHt64D2ZfBkzTvg/640?wx_fmt=png&h=123&w=200&q=90&zc=1&ct=1"
+                            alt="Python中logging模块的基本用法">
+                        </a>
+                    </div>
+                    <div class="note">
+                        <span>
+                               嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
+
+书籍介绍
+本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
+
+
+
+                        </span>
+
+                    </div>
+                    <div class="auto">
+                        <span>
+                           <i class="fa fa-user"></i>
+                            <a href="#">向勇</a>
+                        </span>
+                        <span>
+                            <i class="fa fa-clock-o"></i>
+                             3小时前
+                        </span>
+                        <span>
+                            <i class="fa fa-eye"></i>
+                             11人浏览
+                        </span>
+                        <span>
+                            <i class="fa fa-comments-o"></i>
+                             <a href="#">10000评论</a>
+                        </span>
+                        <span class="like">
+                            <i class="fa fa-heart-o"></i>
+                           <a href="#">0喜欢</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
+
+

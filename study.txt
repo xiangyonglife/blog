@@ -1,0 +1,50 @@
+Url配置：
+    缺省路径默认访问首页：path('', views.index),
+Setting全局配置：
+    静态文件配置：
+        1.一级目录：STATIC_URL = '/目录名称/'
+        2.多级目录
+             STATICFILES_DIRS = (
+                os.path.join(BASE_DIR, "目录名称"),
+             )
+
+
+数据操作：
+    一对一 ，一对多，多对多
+    外键：典型的一对多 外键写在多的一方，依赖方
+
+
+
+
+css:
+
+postion定位
+    absolute ：脱离文档流，容器（父）元素将得不到脱离普通流的子元素高度
+    TRBL 上右下左
+        没有设置了TRBL
+        则默认浮动，跟着直接父元素走
+
+        设置了TRBL
+        相对最近的设定了position:relative/absolute的父（祖先）节点的padding-box的区进行定位（忽略文字）
+        找不到符合条件的父（祖先）节点，则相对浏览器窗口左上角为原始点
+
+
+
+
+
+
+
+
+Others:
+
+富文档编辑器类型
+    MarkDown编辑器
+    HTML编辑器
+    TextBox
+    CuteEditor
+    TinyMCE
+    富文本编辑器
+    Ueditor  百度编辑器
+    KindEditor
+
+     Mou 在 Mac OS X 上免费且十分好用的 Markdown 编辑器，支持实时预览，既左边是你编辑 Markdown 语言，右边会实时的生成预览效果

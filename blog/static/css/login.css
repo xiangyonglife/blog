@@ -1,0 +1,99 @@
+div.logo{
+    margin-left: 50px;
+    position: absolute;
+    top: 56px;
+    left: 50px;
+}
+
+.active{
+    font-weight: 700;
+    color: #ea6f5a;
+    border-bottom: 2px solid #ea6f5a;
+}
+
+.title .normal-title a{
+    padding: 10px;
+    cursor: pointer;
+    display: inline-block;
+}
+.login{
+    width: 400px;
+    min-height: 750px;
+    font-size: 14px;
+    margin:0px auto;
+    text-align:  center;
+    height: 100%;
+
+}
+.login .main{
+    width: 400px;
+    margin: 60px auto 0;
+    padding: 50px 50px 30px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(0,0,0,.1);
+}
+.login .main .title{
+    margin: 0 auto 50px;
+    padding: 10px;
+    font-weight: 400;
+    color: #969696;
+    font-size:18px;
+}
+
+.login_container form div input{
+   padding: 4px 12px 4px 35px;
+   border: 1px solid #c8c8c8;
+   background-color: hsla(0,0%,71%,.1);
+   height: 50px;
+   width: 80%;
+   border-radius: 4px 4px 0 0;
+   padding: 4px 12px 4px 35px;
+   margin-bottom: 0;
+   vertical-align: middle;
+}
+.login_container .btn{
+    background: #3194d0;
+    margin-top: 20px;
+    padding: 9px 18px;
+    font-size: 18px;
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    cursor: pointer;
+    width: 90%;
+}
+
+.login_container .btn:hover{
+    background-color: #00a7ea;
+    outline: 0;
+}
+
+.login #sing-in-loading{
+    width: 20%;
+    height: 20px;
+    margin-top: -4px;
+    vertical-align: middle;
+    margin-right: 2px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.login #sing-in-loading:before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border-radius: 10px;
+    border: 2px solid #fff;
+    border-bottom-color: transparent;
+    vertical-align: middle;
+    animation: rolling .8s infinite linear;
+    z-index: 1;
+}
+
+
+

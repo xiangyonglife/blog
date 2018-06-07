@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load staticfiles %}
+     <link rel="stylesheet" href="{% static 'css/commons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'frame/font-awesome-4.7.0/css/font-awesome.css' %}">
+</head>
+<body >
+     <div class="login">
+        <div class="logo">
+            <img src="{% static 'images/logo.JPG' %}" height="150" width="150" style="border-radius:50px;"/>
+        </div>
+        <div class="main">
+            <h4 class="title">
+                <div class="normal-title">
+                    <a class="active" href="/sign_in">登录</a>
+                    <b>·</b>
+                    <a id="js-sign-up-btn"  href="/sign_up">注册</a>
+                </div>
+            </h4>
+
+            <div class="login_container">
+                <form action="{%url 'blog:loginIn'%}" method="post">
+                    <div style="position: relative">
+                        <i style="position: absolute;top: 20px;font-size: 25px;left: 20px" class="fa fa-user-o"></i>
+                        <input type="text" placeholder="手机号或邮箱" style="border-bottom: none"/>
+                    </div>
+                    <div style="position: relative">
+                        <i style="position: absolute;top: 20px;font-size: 25px;left: 20px" class="fa fa-lock"></i>
+                        <input type="text" placeholder="密码"/>
+                    </div>
+                    <button class="btn" type="submit">
+                        <span id="sing-in-loading"></span>
+                        登录
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

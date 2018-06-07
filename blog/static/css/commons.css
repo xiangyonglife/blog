@@ -1,0 +1,35 @@
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    word-wrap:break-word
+}
+
+body { background-color: #f2f2f2;!important; font: 14px Tahoma, 'Microsoft Yahei', 'Simsun'; color: #666; }
+
+ul,ol,dl{
+    list-style-type: none
+}
+.container{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+a{
+    color: #666;
+    text-decoration: none;
+}
+a:hover{
+    color: #00A7EA;
+    transition: all ease .5s;
+}
+
+.clear_fix:after{
+     content:".";
+     display:block;
+     height:0;
+     clear:both;
+     visibility:hidden;
+
+}
+
+.clear_fix{zoom:1}
