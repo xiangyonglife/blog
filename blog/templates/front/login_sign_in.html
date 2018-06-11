@@ -1,14 +1,14 @@
 {% extends 'login_index.html' %}
 
 {% block template %}
-    <form>
+    <form id="submit">
         <div class="input-sign">
-            <input type="text" placeholder="手机号或邮箱"/>
+            <input name="user-name" type="text" placeholder="手机号或邮箱"/>
             <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="fa fa-user-o"></i>
         </div>
         <div class="input-sign">
-            <input type="password" placeholder="密码">
-             <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="fa fa-lock"></i>
+            <input name="user-pwd" type="password" placeholder="密码">
+            <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="fa fa-lock"></i>
         </div>
         <div class="remember-btn">
             <input type="checkbox" value="true" checked="checked" name="session[remember_me]"
@@ -21,6 +21,9 @@
             <span id="sign-in-loading"></span>
             登录
         </button>
+        <div class="tooltip" style="display: none">
+            <span></span>
+        </div>
     </form>
 {% endblock %}
 
@@ -29,6 +32,44 @@
     <script>
         $('#sign-in-btn').addClass('active')
         $('#sign-up-btn').removeClass('active')
+        $(function () {
+            $('#sign-in-form-submit-btn').click(function () {
+                if ($('.input-sign:first-child input').val().trim() == "") {
+                    $('form .tooltip span').text('手机号/邮箱不存在,请先注册')
+                    $('form .tooltip').slideDown('slow', function () {
+                        $(this).hide()
+                    })
+                } else if ($('.input-sign:eq(1) input').val().trim() == "") {
+                    $('form .tooltip span').text('密码不存在,请先注册')
+                    $('form .tooltip').slideDown('slow', function () {
+                        $(this).hide()
+                    })
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'blog:login' %}",
+                        data: $('#submit').serialize(),
+                        dataType: "JSON",
+                        complete: function (data) {
+                            if (data.responseJSON.code == 1) {
+                                $('form .tooltip span').text(data.responseJSON.msg)
+                                $('form .tooltip').slideDown('slow', function () {
+                                    $(this).hide()
+                                })
+                            }
+                            if (data.responseJSON.code == 0) {
+                                window.location.href='http://127.0.0.1:8000/'
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data)
+                        }
+                    });
+                }
+
+            })
+
+        })
     </script>
 {% endblock %}
 
@@ -36,10 +77,11 @@
 
 {% block style %}
     <style>
-    .login .input-sign{
-        position: relative;
+        .login .input-sign {
+            position: relative;
 
-    }
+        }
+
         .login .input-sign input {
             width: 80%;
             height: 50px;
@@ -63,7 +105,8 @@
             margin: 15px 0;
             font-size: 14px;
         }
-        .login .sign-in-button{
+
+        .login .sign-in-button {
             background: #3194d0;
             margin-top: 20px;
             width: 100%;
@@ -71,11 +114,21 @@
             font-size: 18px;
             border: none;
             border-radius: 25px;
-                color: #fff;
+            color: #fff;
             cursor: pointer;
             outline: none;
             display: block;
             clear: both;
+        }
+
+        .login form .tooltip {
+            padding: 10px;
+            border: 1px solid red;
+            position: fixed;
+            top: 0;
+            margin-left: 100px;
+            color: red;
+            background-color: #fff;
         }
     </style>
 {% endblock %}
