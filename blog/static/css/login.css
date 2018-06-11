@@ -17,17 +17,17 @@ div.logo{
     display: inline-block;
 }
 .login{
-    width: 400px;
+    width: 900px;
+    margin: 0 auto;
     min-height: 750px;
     font-size: 14px;
-    margin:0px auto;
-    text-align:  center;
     height: 100%;
+
 
 }
 .login .main{
-    width: 400px;
     margin: 60px auto 0;
+    width: 900px;
     padding: 50px 50px 30px;
     background-color: #fff;
     border-radius: 4px;
@@ -46,7 +46,7 @@ div.logo{
    border: 1px solid #c8c8c8;
    background-color: hsla(0,0%,71%,.1);
    height: 50px;
-   width: 80%;
+   width: 40%;
    border-radius: 4px 4px 0 0;
    padding: 4px 12px 4px 35px;
    margin-bottom: 0;
@@ -61,7 +61,7 @@ div.logo{
     border-radius: 25px;
     color: #fff;
     cursor: pointer;
-    width: 90%;
+    width: 50%;
 }
 
 .login_container .btn:hover{
@@ -94,6 +94,11 @@ div.logo{
     animation: rolling .8s infinite linear;
     z-index: 1;
 }
+.sign-up-msg{
+    margin-top: 10px;
+}
+
+
 
 
 

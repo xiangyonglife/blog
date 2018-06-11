@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
+    <link rel="stylesheet" href="{% static 'frame/font-awesome-4.7.0/css/font-awesome.css' %}">
+    <style>
+        a {
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        body {
+            font-family: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;;
+        }
+
+        .clear_fix:after {
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+
+        }
+
+        .clear_fix {
+            zoom: 1
+        }
+
+        .navbar {
+            background-color: #fff;
+            border-color: #f0f0f0;
+            height: 50px;
+        }
+
+        nav .width-limit {
+            width: 1440px;
+            margin: 0 auto;
+
+        }
+
+        nav .logo {
+            float: left;
+            margin-top: 7px;
+        }
+
+        nav .write-btn {
+            float: right;
+            width: 100px;
+            line-height: 30px;
+            margin: 8px 10px 0;
+            border-radius: 20px;
+            font-size: 15px;
+            color: #fff;
+            background-color: #ea6f5a;
+            padding: 6px 5px;
+            text-align: center;
+        }
+
+        nav .sign-up {
+            float: right;
+            width: 80px;
+            height: 38px;
+            line-height: 34px;
+            margin: 9px 5px 0 15px;
+            border: 1px solid rgba(236, 97, 73, .7);
+            border-radius: 20px;
+            font-size: 15px;
+            color: #ea6f5a;
+            background-color: transparent;
+            text-indent: 15px;
+
+        }
+
+        nav .log-in {
+            float: right;
+            margin: 11px 6px 0 10px;
+            font-size: 15px;
+            border: 1px solid transparent;
+            padding: 6px 12px;
+            color: #969696;
+
+        }
+
+        nav .navbar-nav {
+            float: left;
+            list-style: none;
+        }
+
+        nav .navbar-nav li {
+            float: left;
+            padding-left: 50px;
+            font-size: 25px;
+        }
+
+        nav .container {
+            padding: 0 15px;
+            width: 930px;
+            margin: 0 auto;
+            margin-top: -80px;
+
+        }
+
+        nav .navbar-nav .search {
+            padding-left: 15px;
+            position: relative;
+            margin-left: 50px;
+            margin-top: -5px;
+        }
+
+        nav .navbar-nav .search input {
+            padding: 0 50px 0 20px;
+            height: 38px;
+            font-size: 14px;
+            border: 1px solid #eee;
+            border-radius: 40px;
+            background: #eee;
+            outline: 0;
+
+        }
+
+        div .top-category ul li {
+            float: left;
+            padding: 10px;
+        }
+    </style>
+    <style>
+        .footer {
+            text-align: center;
+            background-color: #303030;
+            color: #cacaca;
+            font-size: 16px;
+            border-top: solid 3px #41abf7;
+            padding: 10px 0;
+            display: block;
+
+        }
+
+        .footer > div {
+            margin: 16px 0;
+        }
+
+        .footer > .first-row > a {
+            margin: 0 5px;
+        }
+
+        .footer a {
+            color: #cacaca;
+            text-decoration: none;
+        }
+    </style>
+
+    {% block style %}{% endblock %}
+
+</head>
+<body>
+<nav class="navbar">
+    <div class="width-limit clear_fix">
+        <!-- 左上方 Logo -->
+        <a class="logo">
+            <img src="{% static 'images/logo.JPG' %}" width="76" height="56">
+        </a>
+        <!-- 未登录显示登录/注册/写文章 -->
+        <a class="btn write-btn" target="_blank" href="{% url 'blog:write' %}">
+            <i class="iconfont icon-combinedshapecopy2"></i>写文章
+        </a>
+        <a class="btn sign-up" href="{% url 'blog:up' %}">注册</a>
+        <a class="btn log-in" href="{% url 'blog:in' %}">登录</a>
+        <div class="clear_fix"></div>
+        <div class="container clear_fix">
+            <ul class="navbar-nav clear_fix">
+                <a>
+                    <li style="color:#ea6f5a">
+                        <i class="iconfont icon-shouye" style="font-size: 25px"></i>
+                        首页
+                    </li>
+                </a>
+                <a>
+                    <li>
+                        <i class="iconfont icon-jiaochengqianniu" style="font-size: 25px"></i>
+                        教程
+                    </li>
+                </a>
+                <a>
+                    <li>
+                        <i class="iconfont icon-fuliquan" style="font-size: 25px"></i>
+                        福利
+                    </li>
+                </a>
+                <li class="search">
+                    <form>
+                        <i class="iconfont icon-sousuo"
+                           style="font-size: 25px;position: absolute;top: 5px;right: 17px"></i>
+                        <input type="text" placeholder="搜索"/>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container" style="width:1200px;margin: 0 auto">
+    <div class="content_wrap" style="margin-top: 20px">
+        <div class="content">
+            <div class="top-category">
+                <ul class="clear_fix">
+                    <li><a>web前端</a></li>
+                    <li><a>linux</a></li>
+                    <li><a>数据库</a></li>
+                    <li><a>python</a></li>
+                    <li><a>IT深科技</a></li>
+                    <li><a>IT那些事</a></li>
+                    <li><a>IDE使用</a></li>
+                    <li><a>在线工具</a></li>
+                    <li><a>团队开发</a></li>
+                    <li><a>生活随笔</a></li>
+                </ul>
+            </div>
+            {% block template %}{% endblock %}
+        </div>
+    </div>
+</div>
+<div class="clear_fix"></div>
+<footer class="footer">
+    <div class="first-row">
+        <a href="http://haoji.me/">首页</a>
+        <a href="//about.haoji.me">关于本站</a>
+        <a href="http://haoji.me/link.html">友情链接</a>
+        <a href="http://haoji.me/msgboard.html">留言</a>
+
+        <a href="http://www.cnblogs.com/liuxianan/">博客园</a>
+        <a href="https://github.com/sxei/">github</a>
+        <a href="//demo.haoji.me">demo</a>
+        <a href="http://haoji.me/sitemap.xml">sitemap</a>
+
+        <script src="//s19.cnzz.com/z_stat.php?id=1270741665"></script>
+        <script src="http://c.cnzz.com/core.php?web_id=1270741665&amp;t=z" charset="utf-8"
+                type="text/javascript"></script>
+        <a href="http://www.cnzz.com/stat/website.php?web_id=1270741665" target="_blank" title="站长统计">站长统计</a>
+
+    </div>
+    <div>
+        <b>多看书，多总结，少写代码！</b>
+    </div>
+    <div>
+        <span>© 2016-2018 <a href="http://haoji.me/">haoji.me</a> All Rights Reserved</span>
+        <a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备16002604-3</a>
+    </div>
+</footer>
+
+
+</body>
+</html>

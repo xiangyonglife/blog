@@ -2,8 +2,11 @@
     margin: 0;
     padding: 0;
     border: 0;
-    word-wrap:break-word
+    word-wrap:break-word;
+
+
 }
+
 
 body { background-color: #f2f2f2;!important; font: 14px Tahoma, 'Microsoft Yahei', 'Simsun'; color: #666; }
 
@@ -33,3 +36,9 @@ a:hover{
 }
 
 .clear_fix{zoom:1}
+
+input{
+    outline: 0;
+}
+
+

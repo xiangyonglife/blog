@@ -1,0 +1,128 @@
+{% extends 'login_index.html' %}
+
+{% block template %}
+    <form>
+        <div class="input-sign-up">
+            <input class="input-pre" type="text" placeholder="你的昵称"/>
+            <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="fa fa-user-o"></i>
+        </div>
+        <div class="input-sign-up">
+            <input type="password" placeholder="手机号">
+            <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="fa fa-mobile-phone"></i>
+        </div>
+        <div class="input-sign-up">
+            <input type="password" placeholder="验证码">
+            <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="iconfont icon-zhucedengluyanzhengma"></i>
+        </div>
+        <div class="input-sign-up">
+            <input type="password" placeholder="设置密码">
+            <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="fa fa-lock"></i>
+        </div>
+        <button class="sign-up-button" id="sign-in-form-submit-btn" type="button">
+            <span id="sign-in-loading"></span>
+            注册
+        </button>
+        <div class="tooltip">
+            <div class="tooltip-inner">
+                <i class="iconfont icon-cuowu"></i>
+                <span>请输入昵称</span>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block script %}
+    <script>
+        $('#sign-in-btn').removeClass('active')
+        $('#sign-up-btn').addClass('active')
+    </script>
+{% endblock %}
+
+
+
+{% block style %}
+    <style>
+        .login .input-sign-up {
+            position: relative;
+
+        }
+        .login .input-sign-up input {
+            width: 80%;
+            height: 50px;
+            margin-bottom: 0;
+            padding: 4px 12px 4px 35px;
+            border: 1px solid #c8c8c8;
+            background-color: hsla(0, 0%, 71%, .1);
+            vertical-align: middle;
+            border-radius: 4px;
+            outline: 0;
+        }
+
+        .login .sign-up-button {
+            background: #42c02e;
+            margin-top: 20px;
+            width: 100%;
+            padding: 9px 18px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            cursor: pointer;
+            outline: none;
+            display: block;
+            clear: both;
+        }
+
+        @font-face {
+            font-family: "iconfont";
+            src: url('iconfont.eot?t=1528633624091'); /* IE9*/
+            src: url('iconfont.eot?t=1528633624091#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),
+            url('iconfont.ttf?t=1528633624091') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/ url('iconfont.svg?t=1528633624091#iconfont') format('svg'); /* iOS 4.1- */
+        }
+
+        .iconfont {
+            font-family: "iconfont" !important;
+            font-size: 16px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .icon-zhucedengluyanzhengma:before {
+            content: "\e628";
+        }
+
+        .icon-cuowu:before {
+            content: "\e7bd";
+        }
+
+        .tooltip {
+            position: absolute;
+            z-index: 1070;
+            display: block;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-style: normal;
+            font-weight: 400;
+            letter-spacing: normal;
+            color: #333;
+            border: 1px solid #ea6f5a;
+            background-color: #fff;
+            border-radius: 4px;
+            top: 10px;
+            right: 0;
+            padding: 4px;
+            margin-right: -150px;
+            padding-bottom: 3px;
+
+        }
+
+        .icon-cuowu {
+            position: static;
+            margin-right: 5px;
+            font-size: 20px;
+            color: #ea6f5a;
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}

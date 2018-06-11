@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
+    <style>
+        body {
+            font-size: 14px;
+            line-height: 1.5;
+            font-family: Georgia, Times New Roman, Times, Songti SC, serif;
+        }
+
+        .container .seting {
+            background-color: #404040;
+            color: #f2f2f2;
+            width: 17%;
+            height: 960px;
+
+        }
+
+        .container .btn {
+            padding: 30px 18px 5px;
+            text-align: center;
+        }
+
+        .container .btn a {
+            display: block;
+            font-size: 15px;
+            padding: 9px 0;
+            color: #ec7259;
+            border: 1px solid rgba(236, 114, 89, .8);
+            border-radius: 20px;
+            transition: border-color .2s ease-in;
+        }
+
+        .container .new-category {
+            padding: 0 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .container .new-category div {
+            cursor: pointer;
+            color: #f2f2f2;
+            transition: color .2s cubic-bezier(.645, .045, .355, 1);
+            margin-left: 10px;
+        }
+
+        .write-article .article-list {
+            width: 35%;
+            height: 100%;
+            border-right: 1px solid #d9d9d9;
+            background-color: #fff;
+        }
+
+        .write-article .article-list .new-article {
+            line-height: 20px;
+            font-size: 15px;
+            font-weight: 400;
+            padding: 20px 0 20px 25px;
+            cursor: pointer;
+            color: #595959;
+        }
+
+        .write-article .article-list .new-article .new-article-bottom {
+            line-height: 30px;
+            padding: 20px 0 20px 25px;
+            cursor: pointer;
+            color: #999;
+            margin-bottom: 80px;
+        }
+
+        .write-article .article-list div ul {
+            border-top: 1px solid #d9d9d9;
+        }
+
+        .write-article {
+            width: 33%;
+        }
+
+        .write-article .article-list {
+            background-color: #fff;
+            height: 960px;
+        }
+
+        .article-edit{
+            width: 48%;
+
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="seting" style="float: left;border:5px solid green">
+        <div class="btn">
+            <a>回首页</a>
+        </div>
+        <div class="new-category">
+            <div>
+                <i class="iconfont icon-xinjian"></i>
+                <span>新建文集</span>
+            </div>
+        </div>
+    </div>
+    <div class="write-article" style="float: left;border: 5px solid red">
+        <div class="article-list">
+            <div>
+                <div class="new-article">
+                    <i class="iconfont icon-xinjian"></i>
+                    <span>新建文集</span>
+                </div>
+                <ul></ul>
+                <div class="new-article-bottom">
+                    <i class="iconfont icon-xinjian"></i>
+                    <span>新建文集</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="article-edit" style="float: left ;border: 5px solid black">
+       <script id="editor" type="text/plain"></script>
+    </div>
+</div>
+<script src="{% static 'frame/ueditor-1.4.3.3/dist/utf8-php/ueditor.config.js' %}"></script>
+<script src="{% static 'frame/ueditor-1.4.3.3/dist/utf8-php/ueditor.all.js' %}"></script>
+<script src="{% static 'frame/ueditor-1.4.3.3/dist/utf8-php/lang/zh-cn/zh-cn.js' %}"></script>
+<script>
+    var ue = UE.getEditor('editor');  //实例化编辑器
+</script>
+</body>
+</html>

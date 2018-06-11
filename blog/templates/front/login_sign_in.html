@@ -1,0 +1,81 @@
+{% extends 'login_index.html' %}
+
+{% block template %}
+    <form>
+        <div class="input-sign">
+            <input type="text" placeholder="手机号或邮箱"/>
+            <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="fa fa-user-o"></i>
+        </div>
+        <div class="input-sign">
+            <input type="password" placeholder="密码">
+             <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="fa fa-lock"></i>
+        </div>
+        <div class="remember-btn">
+            <input type="checkbox" value="true" checked="checked" name="session[remember_me]"
+                   id="session_remember_me"><span>记住我</span>
+        </div>
+        <div class="forget-btn">
+            <a class="" data-toggle="dropdown" href="">登录遇到问题?</a>
+        </div>
+        <button class="sign-in-button" id="sign-in-form-submit-btn" type="button">
+            <span id="sign-in-loading"></span>
+            登录
+        </button>
+    </form>
+{% endblock %}
+
+
+{% block script %}
+    <script>
+        $('#sign-in-btn').addClass('active')
+        $('#sign-up-btn').removeClass('active')
+    </script>
+{% endblock %}
+
+
+
+{% block style %}
+    <style>
+    .login .input-sign{
+        position: relative;
+
+    }
+        .login .input-sign input {
+            width: 80%;
+            height: 50px;
+            margin-bottom: 0;
+            padding: 4px 12px 4px 35px;
+            border: 1px solid #c8c8c8;
+            background-color: hsla(0, 0%, 71%, .1);
+            vertical-align: middle;
+            border-radius: 4px;
+            outline: 0;
+        }
+
+        .login .remember-btn {
+            float: left;
+            margin: 15px 0;
+        }
+
+        .login .forget-btn {
+            float: right;
+            position: relative;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .login .sign-in-button{
+            background: #3194d0;
+            margin-top: 20px;
+            width: 100%;
+            padding: 9px 18px;
+            font-size: 18px;
+            border: none;
+            border-radius: 25px;
+                color: #fff;
+            cursor: pointer;
+            outline: none;
+            display: block;
+            clear: both;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'frame/font-awesome-4.7.0/css/font-awesome.css' %}">
+</head>
+<style>
+    body{
+        background-color: #f1f1f1;
+    }
+    .container {
+        height: 100%;
+        min-height: 750px;
+        text-align: center;
+        font-size: 14px;
+        background-color: #f1f1f1;
+    }
+
+    .container .logo {
+        position: absolute;
+        top: 56px;
+        margin-left: 50px;
+    }
+
+    .container .login {
+        width: 400px;
+        margin: 60px auto 0;
+        padding: 50px 50px 30px;
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, .1);
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .login .title {
+        margin: 0 auto 50px;
+        padding: 10px;
+        font-weight: 400;
+        color: #969696;
+    }
+    .login .title .active{
+        font-weight: 700;
+        color: #ea6f5a;
+        border-bottom: 2px solid #ea6f5a;
+    }
+    h4{
+        font-size: 18px;
+    }
+    a{
+        cursor: pointer;
+        text-decoration: none;
+        background-color: transparent;
+        padding: 10px;
+        color: #969696;
+    }
+    .login .title b{
+        padding: 10px;
+        font-weight: 700;
+    }
+</style>
+{% block style %}{% endblock %}
+<body>
+<div class="container">
+    <div class="logo">
+        <img src="{% static 'images/logo.JPG' %}" width="150" height="150">
+    </div>
+    <div class="login">
+        <h4 class="title">
+            <div class="normal-title">
+                <a id="sign-in-btn" class="active" href="{% url 'blog:in' %}">登录</a>
+                <b>&middot;</b>
+                <a id="sign-up-btn" class="" href="{% url 'blog:up' %}">注册</a>
+            </div>
+        </h4>
+        <div class="post-data">
+            {% block template %}{% endblock %}
+        </div>
+    </div>
+</div>
+<script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
+{% block script %}{% endblock %}
+</body>
+</html>
+
+
