@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = '09ggoz-jdj18h13#92bq#^8rzofu&mn%ned+81fz=g$djp31bb'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -71,11 +69,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-#数据的配置
+# 数据的配置
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -86,7 +83,6 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -106,7 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -120,9 +115,16 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
 
+# session 配置
+
+# 是否每次请求都跟新session时间
+SESSION_SAVE_EVERY_REQUEST = True
+# session_id 名称
+SESSION_COOKIE_NAME = 'SESSION_ID'
+# 关闭浏览器session过期
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

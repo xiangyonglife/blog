@@ -11,7 +11,7 @@
             <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="fa fa-lock"></i>
         </div>
         <div class="remember-btn">
-            <input type="checkbox" value="true" checked="checked" name="session[remember_me]"
+            <input type="checkbox"  checked="checked" name="remember-me"
                    id="session_remember_me"><span>记住我</span>
         </div>
         <div class="forget-btn">
@@ -33,6 +33,7 @@
         $('#sign-in-btn').addClass('active')
         $('#sign-up-btn').removeClass('active')
         $(function () {
+            //用户登录
             $('#sign-in-form-submit-btn').click(function () {
                 if ($('.input-sign:first-child input').val().trim() == "") {
                     $('form .tooltip span').text('手机号/邮箱不存在,请先注册')
@@ -68,6 +69,7 @@
                 }
 
             })
+
 
         })
     </script>

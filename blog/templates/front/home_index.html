@@ -10,6 +10,7 @@
         a {
             cursor: pointer;
             text-decoration: none;
+            color: #333;
         }
 
         li {
@@ -129,6 +130,60 @@
             float: left;
             padding: 10px;
         }
+
+        nav .user {
+            float: right;
+            height: 100%;
+            text-align: center;
+            margin-right: 20px;
+            text-indent: 16px;
+            position: relative;
+        }
+
+        nav .user .avatar {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            margin: 8px 20px 8px 20px;
+        }
+
+        nav .user .avatar img {
+            height: 50px;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+        }
+
+        nav .user .dropdown-menu {
+            left: auto;
+            border-radius: 0 0 4px 4px;
+        }
+
+        nav .dropdown-menu {
+            margin-top: 0;
+            border-color: transparent;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+            position: absolute;
+            top: 80px;
+            z-index: 1000;
+            display: none;
+            min-width: 160px;
+            padding: 5px 0;
+            list-style: none;
+            font-size: 14px;
+            text-align: left;
+            background-color: #fff;
+            background-clip: padding-box;
+        }
+
+        nav .dropdown-menu li {
+            display: list-item;
+            line-height: 50px;
+        }
+
+        nav .user .dropdown-menu li:first-child {
+            color: black;
+        }
+
     </style>
     <style>
         .footer {
@@ -170,8 +225,69 @@
         <a class="btn write-btn" target="_blank" href="{% url 'blog:write' %}">
             <i class="iconfont icon-combinedshapecopy2"></i>写文章
         </a>
-        <a class="btn sign-up" href="{% url 'blog:up' %}">注册</a>
-        <a class="btn log-in" href="{% url 'blog:in' %}">登录</a>
+        {% if user %}
+            <!-- 如果用户登录，显示下拉菜单 -->
+            <div class="clear_fix">
+                <div class="user">
+                    <div data-hover="dropdown">
+                        <a class="avatar" href="/u/d4dba3cfe3a8" style="position: relative;right: 20px"><img
+                                src="//upload.jianshu.io/users/upload_avatars/12552151/b37c7120-31c3-4b9f-90fe-72b5790a959f?imageMogr2/auto-orient/strip|imageView2/1/w/120/h/120"
+                                alt="120">
+                            <i class="iconfont icon-Down_arrow"
+                               style="font-size: 24px;color:#ea6f5a;position:absolute;top:-20px;left: 40px"></i>
+                        </a>
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="/u/d4dba3cfe3a8">
+                                <i class="iconfont icon-wodezhuye"
+                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a;"></i><span>我的主页</span>
+                            </a></li>
+                        <li>
+                            <!-- TODO bookmarks_path -->
+                            <a href="/bookmarks">
+                                <i class="iconfont icon-shoucangwenzhang"
+                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i><span>收藏的文章</span>
+                            </a></li>
+                        <li>
+                            <a href="/users/d4dba3cfe3a8/liked_notes">
+                                <i class="iconfont icon-xihuandewenzhang"
+                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i><span>喜欢的文章</span>
+                            </a></li>
+                        <li>
+                            <a href="/my/paid_notes">
+                                <i class="iconfont icon-wodezhuye"
+                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i><span>我上传的资源</span>
+                            </a></li>
+                        {#                <li>#}
+                        {#                    <a href="/wallet">#}
+                        {#                        <i class="iconfont icon-wodezhuye" style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i></i><span>我的钱包</span>#}
+                        {#                    </a></li>#}
+                        <li>
+                            <a href="/settings">
+                                <i class="iconfont icon-shezhi"
+                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i></i><span>设置</span>
+                            </a></li>
+                        <li>
+                            <a href="/faqs">
+                                <i class="iconfont icon-bangzhuyufankui"
+                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i></i><span>帮助与反馈</span>
+                            </a></li>
+                        <li>
+                            <a rel="nofollow" data-method="delete" href="{% url 'blog:out' %}">
+                                <i class="iconfont icon-tuichu"
+                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i><span>退出</span>
+                            </a></li>
+                    </ul>
+                </div>
+            </div>
+
+        {% else %}
+            <!-- 用户未登录 -->
+            <a class="btn sign-up" href="{% url 'blog:up' %}">注册</a>
+            <a class="btn log-in" href="{% url 'blog:in' %}">登录</a>
+        {% endif %}
+
         <div class="clear_fix"></div>
         <div class="container clear_fix">
             <ul class="navbar-nav clear_fix">
@@ -203,6 +319,7 @@
             </ul>
         </div>
     </div>
+    <hr style="border-width: 0.6px"/>
 </nav>
 <div class="container" style="width:1200px;margin: 0 auto">
     <div class="content_wrap" style="margin-top: 20px">
@@ -252,7 +369,58 @@
         <a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备16002604-3</a>
     </div>
 </footer>
+<script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
+<script>
+    $(function () {
+        //用户登录显示菜单
+        $('nav .user .avatar').mouseenter(function () {
+            $('nav .user').css({
+                "background": "#eee"
+            })
+            $(this).parent().next().slideDown()
+        }).mouseleave(function () {
+            $('nav .user').css({
+                "background": "#fff"
+            })
+            // $(this).parent().next().hide()
+        })
 
 
+        //每个子菜单加上选中颜色
+        $('nav .user .dropdown-menu li').mouseenter(function () {
+            $(this).css({
+                "background": "#eee"
+            })
+        }).mouseleave(function () {
+            $(this).css({
+                "background": "#fff"
+            })
+        })
+
+        $('nav .user .dropdown-menu').mouseleave(function () {
+            $('nav .user .dropdown-menu').hide()
+        })
+
+
+        $('#menu-cover').mouseenter(function () {
+            //$('nav .user .dropdown-menu').show()
+        }).mouseleave(function () {
+            //$('nav .user .dropdown-menu').hide()
+        })
+
+        //移出用户是子菜单不显示
+        $(document).mousemove(function (e) {
+            if(e.pageX>1305&&e.pageX<1409){
+               //$('nav .user .dropdown-menu').show()
+            }else{
+                 $('nav .user .dropdown-menu').hide()
+            }
+            //console.log((e.pageX + ", " + e.pageY))
+        })
+
+    })
+
+</script>
+{% block script %}{% endblock %}
 </body>
 </html>

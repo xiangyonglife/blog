@@ -12,7 +12,13 @@ def index(request):
     :param request:
     :return: 首页
     """
-    return render(request, 'home_main.html')
+    # 获取当前用户随机字符串
+    # 根据随机字符串获取对应信息
+    user = request.session.get('is_sign')
+    print(user)
+    # request.session.clear_expired() 江所有session失效日期小于当前日期删除
+    # request.session.clear() #注销的时候使用
+    return render(request, 'home_main.html', {'user': user})
 
 
 def login_index(request):
@@ -21,6 +27,7 @@ def login_index(request):
     :param request:
     :return: 登录页
     """
+
     return render(request, 'front/login_sign_in.html')
 
 
@@ -35,10 +42,30 @@ def login(request):
     user = models.User.objects.filter(userName=user_name, pwd=user_pwd).first()
     if user:
         text_json = {'code': '0', 'msg': '登录成功回首页'}
+        # 生成随机字符串
+        # 写到浏览器Cookies
+        # 写到session
+        # 在随机字符串对应字典中设置相关内容
+        remember_me = request.POST.get('remember-me')
+        request.session['user'] = user.userName
+        request.session['is_sign'] = True
+        # 用户选择是否记住密码，记住一个月免登录，否则浏览器关闭就要登录
+        if remember_me:
+            request.session.set_expiry(60 * 60 * 24 * 30)
         return HttpResponse(json.dumps(text_json))
     else:
         text_json = {'code': '1', 'msg': '用户名或密码错误'}
         return HttpResponse(json.dumps(text_json))
+
+
+def logout(request):
+    """
+    退出登录
+    :param request:
+    :return:首页
+    """
+    request.session.clear()
+    return redirect('/')
 
 
 def register_index(request):
