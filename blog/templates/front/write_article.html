@@ -318,7 +318,7 @@
     <div class="edit-article">
         <h1>简 笔</h1>
         <div>
-            <input id="title" type="text"/>
+            <input id="title" type="text" maxlength="35"/>
             <div id="div1" class="toolbar"></div>  <!--工具条-->
         </div>
         <div>
@@ -340,15 +340,24 @@
                         <div class="bg-lm">
                             <span>选择博客类目</span>
                             <form style="padding: 10px">
+
                                 <select style="outline: 0;display: inline-block;padding: 10px;width: 100%;height: 31px">
-                                    <option value="volvo">Volvo</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="opel">Opel</option>
-                                    <option value="audi">Audi</option>
+                                    {% for item in blog_category %}
+                                        <option value="{{ item.ArticleBlogCategory.articleBlogCategoryId }}">
+                                            {{ item.ArticleBlogCategory.articleBlogCategoryName }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <select style="margin-top: 20px;outline: 0;display: inline-block;padding: 10px;width: 100%;height: 31px">
+                                    {% for item in blog_category %}
+                                        <option value="{{ item.articleBlogCategoryId }}">
+                                            {{ item.articleBlogCategoryTwo }}
+                                        </option>
+                                    {% endfor %}
                                 </select>
                             </form>
                         </div>
-                        <div class="bg-btn" style="position: relative;top: 90px ;left: 230px">
+                        <div class="bg-btn" style="position: relative;top: 40px ;left: 230px">
                             <button style="font-size: 15px;padding: 4px 20px;outline: 0;border: 0" type="button">
                                 <span>取消</span>
                             </button>
@@ -424,7 +433,7 @@
                 })
             } else {
 
-                var template = "<li  title=" + name + "><div style='padding: 10px;position: relative'><span>" + name + "</span><i class=\"iconfont icon-shezhi\" style='position: absolute;top: 14px;right: 0;'></i></div></li>"
+                var template = "<li  title=" + name + "><div style='padding: 10px;position: relative'><span style='width: 214px;text-overflow: ellipsis;white-space: nowrap;word-break: keep-all;overflow: hidden;display: inline-block;'>" + name + "</span><i class=\"iconfont icon-shezhi\" style='position: absolute;top: 14px;right: 0;'></i></div></li>"
 
                 //文集提交数据库
                 $.ajax({
@@ -517,9 +526,14 @@
         //发布文章
         $("#btn-pop-push").click(function () {
             var article_content = editor.txt.html()
-            var title=$(".edit-article #title").val()
+            var title = $(".edit-article #title").val()
 
         })
+        //文集设置
+        $(".wj-list li").delegate("i", "click", function () {
+            alert(1)
+        })
+
         //新建文章函数
         function article_new() {
             var template = '<li>\n' +

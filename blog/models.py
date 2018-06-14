@@ -94,7 +94,7 @@ class ArticleCategory(models.Model):
     """
     articleCategoryId = models.AutoField(primary_key=True)  # 自增id
     user = models.ForeignKey(to='User', to_field='userId', on_delete=models.CASCADE)  # 该分类所属用户
-    articleCategoryName = models.CharField(max_length=60)  # 分类名称
+    articleCategoryName = models.TextField(null=True)  # 分类名称
     articleTemplate = models.TextField(null=True)  # 类目模板
 
     class Meta:  # 注意，是模型的子类，要缩进！  根据这些进行进一步删选

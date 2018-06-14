@@ -105,9 +105,9 @@ def register(request):
     user_name = request.POST.get('user-name')
     user_phone = request.POST.get('user-phone')
     user_pwd = request.POST.get('user-pwd')
-    obj = models.User.objects.filter(userName=user_name)
-    if len(obj) > 0:
-        json_text = {'code': '0', 'msg': '昵称已被使用,换一个吧'}
+    user_count = models.User.objects.filter(userName=user_name).count()
+    if user_count > 0:
+        json_text = {'code': '1', 'msg': '昵称已被使用,换一个吧'}
         return HttpResponse(json.dumps(json_text))
     else:
         user = models.User(
@@ -137,9 +137,9 @@ def write_article(request):
     # django 默认无法解析html会把它转义字符要用这个 {% autoescape off %}才能正常显示
     # 获取当前用户类目下的文章
     # article = models.Article.objects.filter(articleCategory__articleCategoryId=category.articleCategoryId)
-    for row in category:
-        print(row.articleTemplate)
-    return render(request, 'write_article.html', {'category': category})
+    # 获取博客分类
+    blog_category = models.ArticleBlogCategoryTwo.objects.all()
+    return render(request, 'write_article.html', {'category': category, "blog_category": blog_category})
 
 
 @auth

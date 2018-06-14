@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="input-sign-up">
-            <input type="password" name="user-phone" placeholder="手机号">
+            <input type="text" name="user-phone" placeholder="手机号">
             <i style="position: absolute;left: 25px;top:16px;font-size: 20px" class="fa fa-mobile-phone"></i>
             <div class="tooltip">
                 <div class="tooltip-inner">
@@ -169,19 +169,26 @@
                     }
                 })
                 if (flag) {
+                    flag=false  //防止表单重复提交
                     $.ajax({
                         type: "POST",
                         url: "{% url 'blog:register' %}",
                         data: $('#submit').serialize(),
                         dataType: "JSON",
-                        complete: function (data) {
-                            $('form .tooltip-glob span').text(data.responseJSON.msg)
+                        success: function (data) {
+                            $('form .tooltip-glob span').text(data.msg)
                             $('form .tooltip-glob').slideDown('slow', function () {
                                 $(this).hide()
                             })
                         },
                         error: function (data) {
-                            console.log(data)
+                            $('form .tooltip-glob span').text(data.msg)
+                            $('form .tooltip-glob').slideDown('slow', function () {
+                                $(this).hide()
+                            })
+                        },
+                        complete:function(){
+                            flag=true;
                         }
                     });
 
