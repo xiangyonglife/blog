@@ -24,7 +24,7 @@ SECRET_KEY = '09ggoz-jdj18h13#92bq#^8rzofu&mn%ned+81fz=g$djp31bb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -81,6 +81,8 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'root',
         'PORT': '3306',
+        'TEST_CHARSET': 'utf8',
+        'TEST_COLLATION': 'utf8_general_ci',
     }
 }
 

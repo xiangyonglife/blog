@@ -4,130 +4,555 @@
     <meta charset="UTF-8">
     <title>Title</title>
     {% load staticfiles %}
+    {% now 'SHORT_DATETIME_FORMAT' as current_year %}
     <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
     <style>
-        body {
-            font-size: 14px;
-            line-height: 1.5;
-            font-family: Georgia, Times New Roman, Times, Songti SC, serif;
+        a {
+            text-decoration: none;
+            outline: 0;
         }
 
-        .container .seting {
-            background-color: #404040;
-            color: #f2f2f2;
-            width: 17%;
-            height: 960px;
-
+        button:hover {
+            font-weight: 800;
+            cursor: pointer;
         }
 
-        .container .btn {
-            padding: 30px 18px 5px;
-            text-align: center;
-        }
-
-        .container .btn a {
-            display: block;
-            font-size: 15px;
-            padding: 9px 0;
-            color: #ec7259;
-            border: 1px solid rgba(236, 114, 89, .8);
-            border-radius: 20px;
-            transition: border-color .2s ease-in;
+        .container {
+            overflow-x: hidden;
         }
 
         .container .new-category {
-            padding: 0 15px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        .container .new-category div {
-            cursor: pointer;
-            color: #f2f2f2;
-            transition: color .2s cubic-bezier(.645, .045, .355, 1);
-            margin-left: 10px;
-        }
-
-        .write-article .article-list {
-            width: 35%;
-            height: 100%;
-            border-right: 1px solid #d9d9d9;
-            background-color: #fff;
-        }
-
-        .write-article .article-list .new-article {
-            line-height: 20px;
-            font-size: 15px;
-            font-weight: 400;
-            padding: 20px 0 20px 25px;
-            cursor: pointer;
-            color: #595959;
-        }
-
-        .write-article .article-list .new-article .new-article-bottom {
-            line-height: 30px;
-            padding: 20px 0 20px 25px;
-            cursor: pointer;
-            color: #999;
-            margin-bottom: 80px;
-        }
-
-        .write-article .article-list div ul {
-            border-top: 1px solid #d9d9d9;
-        }
-
-        .write-article {
-            width: 33%;
-        }
-
-        .write-article .article-list {
-            background-color: #fff;
+            width: 17%;
+            background-color: #404040;
             height: 960px;
+            border-radius: 5px;
+            box-shadow: #404040;
+            float: left;
+            position: fixed;
+            overflow-y: scroll;
         }
 
-        .article-edit{
-            width: 48%;
+        .container .new-article {
+            width: 25%;
+            background-color: #FFFFFF;
+            height: 960px;
+            border-radius: 5px;
+            box-shadow: #FFFFFF;
+            float: left;
+            border-right: 1px solid #9A9A9A;
+            position: fixed;
+            margin-left: 17%;
+            overflow-y: scroll;
+        }
+
+        .container .edit-article {
+            width: 57.52%;
+        {#background-color: #F2F2F2;#} border-radius: 5px;
+            box-shadow: #F2F2F2;
+            float: right;
+            position: relative;
+            background-color: #FFFFFF;
+            padding-top: 20px;
+        {#position: fixed;#}{#margin-left: 42.3%;#}{#overflow-y: scroll;#};
 
         }
+
+        .container .new-category a {
+            color: #EC7259;
+            padding: 9px 0;
+            display: block;
+            text-align: center;
+            border: 1px solid #ec7259;
+            border-radius: 50px;
+        }
+
+        .container .new-category .btn-home {
+            padding: 30px 18px 5px;
+        }
+
+        .container .new-category .btn-wj {
+            color: #FFFFFF;
+            padding: 0 15px;
+            margin: 20px 0px 10px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .container .new-category .btn-wj span {
+            margin-left: 4px;
+
+        }
+
+        .container .new-category .category-data form {
+            margin-top: 10px;
+        }
+
+        .container .new-article .btn-article {
+            padding: 20px 0px 20px 25px;
+            color: #5C6164;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .container .new-article .btn-article:hover {
+            font-weight: 500;
+        }
+
+        .container .new-article .btn-wz {
+            color: #ACADAE;
+            padding: 20px 0px 20px 25px;
+            margin-bottom: 80px;
+            font-size: 13px;
+            margin-top: -15px;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .edit-article h1 {
+            text-align: center;
+            font-size: 90px;
+            color: #E6E6E6;
+            position: absolute;
+            left: 50%;
+            top: 30%;
+            display: none;
+        }
+
+        {#    编辑器的样式#}
+        .edit-article .toolbar {
+            border: 1px solid #D9D9D9;
+            background-color: #D9D9D9;
+        }
+
+        .edit-article .text {
+            border: 1px solid #ccc;
+            padding: 40px 40px 80px;
+            min-height: 870px;
+            border: 0
+
+        }
+
+        .edit-article input {
+            padding: 0px 80px 10px 40px;
+            border: 0px;
+            outline: 0;
+            width: 100%;
+            height: 25px;
+            font-size: 26px;
+        }
+
+        .container .new-category .category-data form input {
+            padding: 4px 6px;
+            background-color: #595959;
+            outline: 0;
+            margin-bottom: 10px;
+            border: 1px solid #595959;
+            display: block;
+            height: 25px;
+            width: 100%;
+            font-size: 18px;
+            color: #CCCCCA;
+        }
+
+        .category-data .btn-c-sub {
+            margin-left: 4px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #45B72F;
+            border-color: #45B72F;
+            background-color: #404040;
+            outline: 0;
+            cursor: pointer;
+        }
+
+        .category-data .btn-c-cancel {
+            margin-left: 8px;
+            padding: 4px 12px;
+            color: #666666;
+            background-color: #404040;
+            border: 0;
+            outline: 0;
+        }
+
+        .container .tooltip {
+            position: fixed;
+            top: 0;
+            color: red;
+            display: none;
+            right: 50%;
+            top: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid red;
+        }
+
+        .wj-list {
+            list-style: none;
+        }
+
+        .wj-list li {
+            padding: 0 15px;
+            color: white;
+            margin-left: -40px;
+        }
+
+        .wj-list li:hover {
+            background-color: #666666;
+            border-left: 4px solid red;
+            cursor: pointer;
+
+        }
+
+        .wj-li-xz {
+            background-color: #666666;
+            border-left: 4px solid red
+        }
+
+        .new-article .article-list {
+            width: 100%;
+        }
+
+        .new-article .article-list li {
+            padding: 15px 10px 15px 60px;
+            list-style: none;
+            margin-left: -40px;
+        }
+
+        .new-article .article-list li:hover {
+            background-color: #E6E6E6;
+            border-left: 5px solid red;
+            cursor: pointer;
+        }
+
+        .wz-li-xz {
+            background-color: #E6E6E6;
+            border-left: 5px solid red;
+        }
+
+        .push-config {
+            width: 412px;
+            height: 319px;
+            border-radius: 6px;
+            background-color: #FFFFFF;
+            border: 1px solid #FFFFFF;
+            mso-border-shadow: yes;
+            box-shadow: white;
+            position: fixed;
+            left: 35%;
+            top: 30%;
+            z-index: 20000000;
+        }
+
+        .pop {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.5;
+            z-index: 1000000;
+            background-color: #C6C6C6;
+
+        }
+
+        .push-container {
+            padding: 16px;
+        }
+
+        #pop-cha:hover {
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .wj-list i {
+            display: none;
+        }
+
+        .article-list .icon-shezhi {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="seting" style="float: left;border:5px solid green">
-        <div class="btn">
-            <a>回首页</a>
+    <div class="new-category">
+        <div class="btn-home">
+            <a href="{% url 'blog:index' %}">回首页</a>
         </div>
-        <div class="new-category">
-            <div>
-                <i class="iconfont icon-xinjian"></i>
-                <span>新建文集</span>
-            </div>
+        <div class="btn-wj">
+            <i class="iconfont icon-xinjian1"></i>
+            <span>新建文集</span>
+        </div>
+        <div class="category-data" style="display: none">
+            <form>
+                <input id="category-name" type="text" placeholder="请输入文集名..." name="category-name">
+                <button class="btn-c-sub" type="button"><span>提 交</span></button>
+                <button class="btn-c-cancel" type="button"><span>取 消</span></button>
+            </form>
+        </div>
+        <ul class="wj-list">
+            {% for item in category %}
+                {% autoescape off %}
+                    {{ item.articleTemplate }}
+                {% endautoescape %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="new-article">
+        <div class="btn-article">
+            <i class="iconfont icon-xinjian"
+               style="color: white;background-color: #5C6164;border-radius: 50%
+                "></i>
+            <span>新建文章</span>
+            <hr style="margin-top: 30px"/>
+        </div>
+        <ul class="article-list">
+
+        </ul>
+        <div class="btn-wz">
+            <i class="iconfont icon-xinjian1"></i>
+            <span>在下方新建文章</span>
         </div>
     </div>
-    <div class="write-article" style="float: left;border: 5px solid red">
-        <div class="article-list">
-            <div>
-                <div class="new-article">
-                    <i class="iconfont icon-xinjian"></i>
-                    <span>新建文集</span>
+    <div class="edit-article">
+        <h1>简 笔</h1>
+        <div>
+            <input id="title" type="text"/>
+            <div id="div1" class="toolbar"></div>  <!--工具条-->
+        </div>
+        <div>
+            <div id="div2" class="text"></div> <!--可使用 min-height 实现编辑区域自动增加高度-->
+        </div>
+    </div>
+    <div class="tooltip">
+        <i class="iconfont icon-error"></i>
+        <span></span>
+    </div>
+
+    <div style="display: none" id="def-pop">
+        <div class="pop"></div>
+        <div class="push-config">
+            <div class="push-container" style="position: relative">
+                <div class="push-config-content">
+                    <h3 style="padding: 20px;margin-bottom: 11px;text-align: center">发布文章</h3>
+                    <div>
+                        <div class="bg-lm">
+                            <span>选择博客类目</span>
+                            <form style="padding: 10px">
+                                <select style="outline: 0;display: inline-block;padding: 10px;width: 100%;height: 31px">
+                                    <option value="volvo">Volvo</option>
+                                    <option value="saab">Saab</option>
+                                    <option value="opel">Opel</option>
+                                    <option value="audi">Audi</option>
+                                </select>
+                            </form>
+                        </div>
+                        <div class="bg-btn" style="position: relative;top: 90px ;left: 230px">
+                            <button style="font-size: 15px;padding: 4px 20px;outline: 0;border: 0" type="button">
+                                <span>取消</span>
+                            </button>
+                            <button id="btn-pop-push" style="margin-left: 15px;padding: 4px 20px;border-radius: 30px;outline: 0;border: 1px solid #79D06A
+                        ;color: #79D06A" type="button"><span>确认</span></button>
+                        </div>
+                        <div id="pop-cha" style=";position: absolute;top: 0;right: 0">
+                            <i style="font-size: 30px" class="iconfont icon-chadiao"></i>
+                        </div>
+                    </div>
                 </div>
-                <ul></ul>
-                <div class="new-article-bottom">
-                    <i class="iconfont icon-xinjian"></i>
-                    <span>新建文集</span>
-                </div>
             </div>
+
         </div>
     </div>
-    <div class="article-edit" style="float: left ;border: 5px solid black">
-       <script id="editor" type="text/plain"></script>
-    </div>
+
+
 </div>
-<script src="{% static 'frame/ueditor-1.4.3.3/dist/utf8-php/ueditor.config.js' %}"></script>
-<script src="{% static 'frame/ueditor-1.4.3.3/dist/utf8-php/ueditor.all.js' %}"></script>
-<script src="{% static 'frame/ueditor-1.4.3.3/dist/utf8-php/lang/zh-cn/zh-cn.js' %}"></script>
-<script>
-    var ue = UE.getEditor('editor');  //实例化编辑器
+<script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
+<script src="{% static 'frame/wangEditor/release/wangEditor.min.js' %}"></script>
+<script type="text/javascript">
+    var E = window.wangEditor
+    var editor = new E('#div1', '#div2')  // 两个参数也可以传入 elem 对象，class 选择器
+    //lang配置项配置多语言  //鼠标放上去显示内容
+    //随时监测HTML的内容的变化
+    editor.customConfig.onchange = function (html) {
+        // html 即变化之后的内容
+        //$(".article-list .wz-li-xz #article-content")
+        var text = $(".edit-article .text div").text()
+        $(".article-list .wz-li-xz #article-content").text(text)
+    }
+    editor.customConfig.uploadImgServer = '/upload'
+    editor.create()
+
+
+    $(function () {
+        $(".edit-article .text div").css({
+            'position': 'fixed',
+            'overflow-y': 'scroll'
+        })
+
+        //自定义按钮
+        var template = '<div id="push-article" class="w-e-menu" style="z-index:10001;">\n' +
+            '   <i class="iconfont icon-fabu"></i>\n' +
+            '    <span>发布文章</span>\n' +
+            '</div>'
+        $(".edit-article .toolbar").append(template)
+
+        //第一次进入写文章类目默认第一个类目选中
+        $(".wj-list li:first-child").addClass('wj-li-xz').find("i").show()
+
+
+        //新建文集
+        $(".btn-wj").click(function () {
+            $(this).nextAll('.category-data').slideDown()
+
+        })
+
+        //取消新建
+        $(".btn-c-cancel").click(function () {
+            $(".btn-wj").nextAll('.category-data').slideUp()
+        })
+        //提交新建文集
+        $(".btn-c-sub").click(function () {
+            var name = $("#category-name").val().trim()
+            if (name == "") {
+                $(".tooltip span").text('文集名不能空')
+                $(".tooltip").slideDown(function () {
+                    setTimeout(function () {
+                        $(".tooltip").hide()
+                    }, 2000)
+
+                })
+            } else {
+
+                var template = "<li  title=" + name + "><div style='padding: 10px;position: relative'><span>" + name + "</span><i class=\"iconfont icon-shezhi\" style='position: absolute;top: 14px;right: 0;'></i></div></li>"
+
+                //文集提交数据库
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'blog:category' %}",
+                    data: {"category_name": name, "template": template},
+                    dataType: "JSON",
+                    beforeSend: function () {
+                        $(".btn-wj span").text("新建文集中......")
+                    },
+                    complete: function (data) {
+                        if (data.responseJSON.code == 0) {
+                            $(".wj-list").prepend(template)
+                            $(".btn-wj span").text("新建文集")
+                            $(".btn-wj").nextAll('.category-data').slideUp()
+                            $(".wj-list li").each(function () {
+                                $(this).removeClass('wj-li-xz')
+                                $(this).find("i").hide()
+                            })
+                            $(".wj-list li:first-child").addClass('wj-li-xz').find("i").show()
+                            $(".btn-wj").nextAll('.category-data').slideUp()
+                        }
+                    },
+                    error: function (data) {
+                        $(".tooltip span").text("创建文集失败，请重试")
+                        $(".tooltip").slideDown(function () {
+                            setTimeout(function () {
+                                $(".tooltip").hide()
+                            }, 2000)
+
+                        })
+                    }
+                });
+
+
+            }
+        })
+
+        //新建文章
+        $(".btn-article,.btn-wz").click(function () {
+            article_new()
+        })
+
+
+        //检测标题改动
+        $(".edit-article #title").bind('input propertychange', function () {
+            var title = $(this).val()
+            $(".article-list .wz-li-xz #article-title").text(title)
+        })
+
+        //发布文章
+        $(".edit-article .toolbar #push-article").click(function () {
+            $("#def-pop").slideDown("slow")
+        })
+
+        $("#pop-cha").click(function () {
+            $("#def-pop").slideUp()
+        })
+
+        $(".bg-btn button:first-child").click(function () {
+            $("#def-pop").slideUp()
+
+        })
+
+        //选择文集
+        $(".wj-list").delegate("li", "click", function () {
+
+            //移除原有选择样式
+            $(".wj-list li").each(function () {
+                $(this).removeClass('wj-li-xz')
+                $(this).find("i").hide()
+            })
+            //当前点击的绑定样式
+            $(this).find("i").show()
+            $(this).addClass('wj-li-xz')
+        });
+        //选择文章
+        $(".article-list").delegate("li", "click", function () {
+            //移除原有选择样式
+            $(".article-list li").each(function () {
+                $(this).removeClass('wz-li-xz')
+                $(this).find(".icon-shezhi").hide()
+            })
+            //当前点击的绑定样式
+            $(this).find("i").show()
+            $(this).addClass('wz-li-xz')
+
+        });
+
+        //发布文章
+        $("#btn-pop-push").click(function () {
+            var article_content = editor.txt.html()
+            var title=$(".edit-article #title").val()
+
+        })
+        //新建文章函数
+        function article_new() {
+            var template = '<li>\n' +
+                '                <div style="position: relative">\n' +
+                '                    <div style="margin-right: 120px">\n' +
+                '                        <i style="position: absolute;top: 0;font-size: 40px;left: -50px"\n' +
+                '                           class="iconfont icon-icon_article"></i>\n' +
+                '                        <div style="float: right;margin-right: 5px">\n' +
+                '                            <span id=article-title style="white-space: nowrap;word-break: keep-all;overflow: hidden;text-overflow:ellipsis;display: inline-block;width: 236px">\n' +
+                '                                {{ current_year }}\n' +
+                '                            </span>\n' +
+                '                            <br>\n' +
+                '                            <span id="article-content" style="white-space: nowrap;word-break: keep-all;overflow: hidden;text-overflow:ellipsis;display: inline-block;width: 237px"></span>\n' +
+                '                        </div>\n' +
+                '                        <i style="position: absolute;top: 40%;right: 70px;font-size: 20px"\n' +
+                '                           class="iconfont iconfont icon-shezhi"></i>\n' +
+                '                        <div style="clear: both"></div>\n' +
+                '                    </div>\n' +
+                '                    <div style="clear: both"></div>\n' +
+                '                </div>\n' +
+                '\n' +
+                '            </li>'
+
+            $(".article-list").prepend(template)
+            $(".edit-article #title").val("{{ current_year }}")
+            $(".article-list li").each(function () {
+                $(this).removeClass("wz-li-xz")
+                $(this).find(".icon-shezhi").hide()
+            })
+            $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+        }
+
+    })
 </script>
 </body>
 </html>

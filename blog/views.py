@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, render_to_response
 from blog import models
 import json
+from django.core import exceptions
+import pickle
 
 
 # Create your views here.
-
-
 def index(request):
     """
     首页
@@ -47,6 +47,13 @@ def login(request):
         # 写到session
         # 在随机字符串对应字典中设置相关内容
         remember_me = request.POST.get('remember-me')
+        # user_pickle = pickle.dumps(user) 江任意数据类型转换为btyts
+        # json.dumps(user)可以将任意数据类型转换为json
+        # user_dic = user.__dict__
+        # user_json = json.dumps(user, default=lambda user: user.__dict__)  # 对象转换json
+        # user_dic_state = user_dic['ModelState']
+        # user_json = json.dumps(user_dic)
+        # print(user_json)
         request.session['user'] = user.userName
         request.session['is_sign'] = True
         # 用户选择是否记住密码，记住一个月免登录，否则浏览器关闭就要登录
@@ -58,13 +65,25 @@ def login(request):
         return HttpResponse(json.dumps(text_json))
 
 
+# 用户装饰器
+def auth(func):
+    def inner(request, *args, **kwargs):
+        is_sign = request.session.get("is_sign")
+        if not is_sign:
+            return redirect('blog:in')
+        return func(request, *args, **kwargs)
+
+    return inner
+
+
 def logout(request):
     """
     退出登录
     :param request:
     :return:首页
     """
-    request.session.clear()
+    request.session.clear()  # 清除sessionid日期小于当前日期的session
+    request.session.flush()  # 删除当前的会话数据和会话cookie
     return redirect('/')
 
 
@@ -87,7 +106,6 @@ def register(request):
     user_phone = request.POST.get('user-phone')
     user_pwd = request.POST.get('user-pwd')
     obj = models.User.objects.filter(userName=user_name)
-    jsong_text = {}
     if len(obj) > 0:
         json_text = {'code': '0', 'msg': '昵称已被使用,换一个吧'}
         return HttpResponse(json.dumps(json_text))
@@ -106,13 +124,64 @@ def register(request):
         return HttpResponse(json.dumps(json_text))
 
 
+@auth
 def write_article(request):
     """
     跳转写文章页
     :param request:
     :return: 文章页
     """
-    return render(request, 'write_article.html')
+    # 根据登录用户展示用户类目
+    user = request.session.get("user")
+    category = models.ArticleCategory.objects.filter(user__userName=user)
+    # django 默认无法解析html会把它转义字符要用这个 {% autoescape off %}才能正常显示
+    # 获取当前用户类目下的文章
+    # article = models.Article.objects.filter(articleCategory__articleCategoryId=category.articleCategoryId)
+    for row in category:
+        print(row.articleTemplate)
+    return render(request, 'write_article.html', {'category': category})
+
+
+@auth
+def new_category(request):
+    """
+    用户新建类目
+    :param request:
+    :return: 成功与否
+    """
+    category_name = request.POST.get("category_name")
+    template = request.POST.get("template")
+    user_sign = request.session.get("user")
+    user = models.User.objects.filter(userName=user_sign).first()
+    obj = models.ArticleCategory(
+        articleCategoryName=category_name,
+        articleTemplate=template,
+        user=user
+    )
+    obj.save()
+    json_text = {'code': '0', 'msg': '创建文集成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def push_article(request):
+    """
+    发布文章
+    :param request:
+    :return:
+    """
+
+    return 'sfsf'
+
+
+def page_error(request):
+    """
+    错误页面
+    :param request:
+    :return:
+    """
+    # 全局404处理函数
+    print(111)
+    return render_to_response('error_msg.html')
 
 
 def session(request):
