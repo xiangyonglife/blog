@@ -12,7 +12,9 @@ urlpatterns = [
     path('sign-up/', views.register_index, name='up'),
     path('register/', views.register, name='register'),
     path('write/', views.write_article, name='write'),
+    path('get-write/', views.load_article, name='get_article'),
     path('sign-out/', views.logout, name='out'),
     path('write-category/', views.new_category, name='category'),
-    path('write-category/', views.new_category, name='category'),
+    path('write-article/', views.new_article, name='article'),
+    path('push-option-category/', views.option_one_blog_category, name='option_category'),
 ]

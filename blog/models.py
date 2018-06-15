@@ -129,7 +129,7 @@ class Article(models.Model):
     ArticleBlogCategory = models.ForeignKey(to='ArticleBlogCategory', to_field='articleBlogCategoryId',
                                             on_delete=models.CASCADE, null=True)  # 文章所属栏目
     articleId = models.AutoField(primary_key=True)  # 自增id
-    articleName = models.CharField(max_length=128)  # 文章标题
+    articleName = models.CharField(max_length=128, null=True)  # 文章标题
     articleTime = models.DateTimeField(auto_now=True)  # 发布时间
     articleIp = models.GenericIPAddressField(null=True)  # 发布ip
     articleClick = models.IntegerField(default=0)  # 查看人数
@@ -139,7 +139,7 @@ class Article(models.Model):
     articleSuperTop = models.IntegerField(default=0)  # 0否1是
     articleComment = models.IntegerField(default=0)  # 评论人数
     articleLike = models.IntegerField(default=0)  # 喜欢人数
-    articleUrl = models.URLField()  # 文章路径
+    articleUrl = models.URLField(null=True)  # 文章路径
 
 
 class comment(models.Model):

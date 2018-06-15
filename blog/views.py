@@ -3,6 +3,7 @@ from blog import models
 import json
 from django.core import exceptions
 import pickle
+from blog.utils import mongodb_con
 
 
 # Create your views here.
@@ -138,8 +139,25 @@ def write_article(request):
     # 获取当前用户类目下的文章
     # article = models.Article.objects.filter(articleCategory__articleCategoryId=category.articleCategoryId)
     # 获取博客分类
-    blog_category = models.ArticleBlogCategoryTwo.objects.all()
+    blog_category = models.ArticleBlogCategory.objects.all()
     return render(request, 'write_article.html', {'category': category, "blog_category": blog_category})
+
+
+def option_one_blog_category(request):
+    """
+    选择文章一级类目
+    :param request:
+    :return: 联动加载二级类目
+    """
+    one_category_id = request.POST.get("one-category")
+    # 数据库通过一级获取二级
+    blog_two_cateogry = models.ArticleBlogCategoryTwo.objects.filter(
+        ArticleBlogCategory__articleBlogCategoryId=one_category_id)
+    category_list = []
+    for item in blog_two_cateogry:
+        category_list.append({'id': item.articleBlogCategoryId, 'name': item.articleBlogCategoryTwo})
+    json_text = {'code': '0', 'msg': '创建文集成功', "data": category_list}
+    return HttpResponse(json.dumps(json_text))
 
 
 @auth
@@ -160,6 +178,40 @@ def new_category(request):
     )
     obj.save()
     json_text = {'code': '0', 'msg': '创建文集成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def new_article(request):
+    """
+    新建文章
+    :param request:
+    :return:
+    """
+    title = request.POST.get("title")
+    title_html = request.POST.get("title_html")
+    content_html = request.POST.get("content_html")
+    parent_article_id = request.POST.get("parent_article_id")
+    # saveType 0新建 1自动保存，2，发布跟新，3.公开发布
+    article = {"parent_article_id": parent_article_id, 'title': title, 'title_html': title_html,
+               'content': content_html, 'saveType': 0}
+    mongodb_con.article.insert(article)
+    json_text = {'code': '0', 'msg': '创建文集成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def load_article(request):
+    """
+    异步加载文章内容
+    :param request:
+    :return:
+    """
+    parent_category_id = request.GET.get("parent_category_id")
+    article = mongodb_con.article.find({"parent_article_id": parent_category_id})
+    article_list = []
+    for item in article:
+        print(item)
+        article_list.append(item)
+    json_text = {'code': '0', 'msg': '成功返回', "data": mongodb_con.dumps(article_list)}
     return HttpResponse(json.dumps(json_text))
 
 

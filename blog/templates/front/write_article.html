@@ -112,10 +112,8 @@
             text-align: center;
             font-size: 90px;
             color: #E6E6E6;
-            position: absolute;
-            left: 50%;
-            top: 30%;
             display: none;
+            margin-top: 200px;
         }
 
         {#    编辑器的样式#}
@@ -307,6 +305,11 @@
             <span>新建文章</span>
             <hr style="margin-top: 30px"/>
         </div>
+        <div class="article-loading" style="display: none;text-align: center;position: absolute;top: 50%;left: 40%">
+            <i class="iconfont icon-jiazai"
+               style="padding: 4px;font-size: 50px;display: inline-block;color: #ED7259"></i>
+            <div style="color: #985A4D">文章加载中</div>
+        </div>
         <ul class="article-list">
 
         </ul>
@@ -339,21 +342,20 @@
                     <div>
                         <div class="bg-lm">
                             <span>选择博客类目</span>
-                            <form style="padding: 10px">
+                            <form id="category-submit" style="padding: 10px">
 
-                                <select style="outline: 0;display: inline-block;padding: 10px;width: 100%;height: 31px">
+                                <select name="one-category" id="push-xz-lm"
+                                        style="outline: 0;display: inline-block;padding: 10px;width: 100%;height: 31px">
+                                    <option value="0">请选择</option>
                                     {% for item in blog_category %}
-                                        <option value="{{ item.ArticleBlogCategory.articleBlogCategoryId }}">
-                                            {{ item.ArticleBlogCategory.articleBlogCategoryName }}
+                                        <option value="{{ item.articleBlogCategoryId }}">
+                                            {{ item.articleBlogCategoryName }}
                                         </option>
                                     {% endfor %}
                                 </select>
-                                <select style="margin-top: 20px;outline: 0;display: inline-block;padding: 10px;width: 100%;height: 31px">
-                                    {% for item in blog_category %}
-                                        <option value="{{ item.articleBlogCategoryId }}">
-                                            {{ item.articleBlogCategoryTwo }}
-                                        </option>
-                                    {% endfor %}
+                                <select name="tow-category"
+                                        style="margin-top: 20px;outline: 0;display: inline-block;padding: 10px;width: 100%;height: 31px">
+                                    <option value="0">请选择</option>
                                 </select>
                             </form>
                         </div>
@@ -377,6 +379,7 @@
 
 </div>
 <script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
+<script src="{% static 'frame/jquery.rotate-0.3.0/jquery.rotate.js' %}"></script>
 <script src="{% static 'frame/wangEditor/release/wangEditor.min.js' %}"></script>
 <script type="text/javascript">
     var E = window.wangEditor
@@ -391,6 +394,7 @@
     }
     editor.customConfig.uploadImgServer = '/upload'
     editor.create()
+    //editor.txt.html("<h2>这是你设置的内容啊</h2>")
 
 
     $(function () {
@@ -406,9 +410,14 @@
             '</div>'
         $(".edit-article .toolbar").append(template)
 
-        //第一次进入写文章类目默认第一个类目选中
+        //第一次进入写文章类目默认第一个选中
         $(".wj-list li:first-child").addClass('wj-li-xz').find("i").show()
-
+        $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+        //判断当前用户是否有文章如果有用户可以编辑
+        if (!$(".article-list li").is("li")) {
+            $(".tooltip,.edit-article h1").nextAll().hide()
+            $(".edit-article h1").show()
+        }
 
         //新建文集
         $(".btn-wj").click(function () {
@@ -432,8 +441,8 @@
 
                 })
             } else {
-
-                var template = "<li  title=" + name + "><div style='padding: 10px;position: relative'><span style='width: 214px;text-overflow: ellipsis;white-space: nowrap;word-break: keep-all;overflow: hidden;display: inline-block;'>" + name + "</span><i class=\"iconfont icon-shezhi\" style='position: absolute;top: 14px;right: 0;'></i></div></li>"
+                var uuid = "blog" + guid();
+                var template = "<li id=" + uuid + "  title=" + name + "><div style='padding: 10px;position: relative'><span style='width: 214px;text-overflow: ellipsis;white-space: nowrap;word-break: keep-all;overflow: hidden;display: inline-block;'>" + name + "</span><i class=\"iconfont icon-shezhi\" style='position: absolute;top: 14px;right: 0;'></i></div></li>"
 
                 //文集提交数据库
                 $.ajax({
@@ -474,7 +483,20 @@
 
         //新建文章
         $(".btn-article,.btn-wz").click(function () {
-            article_new()
+            var flag = true
+            if (!$(".wj-list li").is("li")) {
+                $(".tooltip span").text('文集不存在')
+                $(".tooltip").slideDown(function () {
+                    setTimeout(function () {
+                        $(".tooltip").hide()
+                    }, 2000)
+
+                })
+            } else {
+                if (flag) {
+                    article_new(flag)
+                }
+            }
         })
 
 
@@ -486,7 +508,20 @@
 
         //发布文章
         $(".edit-article .toolbar #push-article").click(function () {
-            $("#def-pop").slideDown("slow")
+            var article_content = editor.txt.text().trim()
+            if (article_content == "") {
+                $(".tooltip span").text('内容不能为空')
+                $(".tooltip").slideDown(function () {
+                    setTimeout(function () {
+                        $(".tooltip").hide()
+                    }, 2000)
+
+                })
+
+            } else {
+                $("#def-pop").slideDown("slow")
+            }
+
         })
 
         $("#pop-cha").click(function () {
@@ -509,6 +544,8 @@
             //当前点击的绑定样式
             $(this).find("i").show()
             $(this).addClass('wj-li-xz')
+
+
         });
         //选择文章
         $(".article-list").delegate("li", "click", function () {
@@ -520,13 +557,48 @@
             //当前点击的绑定样式
             $(this).find("i").show()
             $(this).addClass('wz-li-xz')
+            $(".edit-article #title").val($(this).find("span").text())
+            editor.txt.clear()
 
         });
 
+        //发布文章选择文章栏目
+        $("#push-xz-lm").change(function () {
+            $.ajax({
+                url: "{% url 'blog:option_category' %}",
+                method: "POST",
+                data: $("#category-submit").serialize(),
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 0) {
+                        var template = ''
+                        $.each(data.data, function (i, v) {
+                            template += "<option value=" + v.id + ">" + v.name + "</option>"
+                        })
+                        $("select[name=tow-category]").empty()
+                        $("select[name=tow-category]").append(template)
+                    }
+                },
+                error: function () {
+
+                },
+            })
+        })
+
         //发布文章
         $("#btn-pop-push").click(function () {
-            var article_content = editor.txt.html()
+            var article_content = editor.txt.html().trim()
             var title = $(".edit-article #title").val()
+            if (article_content == "") {
+                $(".tooltip span").text('内容不能为空')
+                $(".tooltip").slideDown(function () {
+                    setTimeout(function () {
+                        $(".tooltip").hide()
+                    }, 2000)
+
+                })
+
+            }
 
         })
         //文集设置
@@ -534,8 +606,55 @@
             alert(1)
         })
 
+
+        //异步加载用户文章
+        var loading = setInterval(function () {
+            $('.article-loading i').animate({rotate: '360'}, 1000);
+        }, 0)
+        $.ajax({
+            url: "{% url 'blog:get_article' %}",
+            method: "GET",
+            data: {"parent_category_id": $(".wj-list li.wj-li-xz").attr("id")},
+            dataType: "JSON",
+            beforeSend: function () {
+                $(".article-loading").show()
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    var item = JSON.parse(data.data)
+                    if (item.length > 0) {
+                        $(".edit-article div").show()
+                        $(".edit-article h1").hide()
+                    }
+                    $.each(item, function (i, v) {
+                        $(".article-list").append(v.title_html)
+                        if (i == 0) {
+                            $(".edit-article #title").val(v.title)
+                            editor.txt.html(v.content)
+                        }
+                    })
+                    $(".article-list li").each(function () {
+                        $(this).removeClass("wz-li-xz")
+                        $(this).find(".icon-shezhi").hide()
+                    })
+                    $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+                }
+            },
+            error: function (data) {
+                console.log(data)
+            },
+            complete: function () {
+                clearInterval(loading)
+                $(".article-loading").hide()
+            }
+        })
+
+
         //新建文章函数
-        function article_new() {
+        function article_new(flag) {
+            //防止重复新建
+            flag = false
+            $(".btn-article span,.btn-wz span").text("新建文章中......")
             var template = '<li>\n' +
                 '                <div style="position: relative">\n' +
                 '                    <div style="margin-right: 120px">\n' +
@@ -557,14 +676,52 @@
                 '\n' +
                 '            </li>'
 
-            $(".article-list").prepend(template)
-            $(".edit-article #title").val("{{ current_year }}")
-            $(".article-list li").each(function () {
-                $(this).removeClass("wz-li-xz")
-                $(this).find(".icon-shezhi").hide()
+            $.ajax({
+                url: "{% url 'blog:article' %}",
+                method: "POST",
+                data: {
+                    "title": "{{ current_year }}",
+                    "title_html": template,
+                    "parent_article_id": $(".wj-list li.wj-li-xz").attr("id")
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    if (data.code == 0) {
+                        $(".article-list").prepend(template)
+                        $(".edit-article #title").val("{{ current_year }}")
+                        $(".article-list li").each(function () {
+                            $(this).removeClass("wz-li-xz")
+                            $(this).find(".icon-shezhi").hide()
+                        })
+                        $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+                    }
+
+                },
+                error: function (data) {
+
+                },
+                complete: function () {
+                    flag = true
+                    $(".btn-article span").text("新建文章")
+                    $(".btn-wz span").text("在下方新建文章中")
+                    //新建后还原编辑器
+                    $(".edit-article div").show()
+                    $(".edit-article h1").hide()
+
+                }
             })
-            $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+
         }
+
+        //按照自己方法生成uuid
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+        }
+
 
     })
 </script>

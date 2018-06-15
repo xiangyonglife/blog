@@ -1,10 +1,8 @@
-import pymongo
+from pymongo import MongoClient
+from bson.json_util import dumps
 
-connection = pymongo.MongoClient()  # 简历连接
-tdb = connection.blog  # 创建数据库
-history = tdb.history  # 创建表
-
-jike = {'name': u'极客', 'age': '4', 'skill': 'Python'}
-gog = {'name': u'天天', 'age': 123, 'skill': 'createanything', 'other': u'哈哈'}
-godslaver = {'name': u'雨来', 'age': 'unknown', 'other': u'嘻嘻'}
-post_info.insert(jike)
+client = MongoClient()  # 建立连接
+db = client.blog  # 创建数据库
+history = db.history  # 创建文章历史记录表
+recycle = db.recycle  # 创建回收站表
+article = db.article  # 创建文章详细表
