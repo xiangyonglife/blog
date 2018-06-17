@@ -191,9 +191,10 @@ def new_article(request):
     title_html = request.POST.get("title_html")
     content_html = request.POST.get("content_html")
     parent_article_id = request.POST.get("parent_article_id")
+    uid = request.POST.get("uid")
     # saveType 0新建 1自动保存，2，发布跟新，3.公开发布
     article = {"parent_article_id": parent_article_id, 'title': title, 'title_html': title_html,
-               'content': content_html, 'saveType': 0}
+               'content': content_html, 'saveType': 0, "article_uid": uid}
     mongodb_con.article.insert(article)
     json_text = {'code': '0', 'msg': '创建文集成功'}
     return HttpResponse(json.dumps(json_text))
@@ -201,7 +202,7 @@ def new_article(request):
 
 def load_article(request):
     """
-    异步加载文章内容
+    异步加载类目下文章内容
     :param request:
     :return:
     """
@@ -212,6 +213,51 @@ def load_article(request):
         print(item)
         article_list.append(item)
     json_text = {'code': '0', 'msg': '成功返回', "data": mongodb_con.dumps(article_list)}
+    return HttpResponse(json.dumps(json_text))
+
+
+def save_current(request):
+    """
+    编辑文章时刻保存
+    :param request:
+    :return:
+    """
+    article_id = request.POST.get("article_id")
+    article_content = request.POST.get("article_content")
+    title = request.POST.get("title")
+    # 找到当前文章并且跟新内容
+    mongodb_con.article.update({'article_uid': article_id},
+                               {'$set': {'content': article_content, "saveType": 1, "title": title}})
+    json_text = {'code': '0', 'msg': '跟新成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def save_current_title(request):
+    """
+    编辑时刻保存标题
+    :param request:
+    :return:
+    """
+    article_id = request.POST.get("article_id")
+    title = request.POST.get("title")
+    # 找到当前文章并且跟新内容
+    mongodb_con.article.update({'article_uid': article_id},
+                               {'$set': {"saveType": 1, "title": title}})
+    json_text = {'code': '0', 'msg': '跟新成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def load_xz_article(request):
+    """
+    加载选中的文章内容
+    :param request:
+    :return:
+    """
+    article_id = request.GET.get("article_id")
+    print(type(article_id))
+    # 找到当前文章并且加载
+    article = mongodb_con.article.find_one({"article_uid": article_id})
+    json_text = {'code': '0', 'msg': '成功返回', "data": mongodb_con.dumps(article)}
     return HttpResponse(json.dumps(json_text))
 
 

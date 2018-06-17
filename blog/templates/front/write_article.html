@@ -24,7 +24,7 @@
         .container .new-category {
             width: 17%;
             background-color: #404040;
-            height:100%;
+            height: 100%;
             border-radius: 5px;
             box-shadow: #404040;
             float: left;
@@ -320,7 +320,9 @@
     <div class="edit-article">
         <h1>简 笔</h1>
         <div>
+            <span id="save-current" style="display: block;position:relative;left: 90%;top:25px">已保存</span>
             <input id="title" type="text" maxlength="35"/>
+
             <div id="div1" class="toolbar"></div>  <!--工具条-->
         </div>
         <div>
@@ -389,6 +391,21 @@
         // html 即变化之后的内容
         //$(".article-list .wz-li-xz #article-content")
         var text = $(".edit-article .text div").text()
+        $("#save-current").text("保存中.....")
+        $.ajax({
+            url: "{% url 'blog:save_current' %}",
+            method: "POST",
+            data: {
+                "article_id": $(".article-list li.wz-li-xz").attr("id"),
+                "article_content": html,
+                "title": $(".edit-article #title").val()
+            },
+            dataType: "JSON",
+            success: function (data) {
+                $("#save-current").text("已保存")
+            }
+        })
+        console.log(html)
         $(".article-list .wz-li-xz #article-content").text(text)
     }
     editor.customConfig.uploadImgServer = '/upload'
@@ -401,7 +418,7 @@
             'position': 'fixed',
             'overflow-y': 'scroll',
             "width": "50%",
-            "padding-bottom":"140px"
+            "padding-bottom": "140px"
 
         })
 
@@ -505,6 +522,19 @@
         //检测标题改动
         $(".edit-article #title").bind('input propertychange', function () {
             var title = $(this).val()
+            $("#save-current").text("保存中.....")
+            $.ajax({
+                url: "{% url 'blog:save_current_title' %}",
+                method: "POST",
+                data: {
+                    "article_id": $(".article-list li.wz-li-xz").attr("id"),
+                    "title": $(".edit-article #title").val()
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    $("#save-current").text("已保存")
+                }
+            })
             $(".article-list .wz-li-xz #article-title").text(title)
         })
 
@@ -559,8 +589,23 @@
             //当前点击的绑定样式
             $(this).find("i").show()
             $(this).addClass('wz-li-xz')
-            $(".edit-article #title").val($(this).find("span").text())
+            //$(".edit-article #title").val($(this).find("span").text())
             editor.txt.clear()
+            //异步加载文章内容
+            $.ajax({
+                url: "{% url 'blog:get_xz_article' %}",
+                method: "GET",
+                data: {"article_id": $(".article-list li.wz-li-xz").attr("id")},
+                dataType: "JSON",
+                success: function (data) {
+                    if (data.code == 0) {
+                        var data = JSON.parse(data.data)
+                        $(".edit-article #title").val(data.title)
+                        editor.txt.html(data.content)
+                    }
+                }
+            })
+            //editor.txt.html('<p>用 JS 设置的内容</p>')
 
         });
 
@@ -597,9 +642,7 @@
                     setTimeout(function () {
                         $(".tooltip").hide()
                     }, 2000)
-
                 })
-
             }
 
         })
@@ -657,7 +700,8 @@
             //防止重复新建
             flag = false
             $(".btn-article span,.btn-wz span").text("新建文章中......")
-            var template = '<li>\n' +
+            var uuid = "article" + guid();
+            var template = '<li id=' + uuid + '>\n' +
                 '                <div style="position: relative">\n' +
                 '                    <div style="margin-right: 120px">\n' +
                 '                        <i style="position: absolute;top: 0;font-size: 40px;left: -50px"\n' +
@@ -684,7 +728,8 @@
                 data: {
                     "title": "{{ current_year }}",
                     "title_html": template,
-                    "parent_article_id": $(".wj-list li.wj-li-xz").attr("id")
+                    "parent_article_id": $(".wj-list li.wj-li-xz").attr("id"),
+                    "uid": uuid
                 },
                 dataType: "JSON",
                 success: function (data) {

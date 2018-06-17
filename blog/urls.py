@@ -17,4 +17,7 @@ urlpatterns = [
     path('write-category/', views.new_category, name='category'),
     path('write-article/', views.new_article, name='article'),
     path('push-option-category/', views.option_one_blog_category, name='option_category'),
+    path('save-current/', views.save_current, name='save_current'),
+    path('save-current_title/', views.save_current_title, name='save_current_title'),
+    path('get-xz-article/', views.load_xz_article, name='get_xz_article'),
 ]
