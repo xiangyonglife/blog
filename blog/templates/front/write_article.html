@@ -438,6 +438,8 @@
             $(".edit-article h1").show()
         }
 
+        ajax_load_article()
+
         //新建文集
         $(".btn-wj").click(function () {
             $(this).nextAll('.category-data').slideDown()
@@ -576,7 +578,7 @@
             //当前点击的绑定样式
             $(this).find("i").show()
             $(this).addClass('wj-li-xz')
-
+            ajax_load_article()
 
         });
         //选择文章
@@ -653,47 +655,53 @@
 
 
         //异步加载用户文章
-        var loading = setInterval(function () {
-            $('.article-loading i').animate({rotate: '360'}, 1000);
-        }, 0)
-        $.ajax({
-            url: "{% url 'blog:get_article' %}",
-            method: "GET",
-            data: {"parent_category_id": $(".wj-list li.wj-li-xz").attr("id")},
-            dataType: "JSON",
-            beforeSend: function () {
-                $(".article-loading").show()
-            },
-            success: function (data) {
-                if (data.code == 0) {
-                    var item = JSON.parse(data.data)
-                    if (item.length > 0) {
-                        $(".edit-article div").show()
-                        $(".edit-article h1").hide()
-                    }
-                    $.each(item, function (i, v) {
-                        $(".article-list").append(v.title_html)
-                        if (i == 0) {
-                            $(".edit-article #title").val(v.title)
-                            editor.txt.html(v.content)
+        function ajax_load_article() {
+            var loading = setInterval(function () {
+                $('.article-loading i').animate({rotate: '360'}, 1000);
+            }, 0)
+            $.ajax({
+                url: "{% url 'blog:get_article' %}",
+                method: "GET",
+                data: {"parent_category_id": $(".wj-list li.wj-li-xz").attr("id")},
+                dataType: "JSON",
+                beforeSend: function () {
+                    $(".article-loading").show()
+                    $(".new-article .article-list").empty()
+                     editor.txt.clear()
+                },
+                success: function (data) {
+                    var title = []
+                    if (data.code == 0) {
+                        var item = JSON.parse(data.data)
+                        if (item.length > 0) {
+                            $(".edit-article div").show()
+                            $(".edit-article h1").hide()
                         }
-                    })
-                    $(".article-list li").each(function () {
-                        $(this).removeClass("wz-li-xz")
-                        $(this).find(".icon-shezhi").hide()
-                    })
-                    $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+                        $.each(item, function (i, v) {
+                            $(".article-list").append(v.title_html)
+                            title.push(v.title)
+                            if (i == 0) {
+                                $(".edit-article #title").val(v.title)
+                                editor.txt.html(v.content)
+                            }
+                        })
+                        $(".article-list li").each(function (i) {
+                            $(this).removeClass("wz-li-xz")
+                            $(this).find(".icon-shezhi").hide()
+                            $(this).find("#article-title").text(title[i])
+                        })
+                        $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+                    }
+                },
+                error: function (data) {
+                    console.log(data)
+                },
+                complete: function () {
+                    clearInterval(loading)
+                    $(".article-loading").hide()
                 }
-            },
-            error: function (data) {
-                console.log(data)
-            },
-            complete: function () {
-                clearInterval(loading)
-                $(".article-loading").hide()
-            }
-        })
-
+            })
+        }
 
         //新建文章函数
         function article_new(flag) {
