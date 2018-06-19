@@ -339,7 +339,39 @@
             color: white;
         }
 
+        .container .cd-sz {
+            position: fixed;
+            bottom: 10px;
+            color: #999997;
+            padding-left: 15px;
+        }
 
+        .container .cd-sz > div:hover {
+            cursor: pointer;
+            font-weight: 800;
+            color: whitesmoke;
+        }
+
+        .container .cd-sz > div:last-child {
+            position: absolute;
+            bottom: 40px;
+            background-color: #FFFFFF;
+            border-radius: 5%;
+            z-index: 10000;
+            display: none;
+
+        }
+
+        .container .cd-sz > div:last-child > div {
+            color: #5B656E;
+            padding: 10px 20px;
+
+        }
+
+        .container .cd-sz > div:last-child > div:hover {
+            background-color: #666666;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -366,6 +398,27 @@
                 {% endautoescape %}
             {% endfor %}
         </ul>
+        <div class="cd-sz">
+            <div style="float: left">
+                <i class="iconfont icon-wechaticon24"></i>
+                <span>设置</span>
+            </div>
+            <div style="float: right;margin-left: 120px">
+                <span>遇到问题</span>
+                <i class="iconfont icon-jiaochengqianniu"></i>
+            </div>
+            <div>
+                <div>
+                    <i class="iconfont icon-shanchu" style="display: inline;font-size: 20px"></i>
+                    <span>回收站</span>
+                </div>
+                <div>
+                    <i class="iconfont icon-jiaochengqianniu" style="display: inline;"></i>
+                    <span>帮助与反馈</span>
+                </div>
+
+            </div>
+        </div>
     </div>
     <div class="new-article">
         <div class="btn-article">
@@ -488,7 +541,7 @@
             'position': 'fixed',
             'overflow-y': 'scroll',
             "width": "50%",
-            "padding-bottom": "140px"
+            "padding-bottom": "180px"
 
         })
 
@@ -902,6 +955,16 @@
             return false
 
         });
+
+        //菜单设置
+
+        $(".container .cd-sz").click(function () {
+            $(this).find(">div:last-child").toggle()
+        })
+
+        $(".container .cd-sz > div:last-child > div:first-child").click(function () {
+            window.location.href = "{% url 'blog:history' %}"
+        })
 
 
         //异步加载用户文章

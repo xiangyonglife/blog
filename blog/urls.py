@@ -24,4 +24,7 @@ urlpatterns = [
     path('modify-wj-del/', views.modify_wj_del, name='modify_wj_del'),
     path('modify-wz-move/', views.modify_wz_move, name='modify_wz_move'),
     path('modify-wz-del/', views.modify_wz_del, name='modify_wz_del'),
+    path('write-history/', views.article_history, name='history'),
+    path('history-cancel/', views.article_cancel, name='cancel'),
+    path('history-recover/', views.article_recover, name='recover'),
 ]

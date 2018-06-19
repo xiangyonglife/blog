@@ -183,6 +183,7 @@ def new_category(request):
     return HttpResponse(json.dumps(json_text))
 
 
+@auth
 def new_article(request):
     """
     新建文章
@@ -194,10 +195,12 @@ def new_article(request):
     content_html = request.POST.get("content_html")
     parent_article_id = request.POST.get("parent_article_id")
     uid = request.POST.get("uid")
+    user_sign = request.session.get("user")
+    user = models.User.objects.filter(userName=user_sign).first()
     # saveType 0新建 1自动保存，2，发布跟新，3.公开发布
     # status 0正常 1删除，2其他
     article = {"parent_article_id": parent_article_id, 'title': title, 'title_html': title_html,
-               'content': content_html, 'saveType': 0, "article_uid": uid, "status": 0}
+               'content': content_html, 'saveType': 0, "article_uid": uid, "status": 0, "user_id": user.userId}
     mongodb_con.article.insert(article)
     json_text = {'code': '0', 'msg': '创建文集成功'}
     return HttpResponse(json.dumps(json_text))
@@ -299,6 +302,49 @@ def modify_wz_del(request):
     """
     article_id = request.POST.get("article_id")
     mongodb_con.article.update({'article_uid': article_id}, {"$set": {"status": 1}})
+    json_text = {'code': '0', 'msg': '跟新成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+@auth
+def article_history(request):
+    """
+    文章回收站
+    :param request:
+    :return:
+    """
+    user = request.session.get("user")
+    u = models.User.objects.filter(userName=user).first()
+    article = mongodb_con.article.find({"status": 1, "user_id": u.userId})
+    article_list = []
+    for item in article:
+        article_list.append(item)
+    print(article_list)
+    return render(request, 'write_history.html', {"article": article_list})
+
+
+def article_cancel(request):
+    """
+    回收站文章彻底删除
+    :param request:
+    :return:
+    """
+    article_id = request.POST.get("article_id")
+    mongodb_con.article.remove({"article_uid": article_id})
+    json_text = {'code': '0', 'msg': '跟新成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def article_recover(request):
+    """
+    回收站文章恢复
+    :param request:
+    :return:
+    """
+    article_id = request.POST.get("article_id")
+    mongodb_con.article.update({"article_uid": article_id}, {"$set": {"status": 0}})
+    parent_article_id = mongodb_con.article.find_one({"article_uid": article_id})['parent_article_id']
+    models.ArticleCategory.objects.filter(articleUuid=parent_article_id).update(status=0)
     json_text = {'code': '0', 'msg': '跟新成功'}
     return HttpResponse(json.dumps(json_text))
 

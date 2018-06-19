@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load staticfiles %}
+    {% now 'SHORT_DATETIME_FORMAT' as current_year %}
+    <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
+    <link rel="stylesheet" href="{% static 'frame/PostbirdAlertBox/css/postbirdAlertBox.css' %}">
+    <style>
+        ul li {
+            list-style: none;
+        }
+
+        .container > div.history-list {
+            position: fixed;
+            width: 19%;
+            height: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid whitesmoke;
+            color: #606060;
+            overflow-y: scroll;
+        }
+
+        .container > div.history-list > div.title {
+            border: 1px solid whitesmoke;
+        }
+
+        .container > div.history-list > div {
+
+        }
+
+        .container > div.history-list > div:last-child > ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        .container > div.history-list > div:last-child > ul > li {
+            padding: 10px;
+            border: 1px solid #E6E6E6;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .container > div.history-list > div:last-child > ul > li:hover {
+            background-color: #E6E6E6;
+        }
+
+        .li-xz {
+            background-color: #E6E6E6;
+        }
+
+        .container > div.main > div.title {
+            position: fixed;
+            left: 20%;
+            width: 80%;
+            background-color: #E6E6E6;
+            padding: 20px 0;
+            text-align: center;
+            line-height: 20px;
+        }
+
+        .container > div.main > div.content {
+            position: fixed;
+            left: 20%;
+            width: 80%;
+            background-color: #F2F2F2;
+            height: 80%;
+            top: 120px;
+            text-align: center;
+            overflow-y: scroll;
+        }
+
+        .container > div.main > div.content > div {
+            padding: 20px;
+            width: 50%;
+            margin: 0 auto 20px;
+            overflow-y: scroll;
+
+        }
+
+        .container > div.main > div.footer {
+            position: fixed;
+            left: 20%;
+            width: 80%;
+            height: 10%;
+            bottom: 0;
+            background-color: #FFFFFF;
+
+        }
+
+        .container > div.main > div.footer > div {
+            padding: 8px 0px;
+            margin-left: 40%;
+            margin-top: 15px;
+        }
+
+        .container > div.main > div.footer > div > span {
+            padding: 9px 32px 7px;
+            border-radius: 5%;
+            color: white;
+            cursor: pointer;
+            font-weight: 800;
+            margin-left: 5px;
+
+        }
+
+        .container > div.main > div.footer > div > span:first-child {
+            background-color: #42C02D;
+        }
+
+        .container > div.main > div.footer > div > span:last-child {
+            background-color: #ED7259;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="history-list">
+        <div class="title">
+            <i class="iconfont icon-shanchu" style="font-size: 25px"></i>
+            <span style="display:inline-block;font-size: 25px">回收站</span>
+        </div>
+        <div>
+            <ul>
+                {% for item in article %}
+                    <li articlId="{{ item.article_uid }}" template="{{ item.content }}">
+                        <i class="iconfont icon-wenzhang" style="font-size: 20px"></i>
+                        {{ item.title }}
+                    </li>
+                {% endfor %}
+
+            </ul>
+        </div>
+    </div>
+    <div class="main">
+        <div class="title">
+            <h3 style="font-size: 25px"></h3>
+            <i id="cha" class="iconfont icon-chadiao"
+               style="font-size: 35px;position: absolute;top: 45px;right: 40px"></i>
+        </div>
+        <div class="content">
+            <div>
+            </div>
+        </div>
+        <div class="footer">
+            <div>
+                <span id="recover">恢复文章</span>
+                <span id="cancel-clear">彻底删除</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'frame/PostbirdAlertBox/js/postbirdAlertBox.js' %}"></script>
+<script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
+<script>
+    $(function () {
+        //进入默认选择
+        init_set()
+
+        //点击每个文章
+        $(".container > div.history-list>div:last-child>ul>li").click(function () {
+            $(".container > div.history-list>div:last-child>ul>li").removeClass('li-xz')
+            $(this).addClass("li-xz")
+            $(".main>div.title>h3").text($(this).text())
+            var html = $(this).attr("template")
+            $(".main>div.content>div").html(html)
+        })
+
+        //关闭
+        $("#cha").click(function () {
+            window.location.href = "{% url 'blog:write' %}"
+        })
+
+        //彻底删除文章---这里涉及铭感操作需验证用户信息展示省略
+        $("#cancel-clear").click(function () {
+            var article_id = $(".container > div.history-list>div:last-child>ul>li.li-xz").attr("articlid")
+            var name = $(".main>div.title>h3").text()
+            PostbirdAlertBox.confirm({
+                'content': '确认删除文章《' + name + '》，文章删除后不可恢复。',
+                'okBtn': '确定',
+                'contentColor': 'red',
+                'onConfirm': function () {
+                    $.ajax({
+                        url: "{% url 'blog:cancel' %}",
+                        dataType: 'JSON',
+                        method: "POST",
+                        data: {"article_id": article_id},
+                        success: function (data) {
+                            if (data.code == 0) {
+                                window.location.reload()
+                            }
+                        }
+
+                    })
+                },
+                'onCancel': function () {
+
+                }
+            });
+            $(".postbird-box-content div:first-child").hide()
+
+        })
+
+        //恢复文章
+        $("#recover").click(function () {
+            var article_id = $(".container > div.history-list>div:last-child>ul>li.li-xz").attr("articlid")
+            $.ajax({
+                url: "{% url 'blog:recover' %}",
+                dataType: 'JSON',
+                method: "POST",
+                data: {"article_id": article_id},
+                success: function (data) {
+                    if (data.code == 0) {
+                        window.location.href = "{% url 'blog:write' %}"
+                    }
+                }
+
+            })
+        })
+
+        function init_set() {
+            $(".container > div.history-list>div:last-child>ul>li:first-child").addClass("li-xz")
+            $(".main>div.title>h3").text($(".container > div.history-list>div:last-child>ul>li:first-child").text())
+            var html = $(".container > div.history-list>div:last-child>ul>li:first-child").attr("template")
+            $(".main>div.content>div").html(html)
+        }
+
+
+    })
+</script>
+</body>
+</html>
