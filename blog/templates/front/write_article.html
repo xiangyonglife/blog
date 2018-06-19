@@ -372,6 +372,63 @@
             background-color: #666666;
             color: white;
         }
+
+        #def-push-pop > div.pos-box {
+            padding: 40px;
+            position: fixed;
+            background: #fff;
+            left: 50%;
+            top: 40%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            margin: 0 auto;
+            z-index: 99999;
+            text-align: center !important;
+        }
+
+        #def-push-pop > div.pos-box > .title {
+            padding-bottom: 24px;
+            font-size: 20px;
+            color: #4f4f4f;
+            letter-spacing: 0;
+            line-height: 30px;
+            margin: 0;
+            word-break: break-all;
+            word-wrap: break-word;
+        }
+
+        #def-push-pop > div.pos-box > .status-box {
+            padding-bottom: 32px;
+            font-size: 28px;
+            color: #4f4f4f;
+            letter-spacing: 0;
+            line-height: 24px;
+        }
+
+        #def-push-pop > div.pos-box > .zhaiyao {
+            font-size: 16px;
+            color: #999999;
+            padding-bottom: 24px;
+        }
+
+        #def-push-pop > div.pos-box > .opt-box > .btn {
+            margin-right: 20px;
+            padding: 0;
+            width: 96px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #dc3545;
+            transition: unset;
+            display: inline-block;
+            border: 1px solid red;
+        }
+        #def-push-pop > div.pos-box > .opt-box > .btn:hover{
+            background-color: red;
+            cursor: pointer;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -498,6 +555,24 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <div id="def-push-pop">
+        <div id="mark"
+             style="position: fixed;top: 0;right: 0;left: 0;bottom: 0 ;opacity: 1;background-color: #F4F4F4;z-index: 99999"></div>
+        <div class="pos-box">
+            <div class="text-center title">提示</div>
+            <div class="text-center status-box">
+                <i class="iconfont icon-chenggong" style="font-size:30px;color: green;margin-right: 10px"></i>文章发布成功
+            </div>
+            <p class="text-center zhaiyao">文章摘要由系统生成</p>
+            <div class="opt-box text-center">
+                <a class="btn  btn-outline-danger btn-new mr24" href="https://mp.csdn.net/postedit">写新文章</a>
+                <a class="btn  btn-outline-danger tolist mr24" href="https://mp.csdn.net/postlist">管理博文</a>
+                <a class="btn  btn-outline-danger toarticle"
+                   href="https://blog.csdn.net/u011738045/article/details/80740226">查看文章</a>
+            </div>
         </div>
     </div>
 </div>
@@ -760,14 +835,33 @@
 
         //发布文章
         $("#btn-pop-push").click(function () {
-            var article_content = editor.txt.html().trim()
+            var article_content = editor.txt.text().trim()
             var title = $(".edit-article #title").val()
+            var article_id = $(".article-list li.wz-li-xz").attr("id")
+            var article_blog_category_id = $("#category-submit>select:first-child").val()
+            var article_blog_category_two_id = $("#category-submit>select:last-child").val()
             if (article_content == "") {
                 $(".tooltip span").text('内容不能为空')
                 $(".tooltip").slideDown(function () {
                     setTimeout(function () {
                         $(".tooltip").hide()
                     }, 2000)
+                })
+            } else {
+                $.ajax({
+                    url: "{% url 'blog:push' %}",
+                    method: "POST",
+                    data: {
+                        "content_text": article_content, "title": title,
+                        "article_id": article_id, "article_blog_category_id": article_blog_category_id,
+                        "article_blog_category_two_id": article_blog_category_two_id
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.code == 0) {
+                            $("#def-push-pop").show()
+                        }
+                    }
                 })
             }
 

@@ -115,8 +115,8 @@ class ArticleBlogCategoryTwo(models.Model):
     """
     文章二级类目
     """
-    articleBlogCategoryId = models.AutoField(primary_key=True)  # 自增id
-    articleBlogCategoryTwo = models.CharField(max_length=60, null=True)  # 二级类目名称
+    articleBlogCategoryTwoId = models.AutoField(primary_key=True)  # 自增id
+    articleBlogCategoryTwoName = models.CharField(max_length=60, null=True)  # 二级类目名称
     ArticleBlogCategory = models.ForeignKey(to='ArticleBlogCategory', to_field='articleBlogCategoryId',
                                             on_delete=models.CASCADE, null=True)  # 文章栏目
 
@@ -126,10 +126,12 @@ class Article(models.Model):
     文章信息
     """
     articleCategory = models.ForeignKey(to='ArticleCategory', to_field='articleCategoryId',
-                                        on_delete=models.CASCADE, null=True)  # 文章所属类目
+                                        on_delete=models.CASCADE, null=True)  # 文章所属用户类目
     user = models.ForeignKey(to='User', to_field='userId', on_delete=models.CASCADE, null=True)  # 文章所属用户
     ArticleBlogCategory = models.ForeignKey(to='ArticleBlogCategory', to_field='articleBlogCategoryId',
-                                            on_delete=models.CASCADE, null=True)  # 文章所属栏目
+                                            on_delete=models.CASCADE, null=True)  # 文章所属一级栏目
+    ArticleBlogCategoryTwo = models.ForeignKey(to='ArticleBlogCategoryTwo', to_field='articleBlogCategoryTwoId',
+                                               on_delete=models.CASCADE, null=True)  # 文章所属二级栏目
     articleId = models.AutoField(primary_key=True)  # 自增id
     articleName = models.CharField(max_length=128, null=True)  # 文章标题
     articleTime = models.DateTimeField(auto_now=True)  # 发布时间
@@ -137,14 +139,14 @@ class Article(models.Model):
     articleClick = models.IntegerField(default=0)  # 查看人数
     articleContent = models.TextField()  # 文章内容
     articlePower = models.IntegerField(default=1)  # 文章可见0私有1公开2好友可见
-    articleTop = models.IntegerField(default=1)  # 是否置顶0为否1为是
-    articleSuperTop = models.IntegerField(default=0)  # 0否1是
+    articleTop = models.IntegerField(default=0)  # 是否置顶0为否1为是
+    articleSuperTop = models.IntegerField(default=0)  # 博主推荐0否1是
     articleComment = models.IntegerField(default=0)  # 评论人数
     articleLike = models.IntegerField(default=0)  # 喜欢人数
     articleUrl = models.URLField(null=True)  # 文章路径
 
 
-class comment(models.Model):
+class Comment(models.Model):
     """
     用户评论
     """

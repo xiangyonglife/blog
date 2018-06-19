@@ -4,6 +4,7 @@ import json
 from django.core import exceptions
 import pickle
 from blog.utils import mongodb_con
+import socket
 
 
 # Create your views here.
@@ -155,7 +156,7 @@ def option_one_blog_category(request):
         ArticleBlogCategory__articleBlogCategoryId=one_category_id)
     category_list = []
     for item in blog_two_cateogry:
-        category_list.append({'id': item.articleBlogCategoryId, 'name': item.articleBlogCategoryTwo})
+        category_list.append({'id': item.articleBlogCategoryTwoId, 'name': item.articleBlogCategoryTwoName})
     json_text = {'code': '0', 'msg': '创建文集成功', "data": category_list}
     return HttpResponse(json.dumps(json_text))
 
@@ -369,8 +370,35 @@ def push_article(request):
     :param request:
     :return:
     """
+    # 一级栏目
+    article_blog_category_id = request.POST.get("article_blog_category_id")
+    # 二级栏目
+    article_blog_category_two_id = request.POST.get("article_blog_category_two_id")
+    # 文章纯文本内容
+    content_text = request.POST.get("content_text")
+    # 文章标题
+    title = request.POST.get("title")
+    # 用户ip
+    my_name = socket.getfqdn(socket.gethostname())
+    my_addr = socket.gethostbyname(my_name)
+    print(my_addr)
+    # 文章id
+    article_id = request.POST.get("article_id")
+    # 文章实体
+    parent_article_id = mongodb_con.article.find_one({"article_uid": article_id, "status": 0})['parent_article_id']
+    article_category = models.ArticleCategory.objects.filter(articleUuid=parent_article_id).first()
+    models.Article.objects.create(
+        articleCategory=article_category,
+        user=article_category.user,
+        ArticleBlogCategory_id=article_blog_category_id,
+        ArticleBlogCategoryTwo_id=article_blog_category_two_id,
+        articleName=title,
+        articleIp=my_addr,
+        articleContent=content_text,
 
-    return 'sfsf'
+    )
+    json_text = {'code': '0', 'msg': '成功返回'}
+    return HttpResponse(json.dumps(json_text))
 
 
 def page_error(request):

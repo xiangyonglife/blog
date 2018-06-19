@@ -27,4 +27,5 @@ urlpatterns = [
     path('write-history/', views.article_history, name='history'),
     path('history-cancel/', views.article_cancel, name='cancel'),
     path('history-recover/', views.article_recover, name='recover'),
+    path('push-article/', views.push_article, name='push'),
 ]
