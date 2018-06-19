@@ -96,6 +96,8 @@ class ArticleCategory(models.Model):
     user = models.ForeignKey(to='User', to_field='userId', on_delete=models.CASCADE)  # 该分类所属用户
     articleCategoryName = models.TextField(null=True)  # 分类名称
     articleTemplate = models.TextField(null=True)  # 类目模板
+    articleUuid = models.CharField(max_length=100, null=True)  # 文集唯一标识
+    status = models.IntegerField(default=0)  # 0正常，1删除，2其他
 
     class Meta:  # 注意，是模型的子类，要缩进！  根据这些进行进一步删选
         ordering = ["-articleCategoryId"]

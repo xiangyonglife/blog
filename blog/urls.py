@@ -20,4 +20,8 @@ urlpatterns = [
     path('save-current/', views.save_current, name='save_current'),
     path('save-current_title/', views.save_current_title, name='save_current_title'),
     path('get-xz-article/', views.load_xz_article, name='get_xz_article'),
+    path('modify-wj-name/', views.modify_wj_name, name='modify_wj_name'),
+    path('modify-wj-del/', views.modify_wj_del, name='modify_wj_del'),
+    path('modify-wz-move/', views.modify_wz_move, name='modify_wz_move'),
+    path('modify-wz-del/', views.modify_wz_del, name='modify_wz_del'),
 ]

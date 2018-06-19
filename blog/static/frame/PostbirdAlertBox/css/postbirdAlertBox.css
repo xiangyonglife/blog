@@ -5,11 +5,11 @@
  * License: MIT
  * Date:    2017-09-23
  */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/** {*/
+    /*margin: 0;*/
+    /*padding: 0;*/
+    /*box-sizing: border-box;*/
+/*}*/
 
 .postbird-box-container {
     width: 100%;
@@ -18,7 +18,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 9999;
+    z-index: 99999;
     background-color: rgba(0, 0, 0, 0.2);
     display: block;
     -webkit-user-select: none;
@@ -68,7 +68,7 @@
 }
 
 .postbird-box-text {
-    width: 100%;
+    /*width: 100%;*/
     padding: 0 10%;
     text-align: center;
     line-height: 40px;

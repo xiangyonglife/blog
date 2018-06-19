@@ -147,7 +147,8 @@ var PostbirdAlertBox = {
         promptInput = promptInput[promptInput.length - 1];
         promptInput.focus();
         var okBtn = document.getElementsByClassName('btn-footer-ok');
-        var inputData = promptInput.value;;
+        promptInput.value = opt.content;
+        var inputData = promptInput.value;
         okBtn[okBtn.length - 1].onclick = function () {
             if (opt.onConfirm) {
                 opt.onConfirm(promptInput.value);

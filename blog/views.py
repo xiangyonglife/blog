@@ -134,7 +134,7 @@ def write_article(request):
     """
     # 根据登录用户展示用户类目
     user = request.session.get("user")
-    category = models.ArticleCategory.objects.filter(user__userName=user)
+    category = models.ArticleCategory.objects.filter(user__userName=user, status=0)
     # django 默认无法解析html会把它转义字符要用这个 {% autoescape off %}才能正常显示
     # 获取当前用户类目下的文章
     # article = models.Article.objects.filter(articleCategory__articleCategoryId=category.articleCategoryId)
@@ -169,11 +169,13 @@ def new_category(request):
     """
     category_name = request.POST.get("category_name")
     template = request.POST.get("template")
+    uuid = request.POST.get("uuid")
     user_sign = request.session.get("user")
     user = models.User.objects.filter(userName=user_sign).first()
     obj = models.ArticleCategory(
         articleCategoryName=category_name,
         articleTemplate=template,
+        articleUuid=uuid,
         user=user
     )
     obj.save()
@@ -193,8 +195,9 @@ def new_article(request):
     parent_article_id = request.POST.get("parent_article_id")
     uid = request.POST.get("uid")
     # saveType 0新建 1自动保存，2，发布跟新，3.公开发布
+    # status 0正常 1删除，2其他
     article = {"parent_article_id": parent_article_id, 'title': title, 'title_html': title_html,
-               'content': content_html, 'saveType': 0, "article_uid": uid}
+               'content': content_html, 'saveType': 0, "article_uid": uid, "status": 0}
     mongodb_con.article.insert(article)
     json_text = {'code': '0', 'msg': '创建文集成功'}
     return HttpResponse(json.dumps(json_text))
@@ -207,7 +210,7 @@ def load_article(request):
     :return:
     """
     parent_category_id = request.GET.get("parent_category_id")
-    article = mongodb_con.article.find({"parent_article_id": parent_category_id})
+    article = mongodb_con.article.find({"parent_article_id": parent_category_id, "status": 0})
     article_list = []
     for item in article:
         print(item)
@@ -247,6 +250,59 @@ def save_current_title(request):
     return HttpResponse(json.dumps(json_text))
 
 
+def modify_wj_name(request):
+    """
+    修改文集名称
+    :param request:
+    :return:
+    """
+    name = request.POST.get("name")
+    uuid = request.POST.get("uuid")
+    template = request.POST.get("template")
+    models.ArticleCategory.objects.filter(articleUuid=uuid).update(articleCategoryName=name, articleTemplate=template)
+    json_text = {'code': '0', 'msg': '跟新成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def modify_wj_del(request):
+    """
+    删除文集
+    :param request:
+    :return:
+    """
+    uuid = request.POST.get("uuid")
+    models.ArticleCategory.objects.filter(articleUuid=uuid).update(status=1)
+    mongodb_con.article.update({"parent_article_id": uuid}, {"$set": {"status": 1}})
+    json_text = {'code': '0', 'msg': '跟新成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def modify_wz_move(request):
+    """
+    移动文章
+    :param request:
+    :return:
+    """
+    parent_article_id = request.POST.get("parent_article_id")
+    article_id = request.POST.get("article_id")
+    # print(mongodb_con.article.find_one())
+    mongodb_con.article.update({'article_uid': article_id}, {"$set": {"parent_article_id": parent_article_id}})
+    json_text = {'code': '0', 'msg': '跟新成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def modify_wz_del(request):
+    """
+    删除文章
+    :param request:
+    :return:
+    """
+    article_id = request.POST.get("article_id")
+    mongodb_con.article.update({'article_uid': article_id}, {"$set": {"status": 1}})
+    json_text = {'code': '0', 'msg': '跟新成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
 def load_xz_article(request):
     """
     加载选中的文章内容
@@ -256,7 +312,7 @@ def load_xz_article(request):
     article_id = request.GET.get("article_id")
     print(type(article_id))
     # 找到当前文章并且加载
-    article = mongodb_con.article.find_one({"article_uid": article_id})
+    article = mongodb_con.article.find_one({"article_uid": article_id, "status": 0})
     json_text = {'code': '0', 'msg': '成功返回', "data": mongodb_con.dumps(article)}
     return HttpResponse(json.dumps(json_text))
 

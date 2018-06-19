@@ -222,7 +222,7 @@
             <img src="{% static 'images/logo.JPG' %}" width="76" height="56">
         </a>
         <!-- 未登录显示登录/注册/写文章 -->
-        <a class="btn write-btn" target="_blank" href="{% url 'blog:write' %}">
+        <a class="btn write-btn" target="_blank" href="{% url 'blog:write'%}">
             <i class="iconfont icon-combinedshapecopy2"></i>写文章
         </a>
         {% if user %}

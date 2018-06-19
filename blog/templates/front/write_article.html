@@ -6,6 +6,7 @@
     {% load staticfiles %}
     {% now 'SHORT_DATETIME_FORMAT' as current_year %}
     <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
+    <link rel="stylesheet" href="{% static 'frame/PostbirdAlertBox/css/postbirdAlertBox.css' %}">
     <style>
         a {
             text-decoration: none;
@@ -269,6 +270,76 @@
             display: none;
         }
 
+        #wj-sz {
+            position: absolute;
+            right: 0;
+            background-color: #FFFFFF;
+            margin-right: 10px;
+            top: 40px;
+            border-radius: 5%;
+            display: none;
+            z-index: 10000;
+        }
+
+        #wj-sz div {
+            color: #5B656E;
+            padding: 10px 20px;
+            border-bottom: 1px solid #D9D9D9;
+        }
+
+        #wz-sz div {
+            color: #5B656E;
+            padding: 10px 20px;
+            border-bottom: 1px solid #D9D9D9;
+
+        }
+
+        #wz-sz {
+            position: absolute;
+            right: 50px;
+            background-color: #FFFFFF;
+            top: 65px;
+            border-radius: 5%;
+            display: none;
+            z-index: 10000;
+            border: 1px solid whitesmoke;
+        }
+
+        #wz-sz > div:hover, #wj-sz > div:hover {
+            background-color: #666666;
+            color: white;
+        }
+
+        div#wz-sz-yd {
+            position: absolute;
+            top: 0;
+            right: 145px;
+            width: 100%;
+            background-color: #FFFFFF;
+            border-radius: 5%;
+            z-index: 10000;
+            border: 1px solid whitesmoke;
+            display: none;
+        !important;
+            padding: 0;
+        }
+
+        #wz-sz-yd div {
+        !important;
+            padding: 0;
+            padding: 10px;
+            white-space: nowrap;
+            word-break: keep-all;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        #wz-sz-yd div:hover {
+            background-color: #666666;
+            color: white;
+        }
+
+
     </style>
 </head>
 <body>
@@ -376,9 +447,8 @@
 
         </div>
     </div>
-
-
 </div>
+<script src="{% static 'frame/PostbirdAlertBox/js/postbirdAlertBox.js' %}"></script>
 <script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
 <script src="{% static 'frame/jquery.rotate-0.3.0/jquery.rotate.js' %}"></script>
 <script src="{% static 'frame/wangEditor/release/wangEditor.js' %}"></script>
@@ -429,14 +499,7 @@
             '</div>'
         $(".edit-article .toolbar").append(template)
 
-        //第一次进入写文章类目默认第一个选中
-        $(".wj-list li:first-child").addClass('wj-li-xz').find("i").show()
-        $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
-        //判断当前用户是否有文章如果有用户可以编辑
-        if (!$(".article-list li").is("li")) {
-            $(".tooltip,.edit-article h1").nextAll().hide()
-            $(".edit-article h1").show()
-        }
+        initOnce(true)
 
         ajax_load_article()
 
@@ -463,13 +526,30 @@
                 })
             } else {
                 var uuid = "blog" + guid();
-                var template = "<li id=" + uuid + "  title=" + name + "><div style='padding: 10px;position: relative'><span style='width: 214px;text-overflow: ellipsis;white-space: nowrap;word-break: keep-all;overflow: hidden;display: inline-block;'>" + name + "</span><i class=\"iconfont icon-shezhi\" style='position: absolute;top: 14px;right: 0;'></i></div></li>"
+                var template = "  <li style=\"position: relative\" id=" + uuid + " title=" + name + "\n" +
+                    "                class=\"\">\n" +
+                    "                <div style=\"padding: 10px;position: relative\"><span\n" +
+                    "                        style=\"width: 214px;text-overflow: ellipsis;white-space: nowrap;word-break: keep-all;overflow: hidden;display: inline-block;\">" + name + "</span><i\n" +
+                    "                        class=\"iconfont icon-shezhi\"\n" +
+                    "                        style=\"position: absolute; top: 14px; right: 0px; display:none;\"></i></div>\n" +
+                    "                <div id=\"wj-sz\">\n" +
+                    "                    <div>\n" +
+                    "                        <i class=\"iconfont icon-modify\"></i>\n" +
+                    "                        <span>修改文集</span>\n" +
+                    "                    </div>\n" +
+                    "                    <div>\n" +
+                    "                        <i class=\"iconfont icon-shanchu\"></i>\n" +
+                    "                        <span>删除文集</span>\n" +
+                    "                    </div>\n" +
+                    "\n" +
+                    "                </div>\n" +
+                    "            </li>"
 
                 //文集提交数据库
                 $.ajax({
                     type: "POST",
                     url: "{% url 'blog:category' %}",
-                    data: {"category_name": name, "template": template},
+                    data: {"category_name": name, "template": template, "uuid": uuid},
                     dataType: "JSON",
                     beforeSend: function () {
                         $(".btn-wj span").text("新建文集中......")
@@ -485,6 +565,8 @@
                             })
                             $(".wj-list li:first-child").addClass('wj-li-xz').find("i").show()
                             $(".btn-wj").nextAll('.category-data').slideUp()
+                            window.location.reload()
+                            initOnce(false)
                         }
                     },
                     error: function (data) {
@@ -542,19 +624,7 @@
 
         //发布文章
         $(".edit-article .toolbar #push-article").click(function () {
-            var article_content = editor.txt.text().trim()
-            if (article_content == "") {
-                $(".tooltip span").text('内容不能为空')
-                $(".tooltip").slideDown(function () {
-                    setTimeout(function () {
-                        $(".tooltip").hide()
-                    }, 2000)
-
-                })
-
-            } else {
-                $("#def-pop").slideDown("slow")
-            }
+            push_article()
 
         })
 
@@ -569,7 +639,7 @@
 
         //选择文集
         $(".wj-list").delegate("li", "click", function () {
-
+            $("div#wj-sz").hide()
             //移除原有选择样式
             $(".wj-list li").each(function () {
                 $(this).removeClass('wj-li-xz')
@@ -583,6 +653,7 @@
         });
         //选择文章
         $(".article-list").delegate("li", "click", function () {
+            $("div#wz-sz").hide()
             //移除原有选择样式
             $(".article-list li").each(function () {
                 $(this).removeClass('wz-li-xz')
@@ -650,8 +721,187 @@
         })
         //文集设置
         $(".wj-list li").delegate("i", "click", function () {
-            alert(1)
+            $(this).parent().next().toggle()
+            event.stopPropagation()   //阻止事件冒泡
         })
+
+        //文集设置----修改文集
+        $("div#wj-sz").delegate("div:eq(0)", "click", function () {
+            $("div#wj-sz").hide()
+            var _this = $(this)
+            var uuid = "blog" + guid();
+            var oldname = _this.parent().parent().attr("title")
+            PostbirdAlertBox.prompt({
+                'title': '请输入新文集名称',
+                'okBtn': '提交',
+                'content': oldname,
+                onConfirm: function (data) {
+                    var uuid = _this.parent().parent().attr("id")
+                    var template = "  <li style=\"position: relative\" id=" + uuid + " title=" + data + "\n" +
+                        "                class=\"\">\n" +
+                        "                <div style=\"padding: 10px;position: relative\"><span\n" +
+                        "                        style=\"width: 214px;text-overflow: ellipsis;white-space: nowrap;word-break: keep-all;overflow: hidden;display: inline-block;\">" + data + "</span><i\n" +
+                        "                        class=\"iconfont icon-shezhi\"\n" +
+                        "                        style=\"position: absolute; top: 14px; right: 0px; display:none;\"></i></div>\n" +
+                        "                <div id=\"wj-sz\">\n" +
+                        "                    <div>\n" +
+                        "                        <i class=\"iconfont icon-modify\"></i>\n" +
+                        "                        <span>修改文集</span>\n" +
+                        "                    </div>\n" +
+                        "                    <div>\n" +
+                        "                        <i class=\"iconfont icon-shanchu\"></i>\n" +
+                        "                        <span>删除文集</span>\n" +
+                        "                    </div>\n" +
+                        "\n" +
+                        "                </div>\n" +
+                        "            </li>"
+                    $.ajax({
+                        url: "{% url 'blog:modify_wj_name' %}",
+                        method: "POST",
+                        dataType: "JSON",
+                        data: {"uuid": uuid, "name": data, "template": template},
+                        success: function (data) {
+                            if (data.code == 0) {
+                                window.location.href = "{% url 'blog:write'%}";
+                            }
+                        }
+                    })
+                },
+                onCancel: function (data) {
+                },
+            });
+            event.stopPropagation()   //阻止事件冒泡
+        })
+
+        //文集设置----删除文集
+        $("div#wj-sz").delegate("div:eq(1)", "click", function () {
+            $("div#wj-sz").hide()
+            var _this = $(this)
+            var uuid = _this.parent().parent().attr("id")
+            var oldname = _this.parent().parent().attr("title")
+            PostbirdAlertBox.confirm({
+                'content': '确认删除文集《' + oldname + '》，文章将被移动到回收站。',
+                'okBtn': '确定',
+                'contentColor': 'red',
+                'onConfirm': function () {
+                    $.ajax({
+                        url: "{% url 'blog:modify_wj_del' %}",
+                        method: "POST",
+                        dataType: "JSON",
+                        data: {"uuid": uuid},
+                        success: function (data) {
+                            if (data.code == 0) {
+                                window.location.href = "{% url 'blog:write'%}";
+                            }
+                        }
+                    })
+                },
+                'onCancel': function () {
+
+                }
+            });
+            $(".postbird-box-content div:first-child").hide()
+            event.stopPropagation()   //阻止事件冒泡
+        })
+
+
+        //文章设置
+        $(".article-list").delegate("li i.icon-shezhi", "click", function () {
+            $(this).parent().parent().next().toggle()
+            event.stopPropagation()   //阻止事件冒泡
+            event.preventDefault()
+            return false
+
+        });
+
+        //文章设置---发布文章
+        $(".article-list").delegate("li>div:last-child>div:first-child", "click", function () {
+            push_article()
+            event.stopPropagation()   //阻止事件冒泡
+            event.preventDefault()
+            return false
+
+        });
+
+        //文章设置---移动文章
+        $(".article-list").delegate("li>div:last-child>div:first-child+div", "mouseenter", function () {
+            $(this).find("div").show()
+            var article_id = $(this).parent().parent().attr("id")
+            //遍历移动文章
+            var template_yd = ''
+            $("ul.wj-list>li:not(.wj-li-xz)").each(function () {
+                template_yd += "<div articlId='" + article_id + "' name='" + $(this).attr("id") + "'><span>" + $(this).attr("title") + "</span></div>"
+            })
+            $(this).find(">div").empty()
+            $(this).find(">div").append(template_yd)
+            event.stopPropagation()   //阻止事件冒泡
+            event.preventDefault()
+            return false
+        })
+        $(".article-list").delegate("li>div:last-child>div:first-child+div", "mouseleave", function () {
+            $(this).find("div").hide()
+            event.stopPropagation()   //阻止事件冒泡
+            event.preventDefault()
+            return false
+        })
+
+        //文章设置--选择移动文章
+        $(".article-list").delegate("li>div:last-child>div:first-child+div>div div", "click", function () {
+            $.ajax({
+                url: "{% url 'blog:modify_wz_move' %}",
+                method: "POST",
+                data: {"parent_article_id": $(this).attr("name"), "article_id": $(this).attr("articlId")},
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 0) {
+                        $(".tooltip span").text('文章已移动至新文集')
+                        $(".tooltip").slideDown(function () {
+                            setTimeout(function () {
+                                $(".tooltip").hide()
+                            }, 2000)
+                        })
+                        ajax_load_article()
+                    }
+                }
+            })
+            event.stopPropagation()   //阻止事件冒泡
+            event.preventDefault()
+            return false
+        })
+
+
+        //文章设置删除文章
+        $(".article-list").delegate("li>div:last-child>div:last-child", "click", function () {
+            var name = $(".article-list .wz-li-xz #article-title").text()
+            var article_id = $(this).parent().parent().attr("id")
+            $("div#wz-sz").hide()
+            PostbirdAlertBox.confirm({
+                'content': '确认删除文章《' + name + '》，文章将被移动到回收站，您可以在那里恢复它。60天后将被彻底删除。',
+                'okBtn': '确定',
+                'contentColor': 'red',
+                'onConfirm': function () {
+                    $.ajax({
+                        url: "{% url 'blog:modify_wz_del' %}",
+                        method: "POST",
+                        data: {"article_id": article_id},
+                        dataType: 'JSON',
+                        success: function (data) {
+                            if (data.code == 0) {
+                                ajax_load_article()
+                            }
+                        }
+                    })
+                },
+                'onCancel': function () {
+
+                }
+            });
+            $(".postbird-box-content div:first-child").hide()
+            event.stopPropagation()   //阻止事件冒泡
+            event.preventDefault()
+            return false
+
+        });
 
 
         //异步加载用户文章
@@ -666,8 +916,8 @@
                 dataType: "JSON",
                 beforeSend: function () {
                     $(".article-loading").show()
-                    $(".new-article .article-list").empty()
-                     editor.txt.clear()
+                    initOnce(false)
+
                 },
                 success: function (data) {
                     var title = []
@@ -703,13 +953,33 @@
             })
         }
 
+        //第一次进入用户的一些默认判断
+        function initOnce(enter) {
+            //清空所有内容
+            $(".new-article .article-list").empty()
+            editor.txt.clear()
+            $(".edit-article #title").val("")
+            if (enter) {
+                console.log({{ uid }})
+                //第一次进入写文章类目默认第一个选中
+                $(".wj-list li:first-child").addClass('wj-li-xz').find("i").show()
+                $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+            }
+            //判断当前用户是否有文章如果有用户可以编辑
+            if (!$(".article-list li").is("li")) {
+                $(".tooltip,.edit-article h1").nextAll().hide()
+                $(".edit-article h1").show()
+            }
+        }
+
         //新建文章函数
         function article_new(flag) {
             //防止重复新建
             flag = false
             $(".btn-article span,.btn-wz span").text("新建文章中......")
             var uuid = "article" + guid();
-            var template = '<li id=' + uuid + '>\n' +
+
+            var template = '<li style="position: relative" id=' + uuid + '>\n' +
                 '                <div style="position: relative">\n' +
                 '                    <div style="margin-right: 120px">\n' +
                 '                        <i style="position: absolute;top: 0;font-size: 40px;left: -50px"\n' +
@@ -721,11 +991,29 @@
                 '                            <br>\n' +
                 '                            <span id="article-content" style="white-space: nowrap;word-break: keep-all;overflow: hidden;text-overflow:ellipsis;display: inline-block;width: 237px"></span>\n' +
                 '                        </div>\n' +
-                '                        <i style="position: absolute;top: 40%;right: 70px;font-size: 20px"\n' +
+                '                        <i style="position: absolute;top: 40%;right: 70px;font-size: 20px;display:none"\n' +
                 '                           class="iconfont iconfont icon-shezhi"></i>\n' +
                 '                        <div style="clear: both"></div>\n' +
                 '                    </div>\n' +
                 '                    <div style="clear: both"></div>\n' +
+                '                </div> <div id="wz-sz" style="display: none;">\n' +
+                '                    <div>\n' +
+                '                        <i class="iconfont icon-fabu"></i>\n' +
+                '                        <span>直接发布</span>\n' +
+                '                    </div>\n' +
+                '                    <div style="position: relative">\n' +
+                '                        <i class="iconfont icon-back" style="display: inline;"></i>\n' +
+                '                        <i class="iconfont icon-wenjianjia" style="display: inline;"></i>\n' +
+                '                        <span>移动文章</span>\n' +
+                '                        <div id="wz-sz-yd">\n' +
+                '                            \n' +
+                '                        </div>\n' +
+                '                    </div>\n' +
+                '                    <div>\n' +
+                '                        <i class="iconfont icon-shanchu" style="display: inline;"></i>\n' +
+                '                        <span>删除文章</span>\n' +
+                '                    </div>\n' +
+                '\n' +
                 '                </div>\n' +
                 '\n' +
                 '            </li>'
@@ -766,6 +1054,24 @@
                 }
             })
 
+        }
+
+        //发布文章函数
+        function push_article() {
+            $("div#wz-sz").hide()
+            var article_content = editor.txt.text().trim()
+            if (article_content == "") {
+                $(".tooltip span").text('内容不能为空')
+                $(".tooltip").slideDown(function () {
+                    setTimeout(function () {
+                        $(".tooltip").hide()
+                    }, 2000)
+
+                })
+
+            } else {
+                $("#def-pop").slideDown("slow")
+            }
         }
 
         //按照自己方法生成uuid
