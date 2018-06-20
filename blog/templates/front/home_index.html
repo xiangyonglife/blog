@@ -41,8 +41,10 @@
             background-color: #fff;
             border-color: #f0f0f0;
             position: fixed;
-            top: 0;
             z-index: 1;
+            padding: 2.5px 0px;
+            width: 100%;
+            top: 30px;
 
         }
 
@@ -206,11 +208,87 @@
             background-color: white;
         }
 
+        #top-header {
+            background: #e7e7e7;
+            color: #555 !important;
+            border-bottom: 1px solid #dedede;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .top-nav {
+            height: 30px;
+            width: 1220px;
+            line-height: 30px;
+            margin: 0 auto;
+            overflow: hidden;
+
+        }
+
+        #inf-d {
+            float: left;
+            width: 46%;
+            margin: 0 0 0 5px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
         .active {
             background-color: #F44344;
             cursor: pointer;
             font-weight: 800;
         }
+
+        div#b04 {
+            width: 900px;
+            margin-left: 60px;
+        }
+
+        .nav-banner {
+            position: absolute;
+            top: 0;
+            left: 900px;
+        }
+
+        div#b04 > ol.dots {
+            position: absolute;
+            top: 0;
+        }
+
+        div#b04 > ol.dots > li {
+            float: left;
+            display: inline-block;
+
+            width: 10px;
+
+            height: 10px;
+
+            margin: 0 4px;
+
+            text-indent: -999em;
+
+            border: 2px solid #fff;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            opacity: .4;
+
+            -webkit-transition: background .5s, opacity .5s;
+
+            -moz-transition: background .5s, opacity .5s;
+
+            transition: background .5s, opacity .5s;
+        }
+
+        div#b04 > ol.dots > li.active {
+            background: #fff;
+
+            opacity: 1;
+        }
+
+
     </style>
     <style>
         .footer {
@@ -221,7 +299,7 @@
             border-top: solid 3px #41abf7;
             padding: 10px 0;
             display: block;
-            margin-top: 70px;
+            margin-top: 100px;
         }
 
         .footer > div {
@@ -242,6 +320,74 @@
 
 </head>
 <body>
+<nav id="top-header" style="position: fixed;top: 0;">
+    <div class="top-nav">
+        <div class="menu-container">
+            <ul class="top-menu">
+                <div id="inf-d">
+                    <div id="inf-b">
+                        Hi,
+                        <script type="text/javascript">today = new Date();
+                        var day;
+                        var date;
+                        var hello;
+                        hour = new Date().getHours();
+                        if (hour < 6) {
+                            hello = ' 凌晨好！ ';
+                        } else if (hour < 9) {
+                            hello = ' 早上好！';
+                        } else if (hour < 12) {
+                            hello = ' 上午好！';
+                        } else if (hour < 14) {
+                            hello = ' 中午好！ ';
+                        } else if (hour < 17) {
+                            hello = ' 下午好！ ';
+                        } else if (hour < 19) {
+                            hello = ' 傍晚好！';
+                        } else if (hour < 22) {
+                            hello = ' 晚上好！ ';
+                        } else {
+                            hello = '夜深了！ ';
+                        }
+
+                        function GetCookie(sName) {
+                            var arr = document.cookie.match(new RegExp("(^| )" + sName + "=([^;]*)(;|$)"));
+                            if (arr != null) {
+                                return unescape(arr[2])
+                            }
+                            ;
+                            return null;
+                        }
+
+                        var Guest_Name = decodeURIComponent(GetCookie('author'));
+                        var webUrl = webUrl;
+                        if (Guest_Name != "null" && Guest_Name != "") {
+                            hello = Guest_Name + ' , ' + hello + ' 欢迎回来。';
+                        }
+                        document.write(' ' + hello);</script>
+                        夜深了！
+                        今天是：
+                        <span id="localtime">
+        <script type="text/javascript">today = new Date();
+        var tdate, tday, x, year;
+        var x = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+        var MSIE = navigator.userAgent.indexOf("MSIE");
+        if (MSIE != -1) {
+            year = (today.getFullYear());
+        } else {
+            year = (today.getYear() + 1900);
+        }
+        tdate = year + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日" + " " + x[today.getDay()];
+        document.write(tdate);</script>2018年6月20日 星期三
+      </span><!---->
+                    </div>
+                    <div id="inf-e"></div>
+                </div>
+            </ul>
+        </div>
+
+    </div>
+</nav>
 <nav class="navbar">
     <div class="width-limit clear_fix">
         <!-- 左上方 Logo -->
@@ -298,7 +444,8 @@
                         <li>
                             <a href="/faqs">
                                 <i class="iconfont icon-bangzhuyufankui"
-                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i></i><span>帮助与反馈</span>
+                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i></i>
+                                <span>帮助与反馈</span>
                             </a></li>
                         <li>
                             <a rel="nofollow" data-method="delete" href="{% url 'blog:out' %}">
@@ -347,7 +494,23 @@
         </div>
     </div>
 </nav>
-<div class="container" style="width:1200px;margin: 0 auto;position: relative;top:60px;">
+<div class="container" style="width:1200px;margin: 0 auto;position: relative;top:110px;">
+    <div id="b04">
+        <ul>
+            <li>
+                <img src="{% static 'images/01.jpg' %}" height="400px" width="100%">
+            </li>
+            <li>
+                <img src="{% static 'images/02.jpg' %}" height="400px" width="100%">
+            </li>
+            <li>
+                <img src="{% static 'images/03.jpg' %}" height="400px" width="100%">
+            </li>
+            <li>
+                <img src="{% static 'images/04.jpg' %}" height="400px" width="100%">
+            </li>
+        </ul>
+    </div>
     <div class="content_wrap" style="margin-top: 20px;margin-left: 50px">
         <div class="content">
             <!--  <div class="top-category">
@@ -411,6 +574,7 @@
 </footer>
 <script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
 <script src="{% static 'frame/jquery.easing/js/jquery.easing.js' %}"></script>
+<script src="{% static 'frame/unslider-150203225543/unslider.min.js' %}"></script>
 
 
 <script>
@@ -452,14 +616,14 @@
         })
 
         //移出用户是子菜单不显示
-        $(document).mousemove(function (e) {
+        {% comment %}$(document).mousemove(function (e) {
             if (e.pageX > 1217 && e.pageX < 1350) {
                 //$('nav .user .dropdown-menu').show()
             } else {
                 $('nav .user .dropdown-menu').hide()
             }
             //console.log((e.pageX + ", " + e.pageY))
-        })
+        }){% endcomment %}
 
         //侧边选择
         $(".lef-bar > div.nav-com > ul>li").mouseenter(function () {
@@ -496,41 +660,19 @@
             $(this).removeClass("active").find(">a").css("color", "#333")
         })
 
-
-        $(".fa.fa-user").click(function () {
-            $("nav.navbar").animate({
-                top: [-70, 'easeInBack']
-            }, {
-                duration: 600, complete: function () {
-
-                }
-            });
-        })
-
-
-        $(".fa.fa-clock-o").click(function () {
-            $("nav.navbar").animate({
-                top: [0, 'easeInBack']
-            }, {
-                duration: 600, complete: function () {
-
-                }
-            });
-        })
-
-
+        //top滑动效果
         $(window).scroll(function () {
             var before = $(window).scrollTop();
             $(window).scroll(function () {
                 var after = $(window).scrollTop();
-                if (before < after&&after>80) {
+                if (before < after && after > 80) {
                     console.log('上');
                     before = after;
                     $("nav.navbar").stop()
 
                     $("nav.navbar").animate({
-                        top: [-70, 'easeInCubic']
-                    },);
+                        top: [-75, 'linear'],
+                    }, {duration: 'fast'});
 
                 }
                 ;
@@ -541,14 +683,35 @@
                     $("nav.navbar").stop()
 
                     $("nav.navbar").animate({
-                        top: [0, 'easeInCubic']
-                    });
+                        top: [30, 'linear'],
+                    }, {duration: 'fast'});
                 }
                 ;
 
 
             });
         });
+
+        //banner初始化
+        $("div#b04>ul>li:eq(1)").css({
+            "position": "absolute",
+            "top": 0,
+            "left": "900px"
+        })
+        $("div#b04>ul>li:eq(2)").css({
+            "position": "absolute",
+            "top": 0,
+            "right": "900px"
+        })
+        $("div#b04>ul>li:eq(3)").css({
+            "position": "absolute",
+            "top": 0,
+            "left": "2700px"
+        })
+
+        var unslider04 = $('#b04').unslider({
+            dots: true
+        })
 
 
     })
