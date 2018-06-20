@@ -17,10 +17,30 @@ def index(request):
     # 获取当前用户随机字符串
     # 根据随机字符串获取对应信息
     user = request.session.get('is_sign')
-    print(user)
+    article = models.Article.objects.all()  # 加载所有文章
+    article_blog_category = models.ArticleBlogCategory.objects.all()  # 加载所有一级栏目
     # request.session.clear_expired() 江所有session失效日期小于当前日期删除
     # request.session.clear() #注销的时候使用
-    return render(request, 'home_main.html', {'user': user})
+    return render(request, 'home_main.html',
+                  {'user': user, "article": article, "article_blog_category": article_blog_category})
+
+
+def index_bar(request):
+    """
+    首页侧边bar二级数据
+    :param request:
+    :return:
+    """
+    article_blog_category_id = request.GET.get("article_blog_category_id")
+    article_blog_category_two = models.ArticleBlogCategoryTwo.objects.filter(
+        ArticleBlogCategory__articleBlogCategoryId=article_blog_category_id)
+    article_blog_category_two_list = []
+    for item in article_blog_category_two:
+        article_blog_category_two_list.append({"articleBlogCategoryTwoId": item.articleBlogCategoryTwoId,
+                                               "articleBlogCategoryTwoName": item.articleBlogCategoryTwoName})
+    print(article_blog_category_two_list)
+    text_json = {'code': '0', 'msg': '跟新成功', "data": article_blog_category_two_list}
+    return HttpResponse(json.dumps(text_json))
 
 
 def login_index(request):
@@ -395,10 +415,31 @@ def push_article(request):
         articleName=title,
         articleIp=my_addr,
         articleContent=content_text,
+        articleUrl=article_id
 
     )
     json_text = {'code': '0', 'msg': '成功返回'}
     return HttpResponse(json.dumps(json_text))
+
+
+def article_show(request):
+    """
+    首页文章展示摘要
+    :return:
+    """
+    article = models.Article.objects.all()
+    json_text = {'code': '0', 'msg': '成功返回'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def article_detail(request, article_id):
+    """
+    文章详情
+    :return:
+    """
+    article = mongodb_con.article.find_one({"article_uid": article_id, "status": 0})
+    print(article['title'])
+    return render(request, 'article_detail.html', article)
 
 
 def page_error(request):

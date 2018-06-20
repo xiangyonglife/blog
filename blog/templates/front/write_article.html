@@ -54,6 +54,8 @@
         {#position: relative;#} background-color: #FFFFFF;
             padding-top: 20px;
         {#position: fixed;#}{#margin-left: 42.3%;#}{#overflow-y: scroll;#};
+            position: fixed;
+            right: -5px;
 
         }
 
@@ -558,7 +560,7 @@
         </div>
     </div>
 
-    <div id="def-push-pop">
+    <div id="def-push-pop" style="display: none">
         <div id="mark"
              style="position: fixed;top: 0;right: 0;left: 0;bottom: 0 ;opacity: 1;background-color: #F4F4F4;z-index: 99999"></div>
         <div class="pos-box">
@@ -833,7 +835,7 @@
             })
         })
 
-        //发布文章
+        //发布提交文章
         $("#btn-pop-push").click(function () {
             var article_content = editor.txt.text().trim()
             var title = $(".edit-article #title").val()

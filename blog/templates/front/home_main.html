@@ -1,70 +1,55 @@
 {% extends 'front/home_index.html' %}
 {% block template %}
+    {% now 'SHORT_DATETIME_FORMAT' as current_year %}
+    {% for item in article %}
     <div class="article clear_fix">
         <div class="title">
             <a class="label" href="#">Python</a>
             <i class="label_arrow"></i>
             <h2>
-                <a href="#" target="_blank" title="Python中logging模块的基本用法">
-                    Python中logging模块的基本用法
+                <a href="{% url 'blog:article-detail'  item.articleUrl  %}" target="_blank" title="{{ item.articleName }}">
+                    {{ item.articleName }}
                 </a>
             </h2>
         </div>
         <div class="img">
             <a target="_blank" href="#">
                 <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://mmbiz.qpic.cn/mmbiz_png/riafuBXuN2hohUpic3yAULNt3jVsLEibedvUkDMKRaa7nuiaPL1aHUWLkENxwBPeQ9Wqy2cuMm9kHt64D2ZfBkzTvg/640?wx_fmt=png&h=123&w=200&q=90&zc=1&ct=1"
-                     alt="Python中logging模块的基本用法">
+                     alt="{{ item.articleName }}">
             </a>
         </div>
         <div class="note">
                         <span>
-                               嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
-
-书籍介绍
-本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
-                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
-
-书籍介绍
-本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
-
-                            嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的《Python3网络爬虫开发实战》！！！
-
-书籍介绍
-本书《Python3网络爬虫开发实战》全面介绍了利用 Python3 开发网络爬虫的知识，书中首先详细介绍... 嗨~ 给大家重磅推荐一本新书！还未上市前就已经重印 3 次的 Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
-                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
-                            Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
-                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
-                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
-                            庆才所作的Python 爬虫书！那么它就是由静觅博客博主崔庆才所作的
-
-
-
+                               {{ item.articleContent }}
                         </span>
 
         </div>
         <div class="auto">
                         <span>
                            <i class="fa fa-user"></i>
-                            <a href="#">向勇</a>
+                            <a href="#">{{ item.user.userName }}</a>
                         </span>
             <span>
                             <i class="fa fa-clock-o"></i>
-                             3小时前
+{#                             {{ item.articleTime|date:"Y-m-d H:i:s"}}#}
+
+                            {{ item.articleTime|timesince}}前
                         </span>
             <span>
                             <i class="fa fa-eye"></i>
-                             11人浏览
+                             {{ item.articleClick }}人浏览
                         </span>
             <span>
                             <i class="fa fa-comments-o"></i>
-                             <a href="#">10000评论</a>
+                             <a href="#">{{ item.articleComment }}评论</a>
                         </span>
             <span class="like">
                             <i class="fa fa-heart-o"></i>
-                           <a href="#">0喜欢</a>
+                           <a href="#">{{ item.articleLike }}喜欢</a>
                         </span>
         </div>
     </div>
+    {% endfor %}
 {% endblock %}
 
 {% block script %}{% endblock %}
@@ -108,10 +93,12 @@
         }
 
         .article {
-            background-color: #fff;
             padding: 20px 15px 30px 20px;
             position: relative;
-            margin-bottom: 10px
+            margin-bottom: 10px;
+            border-bottom: 1px solid whitesmoke;
+             background-color: #FFFFFF;
+
         }
 
         .article .title .label {
