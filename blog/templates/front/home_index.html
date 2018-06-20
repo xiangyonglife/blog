@@ -41,7 +41,7 @@
             background-color: #fff;
             border-color: #f0f0f0;
             position: fixed;
-            top:0;
+            top: 0;
             z-index: 1;
 
         }
@@ -195,7 +195,6 @@
             text-align: center;
             padding: 25px;
             background-color: #FFFFFF;
-
 
         }
 
@@ -411,6 +410,9 @@
     </div>
 </footer>
 <script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
+<script src="{% static 'frame/jquery.easing/js/jquery.easing.js' %}"></script>
+
+
 <script>
     $(function () {
         //用户登录显示菜单
@@ -494,16 +496,61 @@
             $(this).removeClass("active").find(">a").css("color", "#333")
         })
 
-        $(document).scroll(function () {
-            var scroollTop=$(this).scrollTop()
-            if(scroollTop>80){
-                $("nav.navbar").slideUp('slow')
-            }else{
-                 $("nav.navbar").slideDown('slow')
-            }
-            console.log(scroollTop)
 
+        $(".fa.fa-user").click(function () {
+            $("nav.navbar").animate({
+                top: [-70, 'easeInBack']
+            }, {
+                duration: 600, complete: function () {
+
+                }
+            });
         })
+
+
+        $(".fa.fa-clock-o").click(function () {
+            $("nav.navbar").animate({
+                top: [0, 'easeInBack']
+            }, {
+                duration: 600, complete: function () {
+
+                }
+            });
+        })
+
+
+        $(window).scroll(function () {
+            var before = $(window).scrollTop();
+            $(window).scroll(function () {
+                var after = $(window).scrollTop();
+                if (before < after&&after>80) {
+                    console.log('上');
+                    before = after;
+                    $("nav.navbar").stop()
+
+                    $("nav.navbar").animate({
+                        top: [-70, 'easeInCubic']
+                    },);
+
+                }
+                ;
+
+                if (before > after) {
+                    console.log('下');
+                    before = after;
+                    $("nav.navbar").stop()
+
+                    $("nav.navbar").animate({
+                        top: [0, 'easeInCubic']
+                    });
+                }
+                ;
+
+
+            });
+        });
+
+
     })
 
 </script>
