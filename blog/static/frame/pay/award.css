@@ -13,7 +13,7 @@
     opacity: .6;
     filter: alpha(opacity=30);
     background: #000;
-    z-index: 999999999;
+    /*z-index: 999999999;*/
     left: 0;
     top: 0;
     width: 100%;

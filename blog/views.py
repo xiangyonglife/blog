@@ -440,7 +440,8 @@ def article_detail(request, article_id):
     article = mongodb_con.article.find_one({"article_uid": article_id, "status": 0})
     article_zy = models.Article.objects.values("articleTime", "articleClick", "articleComment").filter(
         articleUrl=article_id).first()
-    return render(request, 'article_detail.html', {"article": article, "article_zy": article_zy})
+    comments = models.Comment.objects.filter(commentArticle=article_id).all()
+    return render(request, 'article_detail.html', {"article": article, "article_zy": article_zy, "comments": comments})
 
 
 @auth
@@ -454,6 +455,7 @@ def article_comments(request):
     user = models.User.objects.filter(userName=user_sign).first()
     content = request.POST.get("content")
     article_id = request.POST.get("article_id")
+    comments_count = request.POST.get("comments_count")
     # 用户ip
     my_name = socket.getfqdn(socket.gethostname())
     my_addr = socket.gethostbyname(my_name)
@@ -464,6 +466,7 @@ def article_comments(request):
         commentArticle_id=article_id
 
     )
+    models.Article.objects.filter(articleUrl=article_id).update(articleComment=int(comments_count) + 1)
     json_text = {'code': '0', 'msg': '成功返回'}
     return HttpResponse(json.dumps(json_text))
 

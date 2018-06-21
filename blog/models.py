@@ -158,3 +158,6 @@ class Comment(models.Model):
     commentArticle = models.ForeignKey(to='Article', to_field='articleUrl', on_delete=models.CASCADE,
                                        null=True)  # 评论文章id
     fatherComment = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+
+    class Meta:  # 注意，是模型的子类，要缩进！  根据这些进行进一步删选
+        ordering = ["-commentId"]
