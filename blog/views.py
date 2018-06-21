@@ -438,8 +438,34 @@ def article_detail(request, article_id):
     :return:
     """
     article = mongodb_con.article.find_one({"article_uid": article_id, "status": 0})
-    print(article['title'])
-    return render(request, 'article_detail.html', article)
+    article_zy = models.Article.objects.values("articleTime", "articleClick", "articleComment").filter(
+        articleUrl=article_id).first()
+    return render(request, 'article_detail.html', {"article": article, "article_zy": article_zy})
+
+
+@auth
+def article_comments(request):
+    """
+    文章评论
+    :param request:
+    :return:
+    """
+    user_sign = request.session.get("user")
+    user = models.User.objects.filter(userName=user_sign).first()
+    content = request.POST.get("content")
+    article_id = request.POST.get("article_id")
+    # 用户ip
+    my_name = socket.getfqdn(socket.gethostname())
+    my_addr = socket.gethostbyname(my_name)
+    models.Comment.objects.create(
+        commentContent=content,
+        commentUser=user,
+        commentIp=my_addr,
+        commentArticle_id=article_id
+
+    )
+    json_text = {'code': '0', 'msg': '成功返回'}
+    return HttpResponse(json.dumps(json_text))
 
 
 def page_error(request):

@@ -1,24 +1,257 @@
 {% extends 'front/home_index.html' %}
+{% load staticfiles %}
 {% block template %}
-
+    <div class="article-detail-container">
     <header>
-        <div class="article-detail-container">
-            <div class="title">
-                <h3 style="color: white">JAVA团长</h3>
-            </div>
+
+        <div id="font-change" class="left">
+            <span id="font-dec"><a href="#" title="减小字体">-</a></span>
+            <span id="font-n"><a href="#" title="默认大小">N</a></span>
+            <span id="font-inc"><a href="#" title="增大字体">+</a></span>
         </div>
+
+        <div class="post-meta">
+            <span class="time">{{ article_zy.articleTime|date:"Y年m月d日" }}</span>
+            <span class="eye"><i class="fa fa-eye"></i>&nbsp;{{ article_zy.articleClick }}</span>
+            <span class="comm"><a href="https://www.talklee.com/guestbook/#comments"><i class="fa fa-comment-o"></i>&nbsp;{{ article_zy.articleComment }}</a></span>
+            <span class="r-hide">
+                    <a title="侧边栏">
+                        <i style="padding-left: 5px" class="fa fa-caret-left"></i>
+                        <i class="fa fa-caret-right"></i>
+                    </a>
+                </span>
+        </div>
+
+        <h2 class="post-title"><a href="https://www.talklee.com/guestbook/" title="正在阅读：{{ article.title }}"
+                                  rel="bookmark">{{ article.title }}</a>
+        </h2>
     </header>
+    <div class="main">
+        {% autoescape off %}
+            {{ article.content }}
+        {% endautoescape %}
+    </div>
+    <div class="ds-reward-stl">
+        <button id="dsRewardBtn" onclick="PaymentUtils.show();"><i class="fa fa-usd"></i>赏</button>
+
+    </div>
+    <div class="entry-meta">
+        <p class="post-tag">标签：<a href="https://www.talklee.com/tags-11.html" rel="tag"
+                                  title="查看标签为《建站》的所有文章">建站</a><a href="https://www.talklee.com/tags-20.html"
+                                                                  rel="tag" title="查看标签为《自媒体》的所有文章">自媒体</a><a
+                href="https://www.talklee.com/tags-18.html" rel="tag" title="查看标签为《资讯》的所有文章">资讯</a><a
+                href="https://www.talklee.com/tags-21.html" rel="tag" title="查看标签为《新闻》的所有文章">新闻</a><a
+                href="https://www.talklee.com/tags-3.html" rel="tag" title="查看标签为《投稿》的所有文章">投稿</a></p>
+        <p class="post-tag">
+            个人类目:
+            <a>test</a>
+        </p>
+    </div>
+    <div id="comments">
+        <h4><i class="fa fa-pencil"></i>发表评论<span><a rel="nofollow" id="cancel-reply" href="#comment"
+                                                     style="display:none;"><small>取消回复</small></a></span><span
+                class="jubao"><a rel="nofollow" href="http://www.12377.cn/" target="_blank"><small><i
+                class="fa fa-exclamation-triangle"></i>中国互联网举报中心</small></a></span></h4>
+
+        <div id="editor">
+            <p>文章很好，非常👍不错赞一个</p>
+        </div>
+        <input id="btn-coments" type="button" value="提交评论">
+
+    </div>
 {% endblock %}
 
-{% block script %}{% endblock %}
+{% block script %}
+    <script type="text/javascript"
+            src="{% static 'frame/pay/award.js' %}"></script>
+    <script src="{% static 'frame/wangEditor/release/wangEditor.js' %}"></script>
+    <script type="text/javascript">
+        var E = window.wangEditor
+        var editor = new E('#editor')
+        // 或者 var editor = new E( document.getElementById('editor') )
+        // 自定义菜单配置
+        editor.customConfig.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',  // 字号
+            'fontName',  // 字体
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'strikeThrough',  // 删除线
+            'foreColor',  // 文字颜色
+            'backColor',  // 背景颜色
+            'link',  // 插入链接
+            'justify',  // 对齐方式
+            'quote',  // 引用
+            'emoticon',  // 表情
+        ]
+        editor.customConfig.zIndex = 100
+        editor.create()
+
+        $(function () {
+            $("#editor .w-e-text-container").css({
+                "height": '200px',
+            })
+            $("#editor>div:first-child").css({
+                "background-color": '#dbe8eb',
+            })
+
+            $("#btn-coments").click(function () {
+                var content = editor.txt.html()
+                var article_id = "{{article.article_uid}}"
+                $.ajax({
+                    url: "{% url 'blog:comments' %}",
+                    method: 'POST',
+                    data: {"content": content, "article_id": article_id},
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.code == 0) {
+
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+{% endblock %}
+
 
 
 {% block style %}
+    <link rel="stylesheet" href="{% static 'frame/pay/award.css' %}">
     <style>
-        .article-detail-container{
-            width: 100%;
-            background-color: #232E3C;
-            height: 140px;
+        div.article-detail-container > header span {
+            color: #999;
+            line-height: 26px;
+            margin: 0 5px 0 0;
+            padding: 0px 8px;
+            display: inline-block;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+
         }
+
+        div.article-detail-container > header > div {
+            float: left;
+        }
+
+        div.article-detail-container > header {
+            width: 80%;
+            background-color: white;
+            border: 1px solid whitesmoke;
+            padding: 15px;
+            height: 100%;
+
+        }
+
+        div.article-detail-container div.post-meta {
+            float: right;
+        }
+
+        div.article-detail-container h2.post-title {
+            display: block;
+            font-weight: bold;
+            background: #ebebeb;
+            font-size: 18px;
+            line-height: 30px;
+            margin: 45px -15px 10px -15px;
+            padding: 6px 20px;
+            border-left: 5px solid #2f889a;
+            border-right: 5px solid #2f889a;
+            text-align: center;
+        }
+
+        div.article-detail-container > div.main {
+            width: 80%;
+            background-color: white;
+            border: 1px solid whitesmoke;
+            padding: 15px;
+            height: 100%;
+        }
+
+        div.article-detail-container > div.ds-reward-stl {
+            width: 80%;
+            background-color: white;
+            border: 1px solid whitesmoke;
+            padding: 15px;
+            height: 100%;
+            text-align: center;
+            font-family: "microsoft yahei";
+        }
+
+        div.article-detail-container > div.ds-reward-stl #dsRewardBtn {
+            margin: 0;
+            background: #FF6969;
+            font-size: 16px;
+            font-weight: 600;
+            border: 4px solid #fff;
+            border-radius: 50px;
+            color: #FFFFFF;
+            padding: 8px 30px;
+            transition: all .3s ease-out 0s;
+            outline: 0;
+            cursor: pointer;
+        }
+
+        div.article-detail-container > div.ds-reward-stl #dsRewardBtn:hover {
+            background-color: #30879A;
+        }
+
+        div.article-detail-container > div.entry-meta {
+            padding: 2px 20px;
+            width: 80%;
+            background-color: white;
+            border: 1px solid whitesmoke;
+            padding: 15px;
+            height: 100%;
+        }
+
+        div.article-detail-container > div.entry-meta .post-tag a {
+            padding: 3px 8px;
+            border: 1px solid #eee;
+            margin-right: 5px;
+            line-height: 35px;
+        }
+
+        div.article-detail-container > div#comments {
+            width: 80%;
+            background-color: white;
+            border: 1px solid whitesmoke;
+            padding: 15px;
+            height: 100%;
+
+        }
+
+        div.article-detail-container > div#comments h3, #comments h4 {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 2;
+            padding: 0 8px;
+            margin: 10px 0 15px;
+            border-bottom: 1px solid #398E9F;
+            color: #398E9F;
+        }
+
+        div.article-detail-container > div#comments h4 span.jubao {
+            float: right;
+            margin-right: 0;
+        }
+
+        div.article-detail-container > div#comments h4 span.jubao small {
+            color: #338A9C;
+        }
+
+        #btn-coments {
+            color: #FFFFFF;
+            background-color: #398E9F;
+            height: 30px;
+            width: 88px;
+            border-radius: 4px;
+            cursor: pointer;
+            outline: 0;
+            border: 0;
+            margin-top: 10px;
+        }
+
     </style>
 {% endblock %}

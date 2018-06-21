@@ -143,7 +143,7 @@ class Article(models.Model):
     articleSuperTop = models.IntegerField(default=0)  # 博主推荐0否1是
     articleComment = models.IntegerField(default=0)  # 评论人数
     articleLike = models.IntegerField(default=0)  # 喜欢人数
-    articleUrl = models.URLField(null=True)  # 文章路径
+    articleUrl = models.URLField(null=True, unique=True)  # 文章路径
 
 
 class Comment(models.Model):
@@ -155,3 +155,6 @@ class Comment(models.Model):
     commentUser = models.ForeignKey(to='User', to_field='userId', on_delete=models.CASCADE)  # 评论者
     commentTime = models.DateTimeField(auto_now_add='True')  # 评论时间
     commentIp = models.GenericIPAddressField()  # 评论ip
+    commentArticle = models.ForeignKey(to='Article', to_field='articleUrl', on_delete=models.CASCADE,
+                                       null=True)  # 评论文章id
+    fatherComment = models.ForeignKey('self', on_delete=models.CASCADE, null=True)

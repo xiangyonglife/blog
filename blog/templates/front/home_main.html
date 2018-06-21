@@ -1,59 +1,93 @@
 {% extends 'front/home_index.html' %}
+{% load staticfiles %}
+
+{% block template_banner %}
+    <div id="b04">
+        <ul>
+            <li>
+                <img src="{% static 'images/01.jpg' %}" height="400px" width="100%">
+            </li>
+            <li>
+                <img src="{% static 'images/02.jpg' %}" height="400px" width="100%">
+            </li>
+            <li>
+                <img src="{% static 'images/03.jpg' %}" height="400px" width="100%">
+            </li>
+            <li>
+                <img src="{% static 'images/04.jpg' %}" height="400px" width="100%">
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block template_left_bar %}
+    <div class="lef-bar">
+        <div class="nav-com">
+            <ul>
+                {% for item in article_blog_category %}
+                    <li articleBlogCategoryID="{{ item.articleBlogCategoryId }}">
+                        <a>{{ item.articleBlogCategoryName }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+{% endblock %}
+
 {% block template %}
     {% now 'SHORT_DATETIME_FORMAT' as current_year %}
     {% for item in article %}
-    <div class="article clear_fix">
-        <div class="title">
-            <a class="label" href="#">Python</a>
-            <i class="label_arrow"></i>
-            <h2>
-                <a href="{% url 'blog:article-detail'  item.articleUrl  %}" target="_blank" title="{{ item.articleName }}">
-                    {{ item.articleName }}
+        <div class="article clear_fix">
+            <div class="title">
+                <a class="label" href="#">Python</a>
+                <i class="label_arrow"></i>
+                <h2>
+                    <a href="{% url 'blog:article-detail'  item.articleUrl %}" target="_blank"
+                       title="{{ item.articleName }}">
+                        {{ item.articleName }}
+                    </a>
+                </h2>
+            </div>
+            <div class="img">
+                <a target="_blank" href="#">
+                    <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://mmbiz.qpic.cn/mmbiz_png/riafuBXuN2hohUpic3yAULNt3jVsLEibedvUkDMKRaa7nuiaPL1aHUWLkENxwBPeQ9Wqy2cuMm9kHt64D2ZfBkzTvg/640?wx_fmt=png&h=123&w=200&q=90&zc=1&ct=1"
+                         alt="{{ item.articleName }}">
                 </a>
-            </h2>
-        </div>
-        <div class="img">
-            <a target="_blank" href="#">
-                <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://mmbiz.qpic.cn/mmbiz_png/riafuBXuN2hohUpic3yAULNt3jVsLEibedvUkDMKRaa7nuiaPL1aHUWLkENxwBPeQ9Wqy2cuMm9kHt64D2ZfBkzTvg/640?wx_fmt=png&h=123&w=200&q=90&zc=1&ct=1"
-                     alt="{{ item.articleName }}">
-            </a>
-        </div>
-        <div class="note">
+            </div>
+            <div class="note">
                         <span>
                                {{ item.articleContent }}
                         </span>
 
-        </div>
-        <div class="auto">
+            </div>
+            <div class="auto">
                         <span>
                            <i class="fa fa-user"></i>
                             <a href="#">{{ item.user.userName }}</a>
                         </span>
-            <span>
+                <span>
                             <i class="fa fa-clock-o"></i>
 {#                             {{ item.articleTime|date:"Y-m-d H:i:s"}}#}
 
-                            {{ item.articleTime|timesince}}前
+                            {{ item.articleTime|timesince }}前
                         </span>
-            <span>
+                <span>
                             <i class="fa fa-eye"></i>
                              {{ item.articleClick }}人浏览
                         </span>
-            <span>
+                <span>
                             <i class="fa fa-comments-o"></i>
                              <a href="#">{{ item.articleComment }}评论</a>
                         </span>
-            <span class="like">
+                <span class="like">
                             <i class="fa fa-heart-o"></i>
                            <a href="#">{{ item.articleLike }}喜欢</a>
                         </span>
+            </div>
         </div>
-    </div>
     {% endfor %}
 {% endblock %}
-
-{% block script %}{% endblock %}
-
 
 {% block style %}
     <style>
@@ -97,7 +131,7 @@
             position: relative;
             margin-bottom: 10px;
             border-bottom: 1px solid whitesmoke;
-             background-color: #FFFFFF;
+            background-color: #FFFFFF;
 
         }
 
@@ -244,5 +278,82 @@
             margin-bottom: 20px;
             background: #fff;
         }
+
+        .active {
+            background-color: #F44344;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        div#b04 {
+            width: 900px;
+            margin-left: 60px;
+        }
+
+        .nav-banner {
+            position: absolute;
+            top: 0;
+            left: 900px;
+        }
+
+        div#b04 > ol.dots {
+            position: absolute;
+            top: 0;
+        }
+
+        div#b04 > ol.dots > li {
+            float: left;
+            display: inline-block;
+
+            width: 10px;
+
+            height: 10px;
+
+            margin: 0 4px;
+
+            text-indent: -999em;
+
+            border: 2px solid #fff;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            opacity: .4;
+
+            -webkit-transition: background .5s, opacity .5s;
+
+            -moz-transition: background .5s, opacity .5s;
+
+            transition: background .5s, opacity .5s;
+        }
+
+        div#b04 > ol.dots > li.active {
+            background: #fff;
+
+            opacity: 1;
+        }
+
+        .lef-bar {
+            position: absolute;
+            top: 30px;
+            border: 1px solid whitesmoke;
+            left: -140px;
+            text-align: center;
+            padding: 25px;
+            background-color: #FFFFFF;
+
+        }
+
+        .lef-bar > div.nav-com > ul > li {
+            padding: 6px;
+        }
+
+        .lef-bar > div.nav-com > ul > li > div {
+            background-color: white;
+        }
     </style>
 {% endblock %}
+
+{% block script %}{% endblock %}
+

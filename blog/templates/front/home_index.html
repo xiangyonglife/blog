@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
     {% load staticfiles %}
+
     <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
     <link rel="stylesheet" href="{% static 'frame/font-awesome-4.7.0/css/font-awesome.css' %}">
+
     <style>
         a {
             cursor: pointer;
@@ -189,25 +192,6 @@
             color: black;
         }
 
-        .lef-bar {
-            position: absolute;
-            top: 30px;
-            border: 1px solid whitesmoke;
-            left: -140px;
-            text-align: center;
-            padding: 25px;
-            background-color: #FFFFFF;
-
-        }
-
-        .lef-bar > div.nav-com > ul > li {
-            padding: 6px;
-        }
-
-        .lef-bar > div.nav-com > ul > li > div {
-            background-color: white;
-        }
-
         #top-header {
             background: #e7e7e7;
             color: #555 !important;
@@ -233,64 +217,6 @@
             white-space: nowrap;
         }
 
-        .active {
-            background-color: #F44344;
-            cursor: pointer;
-            font-weight: 800;
-        }
-
-        div#b04 {
-            width: 900px;
-            margin-left: 60px;
-        }
-
-        .nav-banner {
-            position: absolute;
-            top: 0;
-            left: 900px;
-        }
-
-        div#b04 > ol.dots {
-            position: absolute;
-            top: 0;
-        }
-
-        div#b04 > ol.dots > li {
-            float: left;
-            display: inline-block;
-
-            width: 10px;
-
-            height: 10px;
-
-            margin: 0 4px;
-
-            text-indent: -999em;
-
-            border: 2px solid #fff;
-
-            border-radius: 6px;
-
-            cursor: pointer;
-
-            opacity: .4;
-
-            -webkit-transition: background .5s, opacity .5s;
-
-            -moz-transition: background .5s, opacity .5s;
-
-            transition: background .5s, opacity .5s;
-        }
-
-        div#b04 > ol.dots > li.active {
-            background: #fff;
-
-            opacity: 1;
-        }
-
-
-    </style>
-    <style>
         .footer {
             text-align: center;
             background-color: #303030;
@@ -350,22 +276,8 @@
                             hello = '夜深了！ ';
                         }
 
-                        function GetCookie(sName) {
-                            var arr = document.cookie.match(new RegExp("(^| )" + sName + "=([^;]*)(;|$)"));
-                            if (arr != null) {
-                                return unescape(arr[2])
-                            }
-                            ;
-                            return null;
-                        }
-
-                        var Guest_Name = decodeURIComponent(GetCookie('author'));
-                        var webUrl = webUrl;
-                        if (Guest_Name != "null" && Guest_Name != "") {
-                            hello = Guest_Name + ' , ' + hello + ' 欢迎回来。';
-                        }
                         document.write(' ' + hello);</script>
-                        夜深了！
+                        {#                        夜深了！#}
                         今天是：
                         <span id="localtime">
         <script type="text/javascript">today = new Date();
@@ -378,7 +290,7 @@
             year = (today.getYear() + 1900);
         }
         tdate = year + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日" + " " + x[today.getDay()];
-        document.write(tdate);</script>2018年6月20日 星期三
+        document.write(tdate);</script>{% comment %}2018年6月20日 星期三{% endcomment %}
       </span><!---->
                     </div>
                     <div id="inf-e"></div>
@@ -495,22 +407,8 @@
     </div>
 </nav>
 <div class="container" style="width:1200px;margin: 0 auto;position: relative;top:110px;">
-    <div id="b04">
-        <ul>
-            <li>
-                <img src="{% static 'images/01.jpg' %}" height="400px" width="100%">
-            </li>
-            <li>
-                <img src="{% static 'images/02.jpg' %}" height="400px" width="100%">
-            </li>
-            <li>
-                <img src="{% static 'images/03.jpg' %}" height="400px" width="100%">
-            </li>
-            <li>
-                <img src="{% static 'images/04.jpg' %}" height="400px" width="100%">
-            </li>
-        </ul>
-    </div>
+    {% block template_banner %}{% endblock %}
+
     <div class="content_wrap" style="margin-top: 20px;margin-left: 50px">
         <div class="content">
             <!--  <div class="top-category">
@@ -531,22 +429,14 @@
             {% block template %}{% endblock %}
         </div>
     </div>
-    <div class="clear_fix"></div>
-    <div class="lef-bar">
-        <div class="nav-com">
-            <ul>
-                {% for item in article_blog_category %}
-                    <li articleBlogCategoryID="{{ item.articleBlogCategoryId }}">
-                        <a>{{ item.articleBlogCategoryName }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
 
-        </div>
-    </div>
+    <div class="clear_fix"></div>
+
+    {% block template_left_bar %}{% endblock %}
 </div>
 <div class="clear_fix"></div>
-<footer class="footer">
+
+{% comment %}<footer class="footer">
     <div class="first-row">
         <a href="http://haoji.me/">首页</a>
         <a href="//about.haoji.me">关于本站</a>
@@ -571,7 +461,8 @@
         <span>© 2016-2018 <a href="http://haoji.me/">haoji.me</a> All Rights Reserved</span>
         <a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备16002604-3</a>
     </div>
-</footer>
+</footer>{% endcomment %}
+
 <script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
 <script src="{% static 'frame/jquery.easing/js/jquery.easing.js' %}"></script>
 <script src="{% static 'frame/unslider-150203225543/unslider.min.js' %}"></script>
@@ -717,6 +608,7 @@
     })
 
 </script>
+
 {% block script %}{% endblock %}
 </body>
 </html>
