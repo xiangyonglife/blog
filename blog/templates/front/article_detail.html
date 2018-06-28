@@ -2,139 +2,139 @@
 {% load staticfiles %}
 {% block template %}
     <div class="article-detail-container">
-    <header>
+        <header>
 
-        <div id="font-change" class="left">
-            <span id="font-dec"><a href="#" title="减小字体">-</a></span>
-            <span id="font-n"><a href="#" title="默认大小">N</a></span>
-            <span id="font-inc"><a href="#" title="增大字体">+</a></span>
-        </div>
+            <div id="font-change" class="left">
+                <span id="font-dec"><a href="#" title="减小字体">-</a></span>
+                <span id="font-n"><a href="#" title="默认大小">N</a></span>
+                <span id="font-inc"><a href="#" title="增大字体">+</a></span>
+            </div>
 
-        <div class="post-meta">
-            <span class="time">{{ article_zy.articleTime|date:"Y年m月d日" }}</span>
-            <span class="eye"><i class="fa fa-eye"></i>&nbsp;{{ article_zy.articleClick }}</span>
-            <span class="comm"><a href="https://www.talklee.com/guestbook/#comments"><i class="fa fa-comment-o"></i>&nbsp;{{ article_zy.articleComment }}</a></span>
-            <span class="r-hide">
+            <div class="post-meta">
+                <span class="time">{{ article_zy.articleTime|date:"Y年m月d日" }}</span>
+                <span class="eye"><i class="fa fa-eye"></i>&nbsp;{{ article_zy.articleClick }}</span>
+                <span class="comm"><a href="https://www.talklee.com/guestbook/#comments"><i class="fa fa-comment-o"></i>&nbsp;{{ article_zy.articleComment }}</a></span>
+                <span class="r-hide">
                     <a title="侧边栏">
                         <i style="padding-left: 5px" class="fa fa-caret-left"></i>
                         <i class="fa fa-caret-right"></i>
                     </a>
                 </span>
-        </div>
+            </div>
 
-        <h2 class="post-title"><a href="https://www.talklee.com/guestbook/" title="正在阅读：{{ article.title }}"
-                                  rel="bookmark">{{ article.title }}</a>
-        </h2>
-    </header>
-    <div class="main">
-        {% autoescape off %}
-            {{ article.content }}
-        {% endautoescape %}
-    </div>
-    <div class="ds-reward-stl">
-        <button id="dsRewardBtn" onclick="PaymentUtils.show();"><i class="fa fa-usd"></i>赏</button>
-
-    </div>
-    <div class="entry-meta">
-        <p class="post-tag">标签：<a href="https://www.talklee.com/tags-11.html" rel="tag"
-                                  title="查看标签为《建站》的所有文章">建站</a><a href="https://www.talklee.com/tags-20.html"
-                                                                  rel="tag" title="查看标签为《自媒体》的所有文章">自媒体</a><a
-                href="https://www.talklee.com/tags-18.html" rel="tag" title="查看标签为《资讯》的所有文章">资讯</a><a
-                href="https://www.talklee.com/tags-21.html" rel="tag" title="查看标签为《新闻》的所有文章">新闻</a><a
-                href="https://www.talklee.com/tags-3.html" rel="tag" title="查看标签为《投稿》的所有文章">投稿</a></p>
-        <p class="post-tag">
-            个人类目:
-            <a>test</a>
-        </p>
-    </div>
-    <div id="comments">
-        <h4><i class="fa fa-pencil"></i>发表评论<span><a rel="nofollow" id="cancel-reply" href="#comment"
-                                                     style="display:none;"></a></span><span
-                class="jubao"><a rel="nofollow" href="http://www.12377.cn/" target="_blank"><small><i
-                class="fa fa-exclamation-triangle"></i>中国互联网举报中心</small></a></span></h4>
-
-        <div id="editor">
-            <p>文章很好，非常不错赞一个</p>
+            <h2 class="post-title"><a href="https://www.talklee.com/guestbook/" title="正在阅读：{{ article.title }}"
+                                      rel="bookmark">{{ article.title }}</a>
+            </h2>
+        </header>
+        <div class="main">
+            {% autoescape off %}
+                {{ article.content }}
+            {% endautoescape %}
         </div>
-        <input id="btn-coments" type="button" value="提交评论">
-        <div class="come-comt">
-            <i class="fa fa-comments"></i>评论列表 <span id="comment_count">（已有<span
-                style="color:#E1171B">{{ article_zy.articleComment }}</span>条评论，共<span
-                style="color:#E1171B">21135</span>人参与）</span><span
-                class="iliuyan"><a href="https://www.talklee.com/guestbook/#comment"><i class="fa fa-bell"></i>参与讨论</a></span>
+        <div class="ds-reward-stl">
+            <button id="dsRewardBtn" onclick="PaymentUtils.show();"><i class="fa fa-usd"></i>赏</button>
+
         </div>
-        {% for item in comments %}
-            <div class="msg">
-                <div class="msgauto" style="position: relative">
-                    <img class="avatar" src="{% static 'images/logo.JPG' %}" alt="网友昵称：{{ item.commentUser.userName }}"
-                         title="网友昵称：{{ item.commentUser.userName }}">
-                    <div class="msgname">
-                        <a href="#">{{ item.commentUser.userName }}</a>
-                        <span>{{ item.commentTime }}</span>
-                        <h3>#{{ forloop.revcounter }}楼</h3>
-                    </div>
-                </div>
-                <div class="msgtxt">
+        <div class="entry-meta">
+            <p class="post-tag">标签：<a href="https://www.talklee.com/tags-11.html" rel="tag"
+                                      title="查看标签为《建站》的所有文章">建站</a><a href="https://www.talklee.com/tags-20.html"
+                                                                      rel="tag" title="查看标签为《自媒体》的所有文章">自媒体</a><a
+                    href="https://www.talklee.com/tags-18.html" rel="tag" title="查看标签为《资讯》的所有文章">资讯</a><a
+                    href="https://www.talklee.com/tags-21.html" rel="tag" title="查看标签为《新闻》的所有文章">新闻</a><a
+                    href="https://www.talklee.com/tags-3.html" rel="tag" title="查看标签为《投稿》的所有文章">投稿</a></p>
+            <p class="post-tag">
+                个人类目:
+                <a>test</a>
+            </p>
+        </div>
+        <div id="comments">
+            <h4><i class="fa fa-pencil"></i>发表评论<span><a rel="nofollow" id="cancel-reply" href="#comment"
+                                                         style="display:none;"></a></span><span
+                    class="jubao"><a rel="nofollow" href="http://www.12377.cn/" target="_blank"><small><i
+                    class="fa fa-exclamation-triangle"></i>中国互联网举报中心</small></a></span></h4>
+
+            <div id="editor">
+                <p>文章很好，非常不错赞一个</p>
+            </div>
+            <input id="btn-coments" type="button" value="提交评论">
+            <div class="come-comt">
+                <i class="fa fa-comments"></i>评论列表 <span id="comment_count">（已有<span
+                    style="color:#E1171B">{{ article_zy.articleComment }}</span>条评论，共<span
+                    style="color:#E1171B">21135</span>人参与）</span><span
+                    class="iliuyan"><a href="https://www.talklee.com/guestbook/#comment"><i class="fa fa-bell"></i>参与讨论</a></span>
+            </div>
+            {% for item in comments %}
+                {% if not item.fatherComment_id %}
+                    <div class="msg">
+                        <div class="msgauto" style="position: relative">
+                            <img class="avatar" src="{% static 'images/logo.JPG' %}"
+                                 alt="网友昵称：{{ item.commentUser.userName }}"
+                                 title="网友昵称：{{ item.commentUser.userName }}">
+                            <div class="msgname">
+                                <a href="#">{{ item.commentUser.userName }}</a>
+                                <span>{{ item.commentTime }}</span>
+                                <h3>#{{ forloop.revcounter }}楼</h3>
+                            </div>
+                        </div>
+                        <div class="msgtxt">
                 <span>
                     {% autoescape off %}
                         {{ item.commentContent }}
                     {% endautoescape %}
                 </span>
-                </div>
+                        </div>
 
-                <div class="btn-send">
-                 <span>
-                    <i class="iconfont icon-huifu"></i>
-                    回复
-                </span>
-                    <span>
-                    <i class="iconfont icon-dianzan"></i>
-                    6人赞
-                </span>
-
-                    <div style="margin-top: 10px;padding: 10px;font-weight: 100;font-size: 20px;margin-left: 40px;border-left: 1px solid #398D9F">
-                        <a style="padding: 5px;color: #50ABDF">fwrwerw:</a>
-                        <span style="color:#999999">
-                           eqweqeq qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq
-                            qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq
-                            qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq
-                            qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq
-                            qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqw
-                              eqweqeq qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq
-                            qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq
-                            qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq
-                            qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeq
-                            qweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqweqweqeqqw
-                        </span>
-                        <div style="margin-top: 20px">
-                            <span style="margin-right: 20px">2018年5月20日</span>
-                            <span>
+                        <div class="btn-send">
+                             <span parentId="{{ item.commentId }}">
                                 <i class="iconfont icon-huifu"></i>
                                 回复
                             </span>
+                            <span>
+                                <i class="iconfont icon-dianzan"></i>
+                                6人赞
+                            </span>
+                            {% for subitem in comments %}
+                                {% if item.commentId == subitem.fatherComment_id %}
+                                    <div style="margin-top: 10px;padding: 10px;font-weight: 100;font-size: 20px;margin-left: 40px;border-left: 1px solid #398D9F">
+                                        <a style="padding: 5px;color: #50ABDF">{{ subitem.commentUser.userName }}:</a>
+                                        <span style="color:#999999">    `
+                                        {{ subitem.commentContent }}
+                                   </span>
+                                        <div style="margin-top: 20px">
+                                            <span style="margin-right: 20px">{{ subitem.commentTime }}</span>
+                                            <span class="btn-send-huifu-ziji">
+                                            <i class="iconfont icon-huifu"></i>
+                                                回复
+                                        </span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+
+                        </div>
+
+
+                        <div style="display: none" class="send-input">
+                            <textarea placeholder="写下你的回复"></textarea>
+                            <div>
+                                <input class="btn-cancel-huifu" type="button" value="取消">
+                                <input class="btn-send-huifu" type="button" value="发送">
+                            </div>
+
                         </div>
                     </div>
+                {% endif %}
 
-                </div>
-
-
-                <div style="display: none" class="send-input">
-                    <textarea placeholder="写下你的回复"></textarea>
-                    <div>
-                        <input class="btn-cancel-huifu" type="button" value="取消">
-                        <input class="btn-send-huifu" type="button" value="发送">
-                    </div>
-
-                </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
 
 
-    </div>
+        </div>
 
-    <div class="tooltip">
-        <i class="iconfont icon-error"></i>
-        <span>efwergregs</span>
+        <div class="tooltip">
+            <i class="iconfont icon-error"></i>
+            <span></span>
+        </div>
     </div>
 {% endblock %}
 
@@ -162,7 +162,7 @@
             'quote',  // 引用
             'emoticon',  // 表情
         ]
-        editor.customConfig.zIndex = -1
+        editor.customConfig.zIndex = 0
         editor.create()
 
         $(function () {
@@ -229,7 +229,51 @@
             })
 
             $(".btn-send-huifu").click(function () {
-                $(this).parent().parent().hide({
+                var content = $(this).parent().prev().val().trim()
+                var article_id = "{{article.article_uid}}"
+                var comments_count = $("#comment_count>span:eq(0)").text()
+                var parentId = $(".btn-send>span:first-child").attr("parentId")
+                if (content == "") {
+                    $(".tooltip span").text('回复内容不能为空')
+                    $(".tooltip").slideDown(function () {
+                        setTimeout(function () {
+                            $(".tooltip").hide()
+                        }, 2000)
+
+                    })
+                } else {
+                    $.ajax({
+                        url: "{% url 'blog:comments' %}",
+                        method: "POST",
+                        data: {
+                            "content": content,
+                            "article_id": article_id,
+                            "comments_count": comments_count,
+                            "parentId": parentId
+                        },
+                        dataType: 'JSON',
+                        success: function (data) {
+                            if (data.code == 0) {
+                                $(this).parent().parent().hide({
+                                    easing: "easeOutBounce"
+                                })
+                                $(".tooltip span").text('回复成功')
+                                $(".tooltip").slideDown(function () {
+                                    setTimeout(function () {
+                                        window.location.reload()
+                                    }, 1000)
+
+                                })
+                            }
+                        }
+                    })
+                }
+
+
+            })
+
+            $(".btn-send-huifu-ziji").click(function () {
+                $(this).parents('div.btn-send').next().toggle({
                     easing: "easeOutBounce"
                 })
             })
@@ -509,6 +553,12 @@
             margin-right: 10px;
         }
 
+        .btn-send-huifu-ziji {
+            cursor: pointer;
+        }
 
+        .btn-send-huifu-ziji:hover {
+            color: #4FABDF;
+        }
     </style>
 {% endblock %}

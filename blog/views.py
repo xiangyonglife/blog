@@ -456,6 +456,7 @@ def article_comments(request):
     content = request.POST.get("content")
     article_id = request.POST.get("article_id")
     comments_count = request.POST.get("comments_count")
+    parent_id = request.POST.get("parentId")
     # 用户ip
     my_name = socket.getfqdn(socket.gethostname())
     my_addr = socket.gethostbyname(my_name)
@@ -463,7 +464,8 @@ def article_comments(request):
         commentContent=content,
         commentUser=user,
         commentIp=my_addr,
-        commentArticle_id=article_id
+        commentArticle_id=article_id,
+        fatherComment_id=parent_id
 
     )
     models.Article.objects.filter(articleUrl=article_id).update(articleComment=int(comments_count) + 1)
