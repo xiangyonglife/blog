@@ -426,10 +426,29 @@
             display: inline-block;
             border: 1px solid red;
         }
-        #def-push-pop > div.pos-box > .opt-box > .btn:hover{
+
+        #def-push-pop > div.pos-box > .opt-box > .btn:hover {
             background-color: red;
             cursor: pointer;
             color: white;
+        }
+
+        #add-tag:hover {
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .tag-content {
+            border: 0px;
+            outline: 0;
+            background-color: #e9e9e9;
+            font-size: 12px;
+            padding: 3px 25px 3px 3px;
+            border-radius: 2px;
+            line-height: 15px;
+            height: 21px;
+            width: 15%;
+            position: relative
         }
     </style>
 </head>
@@ -525,11 +544,11 @@
                     <h3 style="padding: 20px;margin-bottom: 11px;text-align: center">发布文章</h3>
                     <div>
                         <div class="bg-lm">
-                            <span>选择博客类目</span>
-                            <form id="category-submit" style="padding: 10px">
+                            <span>选择博客分类</span>
+                            <form id="category-submit" style="">
 
                                 <select name="one-category" id="push-xz-lm"
-                                        style="outline: 0;display: inline-block;padding: 10px;width: 100%;height: 31px">
+                                        style="outline: 0;display: inline-block;padding: 10px;width: 40%;height: 31px">
                                     <option value="0">请选择</option>
                                     {% for item in blog_category %}
                                         <option value="{{ item.articleBlogCategoryId }}">
@@ -538,10 +557,26 @@
                                     {% endfor %}
                                 </select>
                                 <select name="tow-category"
-                                        style="margin-top: 20px;outline: 0;display: inline-block;padding: 10px;width: 100%;height: 31px">
+                                        style="margin-top: 20px;outline: 0;display: inline-block;padding: 10px;width: 40%;height: 31px;margin-left: 10%">
                                     <option value="0">请选择</option>
                                 </select>
                             </form>
+
+
+                            <div class="tag-list" style="padding: 5px;margin-top: 2%;color: #629DD5">
+                                <div id="tag">
+
+                                </div>
+                                <div id="add-tag" style="margin-top: 5%">
+                                    <i class="iconfont icon-xinjian"
+                                       style="color: white;background-color: #629DD5;border-radius: 50%"></i>
+                                    添加标签
+                                    <span style="color: initial">(最多4个)</span>
+                                </div>
+
+                            </div>
+
+
                         </div>
                         <div class="bg-btn" style="position: relative;top: 40px ;left: 230px">
                             <button style="font-size: 15px;padding: 4px 20px;outline: 0;border: 0" type="button">
@@ -614,36 +649,60 @@
 
 
     $(function () {
+        //自定义文本编辑器样式
         $(".edit-article .text div").css({
             'position': 'fixed',
             'overflow-y': 'scroll',
             "width": "50%",
             "padding-bottom": "180px"
-
+        })
+        $(".toolbar").css({
+            'background-color': '#D9D9D9'
         })
 
-        //自定义按钮
-        var template = '<div id="push-article" class="w-e-menu" style="z-index:10001;">\n' +
-            '   <i class="iconfont icon-fabu"></i>\n' +
-            '    <span>发布文章</span>\n' +
-            '</div>'
+        //自定义文本编辑器动态效果
+        $(".toolbar").delegate('div.w-e-menu', 'mouseenter', function () {
+            $(this).css({
+                'background-color': '#59595A'
+            })
+            $(this).find('>i').css({
+                'color': 'white'
+            })
+        })
+
+        $(".toolbar").delegate('div.w-e-menu', 'mouseleave', function () {
+            $(this).css({
+                'background-color': ''
+
+            })
+            $(this).find('>i').css({
+                'color': ''
+            })
+        })
+
+        //自定义文本编辑器bar
+        var template = '<div class="w-e-menu" style="z-index: 10001;">\n' +
+            '            <i class="iconfont icon-fabu" style=""><span>发布文章</span></i>\n' +
+            '        </div>'
+
         $(".edit-article .toolbar").append(template)
 
         initOnce(true)
 
         ajax_load_article()
 
-        //新建文集
+        //新建文集样式效果
         $(".btn-wj").click(function () {
             $(this).nextAll('.category-data').slideDown()
 
         })
 
-        //取消新建
+        //取消新建文集样式效果
         $(".btn-c-cancel").click(function () {
             $(".btn-wj").nextAll('.category-data').slideUp()
         })
-        //提交新建文集
+
+        //新建文集事件
         $(".btn-c-sub").click(function () {
             var name = $("#category-name").val().trim()
             if (name == "") {
@@ -714,7 +773,7 @@
             }
         })
 
-        //新建文章
+        //新建文章事件
         $(".btn-article,.btn-wz").click(function () {
             var flag = true
             if (!$(".wj-list li").is("li")) {
@@ -733,7 +792,7 @@
         })
 
 
-        //检测标题改动
+        //检测富文本标题改动事件
         $(".edit-article #title").bind('input propertychange', function () {
             var title = $(this).val()
             $("#save-current").text("保存中.....")
@@ -752,8 +811,8 @@
             $(".article-list .wz-li-xz #article-title").text(title)
         })
 
-        //发布文章
-        $(".edit-article .toolbar #push-article").click(function () {
+        //富文本bar发布文章按钮事件
+        $(".edit-article .toolbar div:last-child").click(function () {
             push_article()
 
         })
@@ -835,7 +894,7 @@
             })
         })
 
-        //发布提交文章
+        //发布文章事件
         $("#btn-pop-push").click(function () {
             var article_content = editor.txt.text().trim()
             var title = $(".edit-article #title").val()
@@ -861,6 +920,7 @@
                     dataType: 'JSON',
                     success: function (data) {
                         if (data.code == 0) {
+                            $("#push-article>i+span").text('已发布')
                             $("#def-push-pop").show()
                         }
                     }
@@ -1062,6 +1122,27 @@
             window.location.href = "{% url 'blog:history' %}"
         })
 
+        //添加文章标签
+        var tag_count = 0
+        $("#add-tag").click(function () {
+            tag_count += 1;
+            var template = '<span style="position:relative">\n' +
+                '                                        <input class="tag-content">\n' +
+                '                                        <i style="font-size: 30px;position: absolute;right: 0" class="iconfont icon-chadiao"></i>\n' +
+                '                                    </span>'
+            if (tag_count <= 4)
+                $("#tag").append(template)
+            $("div.bg-btn").css({"top": '15px'})
+        })
+
+        //删除文章标签
+        $("#tag").delegate('input.tag-content+i', 'click', function () {
+            $(this).parent().remove()
+            tag_count -= 1;
+            if (tag_count == 0)
+                $("div.bg-btn").css({"top": '40px'})
+        })
+
 
         //异步加载用户文章
         function ajax_load_article() {
@@ -1215,7 +1296,7 @@
 
         }
 
-        //发布文章函数
+        //发布文章选择博客类目函数
         function push_article() {
             $("div#wz-sz").hide()
             var article_content = editor.txt.text().trim()
