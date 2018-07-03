@@ -252,9 +252,15 @@ def save_current(request):
     article_id = request.POST.get("article_id")
     article_content = request.POST.get("article_content")
     title = request.POST.get("title")
+    save_type = request.POST.get("saveType")
     # 找到当前文章并且跟新内容
-    mongodb_con.article.update({'article_uid': article_id},
-                               {'$set': {'content': article_content, "saveType": 1, "title": title}})
+    if save_type == "2" or save_type == "3":
+        mongodb_con.article.update({'article_uid': article_id},
+                                   {'$set': {"saveType": 3, "title_push": title, "content_push": article_content}},
+                                   True)
+    else:
+        mongodb_con.article.update({'article_uid': article_id},
+                                   {'$set': {'content': article_content, "saveType": 1, "title": title}})
     json_text = {'code': '0', 'msg': '跟新成功'}
     return HttpResponse(json.dumps(json_text))
 
@@ -267,9 +273,14 @@ def save_current_title(request):
     """
     article_id = request.POST.get("article_id")
     title = request.POST.get("title")
+    save_type = request.POST.get("saveType")
     # 找到当前文章并且跟新内容
-    mongodb_con.article.update({'article_uid': article_id},
-                               {'$set': {"saveType": 1, "title": title}})
+    if save_type == "2" or save_type == "3":
+        mongodb_con.article.update({'article_uid': article_id},
+                                   {'$set': {"saveType": 3, "title_push": title}}, True)
+    else:
+        mongodb_con.article.update({'article_uid': article_id},
+                                   {'$set': {"saveType": 1, "title": title}})
     json_text = {'code': '0', 'msg': '跟新成功'}
     return HttpResponse(json.dumps(json_text))
 
@@ -406,6 +417,9 @@ def push_article(request):
     article_id = request.POST.get("article_id")
     # 文章实体
     parent_article_id = mongodb_con.article.find_one({"article_uid": article_id, "status": 0})['parent_article_id']
+
+    mongodb_con.article.update({'article_uid': article_id},
+                               {'$set': {"saveType": 2}})
     article_category = models.ArticleCategory.objects.filter(articleUuid=parent_article_id).first()
     models.Article.objects.create(
         articleCategory=article_category,
@@ -418,7 +432,12 @@ def push_article(request):
         articleUrl=article_id
 
     )
-    json_text = {'code': '0', 'msg': '成功返回'}
+    article_tag = request.POST.get("article_tag")
+    models.ArticleTag.objects.create(
+        articleId=article_id,
+        articleTagName=article_tag
+    )
+    json_text = {'code': '0', 'data': article_id, 'msg': '成功返回'}
     return HttpResponse(json.dumps(json_text))
 
 

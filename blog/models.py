@@ -121,6 +121,15 @@ class ArticleBlogCategoryTwo(models.Model):
                                             on_delete=models.CASCADE, null=True)  # 文章栏目
 
 
+class ArticleTag(models.Model):
+    """
+    文章标签表
+    """
+    articleTagId = models.AutoField(primary_key=True)  # tag id
+    articleId = models.TextField(null=True)  # 对应文章
+    articleTagName = models.TextField(null=True)
+
+
 class Article(models.Model):
     """
     文章信息

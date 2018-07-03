@@ -605,10 +605,9 @@
             </div>
             <p class="text-center zhaiyao">文章摘要由系统生成</p>
             <div class="opt-box text-center">
-                <a class="btn  btn-outline-danger btn-new mr24" href="https://mp.csdn.net/postedit">写新文章</a>
-                <a class="btn  btn-outline-danger tolist mr24" href="https://mp.csdn.net/postlist">管理博文</a>
-                <a class="btn  btn-outline-danger toarticle"
-                   href="https://blog.csdn.net/u011738045/article/details/80740226">查看文章</a>
+                <a class="btn  btn-outline-danger btn-new mr24" href="{% url 'blog:write' %}">写新文章</a>
+                <span class="btn  btn-outline-danger tolist mr24">管理博文</span>
+                <a class="btn  btn-outline-danger toarticle" href="javascript:void(0)">查看文章</a>
             </div>
         </div>
     </div>
@@ -627,16 +626,21 @@
         //$(".article-list .wz-li-xz #article-content")
         var text = $(".edit-article .text div").text()
         $("#save-current").text("保存中.....")
+        var saveType = $("div.push-article").attr("saveType")
         $.ajax({
             url: "{% url 'blog:save_current' %}",
             method: "POST",
             data: {
                 "article_id": $(".article-list li.wz-li-xz").attr("id"),
                 "article_content": html,
-                "title": $(".edit-article #title").val()
+                "title": $(".edit-article #title").val(),
+                "saveType": saveType
             },
             dataType: "JSON",
             success: function (data) {
+                if (saveType == 2) {
+                    $("div.push-article span").text("发布更新")
+                }
                 $("#save-current").text("已保存")
             }
         })
@@ -662,6 +666,10 @@
 
         //自定义文本编辑器动态效果
         $(".toolbar").delegate('div.w-e-menu', 'mouseenter', function () {
+            var saveType = $(this).attr("saveType")
+            if (saveType == 2) {
+                $(this).find("span").text('取消发布')
+            }
             $(this).css({
                 'background-color': '#59595A'
             })
@@ -671,6 +679,10 @@
         })
 
         $(".toolbar").delegate('div.w-e-menu', 'mouseleave', function () {
+            var saveType = $(this).attr("saveType")
+            if (saveType == 2) {
+                $(this).find("span").text('已发布')
+            }
             $(this).css({
                 'background-color': ''
 
@@ -680,11 +692,11 @@
             })
         })
 
+
         //自定义文本编辑器bar
-        var template = '<div class="w-e-menu" style="z-index: 10001;">\n' +
+        var template = '<div class="w-e-menu push-article" style="z-index: 10001;">\n' +
             '            <i class="iconfont icon-fabu" style=""><span>发布文章</span></i>\n' +
             '        </div>'
-
         $(".edit-article .toolbar").append(template)
 
         initOnce(true)
@@ -796,15 +808,20 @@
         $(".edit-article #title").bind('input propertychange', function () {
             var title = $(this).val()
             $("#save-current").text("保存中.....")
+            var saveType = $("div.push-article").attr("saveType")
             $.ajax({
                 url: "{% url 'blog:save_current_title' %}",
                 method: "POST",
                 data: {
                     "article_id": $(".article-list li.wz-li-xz").attr("id"),
-                    "title": $(".edit-article #title").val()
+                    "title": $(".edit-article #title").val(),
+                    "saveType": saveType
                 },
                 dataType: "JSON",
                 success: function (data) {
+                    if (saveType == 2) {
+                        $("div.push-article span").text("发布更新")
+                    }
                     $("#save-current").text("已保存")
                 }
             })
@@ -813,7 +830,12 @@
 
         //富文本bar发布文章按钮事件
         $(".edit-article .toolbar div:last-child").click(function () {
-            push_article()
+            var saveType = $(this).attr("saveType")
+            if (saveType == 2) {
+                $(".edit-article .toolbar div:last-child")
+            } else {
+                push_article()
+            }
 
         })
 
@@ -863,7 +885,15 @@
                     if (data.code == 0) {
                         var data = JSON.parse(data.data)
                         $(".edit-article #title").val(data.title)
+                        $("div.push-article").attr("saveType", data.saveType)
                         editor.txt.html(data.content)
+                        if (data.saveType == 2) {
+                            $("div.push-article span").text('已发布')
+                        } else if (data.saveType == 3) {
+                            $("div.push-article span").text('发布更新')
+                        } else {
+                            $("div.push-article span").text('发布文章')
+                        }
                     }
                 }
             })
@@ -901,6 +931,11 @@
             var article_id = $(".article-list li.wz-li-xz").attr("id")
             var article_blog_category_id = $("#category-submit>select:first-child").val()
             var article_blog_category_two_id = $("#category-submit>select:last-child").val()
+            var article_tag = ""
+            $("input.tag-content").each(function (i, v) {
+                article_tag += $(this).val() + ','
+            })
+            console.log(article_tag)
             if (article_content == "") {
                 $(".tooltip span").text('内容不能为空')
                 $(".tooltip").slideDown(function () {
@@ -915,19 +950,31 @@
                     data: {
                         "content_text": article_content, "title": title,
                         "article_id": article_id, "article_blog_category_id": article_blog_category_id,
-                        "article_blog_category_two_id": article_blog_category_two_id
+                        "article_blog_category_two_id": article_blog_category_two_id,
+                        "article_tag": article_tag
                     },
                     dataType: 'JSON',
                     success: function (data) {
                         if (data.code == 0) {
-                            $("#push-article>i+span").text('已发布')
+                            $("#def-pop").hide()
                             $("#def-push-pop").show()
+                            $("#def-push-pop div.pos-box:last-child a:last-child").attr('href', '/article-detail-' + data.data + '.html')
                         }
                     }
                 })
             }
 
         })
+
+
+        //文章发布成功--查看文章
+        $("#def-push-pop div.pos-box:last-child a:last-child").click(function () {
+            var article_id = $(".article-list li.wz-li-xz").attr("id")
+
+            window.location.href = 'article-detail-' + article_id
+        })
+
+
         //文集设置
         $(".wj-list li").delegate("i", "click", function () {
             $(this).parent().next().toggle()
@@ -1168,11 +1215,28 @@
                             $(".edit-article h1").hide()
                         }
                         $.each(item, function (i, v) {
-                            $(".article-list").append(v.title_html)
+
+                            if (v.saveType == 2 || v.saveType == 3) {
+                                var title_html_spaces = v.title_html.replace(/[\r\n]/g, "");
+                                var re_content = ' <i style="color: #C9BD95;position: absolute;top: 0;font-size: 40px;left: -50px"\n' +
+                                    '                           class="iconfont icon-icon_article"></i><i style="position: relative;right: 40px;top: 10px" class="iconfont icon-gou"></i>'
+                                var title_html_push = title_html_spaces.replace(/<i.*?<\/i>/, re_content);
+
+                                $(".article-list").append(title_html_push)
+                            } else {
+                                $(".article-list").append(v.title_html)
+                            }
                             title.push(v.title)
                             if (i == 0) {
+                                $("div.push-article").attr("saveType", v.saveType)
                                 $(".edit-article #title").val(v.title)
                                 editor.txt.html(v.content)
+                                if (v.saveType == 2) {
+                                    $("div.push-article span").text('已发布')
+
+                                } else if (v.saveType == 3) {
+                                    $("div.push-article span").text('发布更新')
+                                }
                             }
                         })
                         $(".article-list li").each(function (i) {
@@ -1277,6 +1341,8 @@
                             $(this).find(".icon-shezhi").hide()
                         })
                         $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+                        $("div.push-article").attr("saveType", 0)
+                        editor.txt.clear()
                     }
 
                 },
