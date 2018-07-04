@@ -338,6 +338,38 @@ def modify_wz_del(request):
     return HttpResponse(json.dumps(json_text))
 
 
+def modify_wz_sm(request):
+    """
+    文章设置为私密
+    :param request:
+    :return:
+    """
+    article_id = request.POST.get("article_id")
+    title = request.POST.get("title")
+    content_html = request.POST.get("content_html")
+    mongodb_con.article.update({'article_uid': article_id},
+                               {'$set': {'content': content_html, "saveType": 1, "title": title},
+                                '$unset': {"content_push": "", "title_push": ""}})
+    json_text = {'code': '0', 'msg': '跟新成功'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def modify_wz_cancel_push(request):
+    """
+    文章取消发布
+    :param request:
+    :return:
+    """
+    article_id = request.POST.get("article_id")
+
+    mongodb_con.article.update({'article_uid': article_id},
+                               {'$set': {"saveType": 1}})
+    models.Article.objects.filter(articleUrl=article_id).update(saveType=1)
+
+    json_text = {'code': '0', 'msg': '跟新成功', "data": article_id}
+    return HttpResponse(json.dumps(json_text))
+
+
 @auth
 def article_history(request):
     """
@@ -416,27 +448,49 @@ def push_article(request):
     # 文章id
     article_id = request.POST.get("article_id")
     # 文章实体
-    parent_article_id = mongodb_con.article.find_one({"article_uid": article_id, "status": 0})['parent_article_id']
+    article = mongodb_con.article.find_one({"article_uid": article_id, "status": 0})
 
+    # 用户类目
+    article_category = models.ArticleCategory.objects.filter(articleUuid=article['parent_article_id']).first()
+
+    # 判断文章是否存在
+    article_count = models.Article.objects.filter(articleUrl=article_id).count()
+
+    if article_count > 0:
+        models.Article.objects.filter(articleUrl=article_id).update(saveType=2)
+    else:
+        models.Article.objects.create(
+            articleCategory=article_category,
+            user=article_category.user,
+            ArticleBlogCategory_id=article_blog_category_id,
+            ArticleBlogCategoryTwo_id=article_blog_category_two_id,
+            articleName=title,
+            articleIp=my_addr,
+            articleContent=content_text,
+            articleUrl=article_id,
+            status=article['status'],
+            saveType=article['saveType']
+
+        )
     mongodb_con.article.update({'article_uid': article_id},
-                               {'$set': {"saveType": 2}})
-    article_category = models.ArticleCategory.objects.filter(articleUuid=parent_article_id).first()
-    models.Article.objects.create(
-        articleCategory=article_category,
-        user=article_category.user,
-        ArticleBlogCategory_id=article_blog_category_id,
-        ArticleBlogCategoryTwo_id=article_blog_category_two_id,
-        articleName=title,
-        articleIp=my_addr,
-        articleContent=content_text,
-        articleUrl=article_id
+                               {'$set': {"saveType": 2, "article_category_id": article_blog_category_id,
+                                         "article_two_category_id": article_blog_category_two_id}}, True)
 
-    )
+    # 添加文章标签
     article_tag = request.POST.get("article_tag")
-    models.ArticleTag.objects.create(
-        articleId=article_id,
-        articleTagName=article_tag
-    )
+    tag_count = models.ArticleTag.objects.filter(articleId=article_id).count()
+    if tag_count > 0:
+        if not article_tag.strip() == '':
+            models.ArticleTag.objects.filter(articleId=article_id).update(articleTagName=article_tag)
+        else:
+            models.ArticleTag.objects.filter(articleId=article_id).delete()
+    else:
+        if not article_tag.strip() == '':
+            models.ArticleTag.objects.create(
+                articleId=article_id,
+                articleTagName=article_tag
+            )
+
     json_text = {'code': '0', 'data': article_id, 'msg': '成功返回'}
     return HttpResponse(json.dumps(json_text))
 
@@ -448,6 +502,22 @@ def article_show(request):
     """
     article = models.Article.objects.all()
     json_text = {'code': '0', 'msg': '成功返回'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def load_article_tag_category(request):
+    """
+    发布时候加载文章类目等内容
+    :param request:
+    :return:
+    """
+    article_uid = request.GET.get("article_uid")
+    tag = models.ArticleTag.objects.filter(articleId=article_uid).first()
+    data = ''
+    if tag:
+        data = {"tag": tag.articleTagName}
+    # article_blog_cateogry=models.ArticleBlogCategory.objects.filter()
+    json_text = {'code': '0', 'msg': '成功返回', "data": data}
     return HttpResponse(json.dumps(json_text))
 
 

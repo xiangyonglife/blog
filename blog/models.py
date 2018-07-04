@@ -153,6 +153,8 @@ class Article(models.Model):
     articleComment = models.IntegerField(default=0)  # 评论人数
     articleLike = models.IntegerField(default=0)  # 喜欢人数
     articleUrl = models.URLField(null=True, unique=True)  # 文章路径
+    status = models.IntegerField(null=True)  # 文章状态0在1删除
+    saveType = models.IntegerField(null=True)  # 发布状态0新建 1草稿，2发布，3发布更新
 
 
 class Comment(models.Model):

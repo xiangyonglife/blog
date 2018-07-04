@@ -176,14 +176,16 @@
 
         .container .tooltip {
             position: fixed;
-            top: 0;
-            color: red;
+            color: #FBFBFB;
             display: none;
             right: 50%;
             top: 10px;
             border-radius: 10px;
             padding: 10px;
-            border: 1px solid red;
+            border: 1px solid #FBFBFB;
+            z-index: 99999999;
+            box-shadow: 5px 5px 10px #525252 inset;
+            background-color: #525252;
         }
 
         .wj-list {
@@ -624,28 +626,30 @@
     editor.customConfig.onchange = function (html) {
         // html 即变化之后的内容
         //$(".article-list .wz-li-xz #article-content")
-        var text = $(".edit-article .text div").text()
-        $("#save-current").text("保存中.....")
-        var saveType = $("div.push-article").attr("saveType")
-        $.ajax({
-            url: "{% url 'blog:save_current' %}",
-            method: "POST",
-            data: {
-                "article_id": $(".article-list li.wz-li-xz").attr("id"),
-                "article_content": html,
-                "title": $(".edit-article #title").val(),
-                "saveType": saveType
-            },
-            dataType: "JSON",
-            success: function (data) {
-                if (saveType == 2) {
-                    $("div.push-article span").text("发布更新")
+        var text = $(".edit-article .text div").text().trim()
+        if (text != "") {
+            $("#save-current").text("保存中.....")
+            var saveType = $("div.push-article").attr("saveType")
+            $.ajax({
+                url: "{% url 'blog:save_current' %}",
+                method: "POST",
+                data: {
+                    "article_id": $(".article-list li.wz-li-xz").attr("id"),
+                    "article_content": html,
+                    "title": $(".edit-article #title").val(),
+                    "saveType": saveType
+                },
+                dataType: "JSON",
+                success: function (data) {
+                    if (saveType == 2) {
+                        $("div.push-article span").text("发布更新")
+                    }
+                    $("#save-current").text("已保存")
                 }
-                $("#save-current").text("已保存")
-            }
-        })
-        console.log(html)
-        $(".article-list .wz-li-xz #article-content").text(text)
+            })
+            $(".article-list .wz-li-xz #article-content").text(text)
+        }
+
     }
     editor.customConfig.uploadImgServer = '/upload'
     editor.create()
@@ -653,6 +657,18 @@
 
 
     $(function () {
+        //点击空白处隐藏弹框
+        $(document).click(function (e) {
+            //console.log(e.target)   //触发这个事件的对象
+            //console.log(e.currentTarget)//注册了事件监听器的对象
+            var _con = $('div#wj-sz,div#wz-sz');
+            if (!_con.is(event.target) && _con.has(event.target).length === 0) { // Mark 1
+                $("div#wj-sz").hide()
+                $("div#wz-sz").hide()
+            }
+        })
+
+
         //自定义文本编辑器样式
         $(".edit-article .text div").css({
             'position': 'fixed',
@@ -831,10 +847,22 @@
         //富文本bar发布文章按钮事件
         $(".edit-article .toolbar div:last-child").click(function () {
             var saveType = $(this).attr("saveType")
+            var article_id = $(".article-list>li.wz-li-xz").attr("id")
             if (saveType == 2) {
-                $(".edit-article .toolbar div:last-child")
+
+                $.ajax({
+                    url: "{% url 'blog:modify_wz_cancel_push' %}",
+                    method: "POST",
+                    data: {"article_id": article_id},
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.code == 0) {
+                            ajax_load_article(data.data)
+                        }
+                    }
+                })
             } else {
-                push_article()
+                push_article(article_id)
             }
 
         })
@@ -884,9 +912,19 @@
                 success: function (data) {
                     if (data.code == 0) {
                         var data = JSON.parse(data.data)
-                        $(".edit-article #title").val(data.title)
-                        $("div.push-article").attr("saveType", data.saveType)
-                        editor.txt.html(data.content)
+                        $("div.push-article").attr({
+                            "category": data.article_category_id,
+                            "category_two": data.article_two_category_id,
+                            "saveType": data.saveType
+                        })
+                        if (data.saveType == 3) {
+                            editor.txt.html(data.content_push)
+                            $(".edit-article #title").val(data.title_push)
+                        } else {
+                            $(".edit-article #title").val(data.title)
+                            editor.txt.html(data.content)
+                        }
+
                         if (data.saveType == 2) {
                             $("div.push-article span").text('已发布')
                         } else if (data.saveType == 3) {
@@ -898,30 +936,15 @@
                 }
             })
             //editor.txt.html('<p>用 JS 设置的内容</p>')
+            event.stopPropagation()   //阻止事件冒泡
+            event.preventDefault()
+            return false
 
         });
 
         //发布文章选择文章栏目
         $("#push-xz-lm").change(function () {
-            $.ajax({
-                url: "{% url 'blog:option_category' %}",
-                method: "POST",
-                data: $("#category-submit").serialize(),
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.code == 0) {
-                        var template = ''
-                        $.each(data.data, function (i, v) {
-                            template += "<option value=" + v.id + ">" + v.name + "</option>"
-                        })
-                        $("select[name=tow-category]").empty()
-                        $("select[name=tow-category]").append(template)
-                    }
-                },
-                error: function () {
-
-                },
-            })
+            load_push_category(false)
         })
 
         //发布文章事件
@@ -932,8 +955,12 @@
             var article_blog_category_id = $("#category-submit>select:first-child").val()
             var article_blog_category_two_id = $("#category-submit>select:last-child").val()
             var article_tag = ""
+            var tag_content = true
             $("input.tag-content").each(function (i, v) {
                 article_tag += $(this).val() + ','
+                if ($(this).val().trim() == "") {
+                    tag_content = false
+                }
             })
             console.log(article_tag)
             if (article_content == "") {
@@ -943,7 +970,22 @@
                         $(".tooltip").hide()
                     }, 2000)
                 })
-            } else {
+            } else if (!tag_content) {
+                $(".tooltip span").text('标签内容不能为空')
+                $(".tooltip").slideDown(function () {
+                    setTimeout(function () {
+                        $(".tooltip").hide()
+                    }, 2000)
+                })
+            } else if (article_blog_category_id.trim() == 0 || article_blog_category_two_id == 0) {
+                $(".tooltip span").text('请选择文章分类')
+                $(".tooltip").slideDown(function () {
+                    setTimeout(function () {
+                        $(".tooltip").hide()
+                    }, 2000)
+                })
+            }
+            else {
                 $.ajax({
                     url: "{% url 'blog:push' %}",
                     method: "POST",
@@ -956,10 +998,16 @@
                     dataType: 'JSON',
                     success: function (data) {
                         if (data.code == 0) {
+                            var article_title = $(".edit-article #title").val()
+                            $("#def-push-pop div.text-center.title").text(article_title)
                             $("#def-pop").hide()
                             $("#def-push-pop").show()
+
                             $("#def-push-pop div.pos-box:last-child a:last-child").attr('href', '/article-detail-' + data.data + '.html')
                         }
+                    },
+                    error: function (data) {
+                        console.log(data)
                     }
                 })
             }
@@ -976,7 +1024,7 @@
 
 
         //文集设置
-        $(".wj-list li").delegate("i", "click", function () {
+        $(".wj-list li").delegate("i", "click", function (e) {
             $(this).parent().next().toggle()
             event.stopPropagation()   //阻止事件冒泡
         })
@@ -1072,7 +1120,11 @@
 
         //文章设置---发布文章
         $(".article-list").delegate("li>div:last-child>div:first-child", "click", function () {
-            push_article()
+            //没有发布的文章我们才让发布
+            if ($(this).find(">i").hasClass("icon-fabu")) {
+                var article_id = $(this).parent().parent().attr("id")
+                push_article(article_id)
+            }
             event.stopPropagation()   //阻止事件冒泡
             event.preventDefault()
             return false
@@ -1080,7 +1132,7 @@
         });
 
         //文章设置---移动文章
-        $(".article-list").delegate("li>div:last-child>div:first-child+div", "mouseenter", function () {
+        $(".article-list").delegate("li>div:last-child>div.move-article", "mouseenter", function () {
             $(this).find("div").show()
             var article_id = $(this).parent().parent().attr("id")
             //遍历移动文章
@@ -1094,7 +1146,7 @@
             event.preventDefault()
             return false
         })
-        $(".article-list").delegate("li>div:last-child>div:first-child+div", "mouseleave", function () {
+        $(".article-list").delegate("li>div:last-child>div.move-article", "mouseleave", function () {
             $(this).find("div").hide()
             event.stopPropagation()   //阻止事件冒泡
             event.preventDefault()
@@ -1102,7 +1154,7 @@
         })
 
         //文章设置--选择移动文章
-        $(".article-list").delegate("li>div:last-child>div:first-child+div>div div", "click", function () {
+        $(".article-list").delegate("li>div:last-child>div.move-article>div div", "click", function () {
             $.ajax({
                 url: "{% url 'blog:modify_wz_move' %}",
                 method: "POST",
@@ -1125,8 +1177,7 @@
             return false
         })
 
-
-        //文章设置删除文章
+        //文章设置--删除文章
         $(".article-list").delegate("li>div:last-child>div:last-child", "click", function () {
             var name = $(".article-list .wz-li-xz #article-title").text()
             var article_id = $(this).parent().parent().attr("id")
@@ -1159,6 +1210,40 @@
 
         });
 
+        //文章设置--在新窗口中打开
+        $(".article-list").delegate("li>div:last-child>div.new-open-article", "click", function () {
+            var article_id = $(this).parent().parent().attr("id")
+            $("div#wz-sz").hide()
+            window.open('/article-detail-' + article_id + '.html')
+            event.stopPropagation()   //阻止事件冒泡
+            event.preventDefault()
+            return false
+
+        });
+
+        //文章设置--设为私密
+        $(".article-list").delegate("li>div:last-child>div.secret-article", "click", function () {
+            var article_id = $(this).parent().parent().attr("id")
+            var title = $(".edit-article #title").val()
+            var content_html = editor.txt.html()
+            $("div#wz-sz").hide()
+            $.ajax({
+                url: "{% url 'blog:modify_wz_sm' %}",
+                method: "POST",
+                data: {"article_id": article_id, "title": title, "content_html": content_html},
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 0) {
+                        ajax_load_article()
+                    }
+                }
+            })
+            event.stopPropagation()   //阻止事件冒泡
+            event.preventDefault()
+            return false
+
+        });
+
         //菜单设置
 
         $(".container .cd-sz").click(function () {
@@ -1172,27 +1257,33 @@
         //添加文章标签
         var tag_count = 0
         $("#add-tag").click(function () {
-            tag_count += 1;
+
             var template = '<span style="position:relative">\n' +
                 '                                        <input class="tag-content">\n' +
                 '                                        <i style="font-size: 30px;position: absolute;right: 0" class="iconfont icon-chadiao"></i>\n' +
                 '                                    </span>'
-            if (tag_count <= 4)
+            if (tag_count < 4) {
                 $("#tag").append(template)
-            $("div.bg-btn").css({"top": '15px'})
+                $("div.bg-btn").css({"top": '15px'})
+                tag_count += 1;
+            }
+
         })
 
         //删除文章标签
         $("#tag").delegate('input.tag-content+i', 'click', function () {
             $(this).parent().remove()
-            tag_count -= 1;
-            if (tag_count == 0)
+            if (tag_count == 0) {
                 $("div.bg-btn").css({"top": '40px'})
+            } else {
+                tag_count -= 1;
+            }
+
         })
 
 
         //异步加载用户文章
-        function ajax_load_article() {
+        function ajax_load_article(article_id) {
             var loading = setInterval(function () {
                 $('.article-loading i').animate({rotate: '360'}, 1000);
             }, 0)
@@ -1207,13 +1298,15 @@
 
                 },
                 success: function (data) {
-                    var title = []
+                    var getData = []
                     if (data.code == 0) {
                         var item = JSON.parse(data.data)
                         if (item.length > 0) {
                             $(".edit-article div").show()
                             $(".edit-article h1").hide()
-                        }
+                        }   //样式初始化
+
+                        //遍历数据库html 追加文章列表
                         $.each(item, function (i, v) {
 
                             if (v.saveType == 2 || v.saveType == 3) {
@@ -1226,25 +1319,53 @@
                             } else {
                                 $(".article-list").append(v.title_html)
                             }
-                            title.push(v.title)
-                            if (i == 0) {
-                                $("div.push-article").attr("saveType", v.saveType)
-                                $(".edit-article #title").val(v.title)
-                                editor.txt.html(v.content)
-                                if (v.saveType == 2) {
-                                    $("div.push-article span").text('已发布')
-
-                                } else if (v.saveType == 3) {
-                                    $("div.push-article span").text('发布更新')
-                                }
+                            getData.push({
+                                "title": v.title,
+                                "title_push": v.title_push,
+                                "content": v.content,
+                                "content_push": v.content_push,
+                                "saveType": v.saveType,
+                                "category_id": v.article_category_id,
+                                "category_two_id": v.article_category_two_id
+                            })
+                            //默认加载第一个
+                            if (i == 0 && article_id == null) {
+                                ajax_laod_article_content(getData, i)
                             }
                         })
+
+                        //追加完成后做样式操作
                         $(".article-list li").each(function (i) {
                             $(this).removeClass("wz-li-xz")
                             $(this).find(".icon-shezhi").hide()
-                            $(this).find("#article-title").text(title[i])
+                            if (getData[i].saveType == 3) {
+                                $(this).find("#article-content").text(getData[i].content_push.replace(/<[^>]*>/g, ""))
+                                $(this).find("#article-title").text(getData[i].title_push)
+                            } else {
+                                $(this).find("#article-title").text(getData[i].title)
+                                if (getData[i].content != null)
+                                    $(this).find("#article-content").text(getData[i].content.replace(/<[^>]*>/g, ""))
+                            }
+
+                            if (getData[i].saveType == 3 || getData[i].saveType == 2) {
+                                $(this).find(">div:last-child>div").eq(1).show()
+                                $(this).find(">div:last-child>div").eq(3).show()
+                                $(this).find(">div:last-child>div").eq(4).show()
+                                $(this).find(">div:last-child>div").eq(0).find(">span").text("已发布")
+                                $(this).find(">div:last-child>div").eq(0).find(">i").removeClass("icon-fabu").addClass("icon-gou")
+                            }
+
+                            var article_uid = $(this).attr("id")
+                            if (article_uid == article_id) {
+                                ajax_laod_article_content(getData, i)
+                                $(this).addClass('wz-li-xz').find(".icon-shezhi").show()
+                            }
                         })
-                        $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+
+                        //默认第一个选中样式
+                        if (article_id == null)
+                            $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
+
                     }
                 },
                 error: function (data) {
@@ -1257,7 +1378,7 @@
             })
         }
 
-        //第一次进入用户的一些默认判断
+        //第一次进入用户的一些默认样式判断
         function initOnce(enter) {
             //清空所有内容
             $(".new-article .article-list").empty()
@@ -1304,15 +1425,15 @@
                 '                    <div>\n' +
                 '                        <i class="iconfont icon-fabu"></i>\n' +
                 '                        <span>直接发布</span>\n' +
-                '                    </div>\n' +
-                '                    <div style="position: relative">\n' +
+                '                    </div>\n<div class="share-article" style="display: none;"><i class="iconfont icon-fenxiang" style="display: inline;"></i><span>分享文章</span></div>' +
+                '                    <div class="move-article" style="position: relative">\n' +
                 '                        <i class="iconfont icon-back" style="display: inline;"></i>\n' +
                 '                        <i class="iconfont icon-wenjianjia" style="display: inline;"></i>\n' +
                 '                        <span>移动文章</span>\n' +
                 '                        <div id="wz-sz-yd">\n' +
                 '                            \n' +
                 '                        </div>\n' +
-                '                    </div>\n' +
+                '                    </div>\n<div class="new-open-article" style="display: none;"><i class="iconfont icon-xinchuangkoudakai" style="display: inline;"></i><span style="margin-left: 5px;">在新窗口打开</span></div><div class="secret-article" style="display: none;"><i class="iconfont icon-simizhuanxian1" style="display: inline;"></i><span style="margin-left: 5px;">设为私密</span></div>' +
                 '                    <div>\n' +
                 '                        <i class="iconfont icon-shanchu" style="display: inline;"></i>\n' +
                 '                        <span>删除文章</span>\n' +
@@ -1342,6 +1463,7 @@
                         })
                         $(".article-list li:first-child").addClass('wz-li-xz').find(".icon-shezhi").show()
                         $("div.push-article").attr("saveType", 0)
+                        $("div.push-article span").text("发布文章")
                         editor.txt.clear()
                     }
 
@@ -1363,7 +1485,7 @@
         }
 
         //发布文章选择博客类目函数
-        function push_article() {
+        function push_article(article_uid) {
             $("div#wz-sz").hide()
             var article_content = editor.txt.text().trim()
             if (article_content == "") {
@@ -1376,8 +1498,107 @@
                 })
 
             } else {
-                $("#def-pop").slideDown("slow")
+                tag_count = 0
+                //回显用户之前的tag
+                $.ajax({
+                    url: "{% url 'blog:get_tag_category' %}",
+                    method: "GET",
+                    data: {"article_uid": article_uid},
+                    dataType: "JSON",
+                    success: function (data) {
+                        $("#def-pop").slideDown("slow")
+                        if (data.data != '') {
+                            var taglist = data.data.tag.split(',')
+                            var template = ''
+                            $.each(taglist, function (i, v) {
+                                if (v.trim() != '') {
+                                    template += '<span style="position:relative">\n' +
+                                        '                                        <input value="' + v + '" class="tag-content">\n' +
+                                        '                                        <i style="font-size: 30px;position: absolute;right: 0" class="iconfont icon-chadiao"></i>\n' +
+                                        '                                    </span>'
+                                    tag_count += 1
+                                }
+
+                            })
+                            if (template.trim() != '') {
+                                console.log(tag_count)
+                                $("#tag").empty()
+                                $("div.bg-btn").css({"top": '15px'})
+                                $("#tag").append(template)
+                            }
+
+                        } else {
+                            $("#tag").empty()
+                        }
+
+                    }
+                })
+
+                //回显用户之前选中的类目
+                $("#category-submit>select:first-child>option").each(function () {
+                    if ($(this).val() == $("div.push-article").attr("category")) {
+                        $(this).attr("selected", true)
+                    }
+                })
+                load_push_category(true)
+
             }
+        }
+
+        //异步加载文章内容
+        function ajax_laod_article_content(data, index) {
+            $("div.push-article").attr({
+                "category": data[index].article_category_id,
+                "category_two": data[index].article_category_two_id,
+                "saveType": data[index].saveType
+            })
+
+            if (data[index].saveType == 3) {
+                $(".edit-article #title").val(data[index].title_push)
+                editor.txt.html(data[index].content_push)
+            } else {
+                $(".edit-article #title").val(data[index].title)
+                editor.txt.html(data[index].content)
+            }
+
+            if (data[index].saveType == 2) {
+                $("div.push-article span").text('已发布')
+            } else if (data[index].saveType == 3) {
+                $("div.push-article span").text('发布更新')
+            } else {
+                $("div.push-article span").text('发布文章')
+            }
+
+        }
+
+        function load_push_category(flag) {
+            $.ajax({
+                url: "{% url 'blog:option_category' %}",
+                method: "POST",
+                data: $("#category-submit").serialize(),
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.code == 0) {
+                        var template = ''
+                        $.each(data.data, function (i, v) {
+                            template += "<option value=" + v.id + ">" + v.name + "</option>"
+                        })
+                        $("select[name=tow-category]").empty()
+                        $("select[name=tow-category]").append(template)
+
+                        if (flag) {
+                            $("#category-submit>select:last-child>option").each(function () {
+                                if ($(this).val() == $("div.push-article").attr("category_two")) {
+                                    $(this).attr("selected", true)
+                                }
+                            })
+                        }
+                    }
+                },
+                error: function () {
+
+                },
+            })
         }
 
         //按照自己方法生成uuid
