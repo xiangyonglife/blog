@@ -31,6 +31,7 @@ urlpatterns = [
     path('history-cancel/', views.article_cancel, name='cancel'),
     path('history-recover/', views.article_recover, name='recover'),
     path('push-article/', views.push_article, name='push'),
+    path('push-article_update/', views.push_article_update, name='push_update'),
     path('article-show/', views.push_article, name='article-show'),
     path('article-detail-<article_id>.html/', views.article_detail, name='article-detail'),
     path('index-bar/', views.index_bar, name='index-bar'),

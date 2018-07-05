@@ -350,7 +350,7 @@ def modify_wz_sm(request):
     mongodb_con.article.update({'article_uid': article_id},
                                {'$set': {'content': content_html, "saveType": 1, "title": title},
                                 '$unset': {"content_push": "", "title_push": ""}})
-    json_text = {'code': '0', 'msg': '跟新成功'}
+    json_text = {'code': '0', 'msg': '跟新成功',"data":article_id}
     return HttpResponse(json.dumps(json_text))
 
 
@@ -492,6 +492,22 @@ def push_article(request):
             )
 
     json_text = {'code': '0', 'data': article_id, 'msg': '成功返回'}
+    return HttpResponse(json.dumps(json_text))
+
+
+def push_article_update(request):
+    """
+    用户编辑后发布跟新
+    :param request:
+    :return:
+    """
+    article_id = request.POST.get("article_id")
+    title = request.POST.get("title")
+    content_html = request.POST.get("content_html")
+    mongodb_con.article.update({'article_uid': article_id},
+                               {'$set': {'content': content_html, "saveType": 2, "title": title},
+                                '$unset': {"content_push": "", "title_push": ""}})
+    json_text = {'code': '0', 'msg': '跟新成功',"data":article_id}
     return HttpResponse(json.dumps(json_text))
 
 

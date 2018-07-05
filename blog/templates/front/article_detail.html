@@ -30,6 +30,11 @@
             {% autoescape off %}
                 {{ article.content }}
             {% endautoescape %}
+            <div id="imgViewDom">
+                <img src="">
+                <a target="_blank" href="">查看原图</a>
+
+            </div>
         </div>
         <div class="ds-reward-stl">
             <button id="dsRewardBtn" onclick="PaymentUtils.show();"><i class="fa fa-usd"></i>赏</button>
@@ -130,11 +135,13 @@
 
 
         </div>
-
         <div class="tooltip">
             <i class="iconfont icon-error"></i>
             <span></span>
         </div>
+    </div>
+    <div class="user-info">
+        <div class="user-intr"></div>
     </div>
 {% endblock %}
 
@@ -278,6 +285,75 @@
                 })
             })
 
+            //图片点击显示原始图片效果
+            $("div.article-detail-container > div.main img ").click(function (e) {
+                $("#imgViewDom>img").attr("src", $(this).attr("src")).css("cursor", "zoom-out")
+                $("#imgViewDom>a").attr("href", $(this).attr("src"))
+                $("#imgViewDom").show()
+                $("body").css("overflow", "hidden")
+            })
+            $("#imgViewDom").click(function () {
+                $(this).hide()
+                $("body").css("overflow", "")
+            })
+
+            //文章字体放大缩小
+            $("#font-change>span").hover(function () {
+                $(this).css("background-color", "red");
+                $(this).find(">a").css({"color": "white"})
+            }, function () {
+                $(this).css("background-color", "");
+                $(this).find(">a").css({"color": ""})
+            });
+            var fontSize = 16
+            $("#font-dec").click(function () {
+                if (fontSize > 10) {
+                    fontSize -= 2
+                    $("div.article-detail-container>div:first").css("fontSize", fontSize)
+                }
+            })
+
+            $("#font-n").click(function () {
+                fontSize = 16
+                $("div.article-detail-container>div:first").css("fontSize", fontSize)
+            })
+
+            $("#font-inc").click(function () {
+                if (fontSize < 40) {
+                    fontSize += 2
+                    $("div.article-detail-container>div:first").css("fontSize", fontSize)
+                }
+            })
+
+            //评论等按钮
+            $(".post-meta>span:eq(2),.post-meta>span:last").hover(function () {
+                $(this).css("background-color", "#488698");
+                $(this).find(">a").css({"color": "white"})
+            }, function () {
+                $(this).css("background-color", "");
+                $(this).find(">a").css({"color": ""})
+            });
+
+            $(".post-meta>span:last").click(function () {
+                //jQuery对象转换成功JavaScript对象
+                vdom = $("div.article-detail-container")[0]
+                if (vdom.style.width != '100%') {
+                    $("div.article-detail-container").animate({
+                        width: ['100%', 'easeInOutQuad'],
+                    }, function () {
+
+                    });
+                } else {
+                    $("div.article-detail-container").animate({
+                        width: ['80%', 'easeInOutQuad'],
+                    }, function () {
+                        console.log(vdom.style.width)
+                    });
+                }
+
+
+            })
+
 
         })
     </script>
@@ -288,6 +364,10 @@
 {% block style %}
     <link rel="stylesheet" href="{% static 'frame/pay/award.css' %}">
     <style>
+        div.article-detail-container {
+            width: 80%;
+        }
+
         div.article-detail-container > header span {
             color: #999;
             line-height: 26px;
@@ -304,12 +384,9 @@
         }
 
         div.article-detail-container > header {
-            width: 80%;
             background-color: white;
             border: 1px solid whitesmoke;
             padding: 15px;
-            height: 100%;
-
         }
 
         div.article-detail-container div.post-meta {
@@ -330,19 +407,15 @@
         }
 
         div.article-detail-container > div.main {
-            width: 80%;
             background-color: white;
             border: 1px solid whitesmoke;
             padding: 15px;
-            height: 100%;
         }
 
         div.article-detail-container > div.ds-reward-stl {
-            width: 80%;
             background-color: white;
             border: 1px solid whitesmoke;
             padding: 15px;
-            height: 100%;
             text-align: center;
             font-family: "microsoft yahei";
         }
@@ -367,11 +440,9 @@
 
         div.article-detail-container > div.entry-meta {
             padding: 2px 20px;
-            width: 80%;
             background-color: white;
             border: 1px solid whitesmoke;
             padding: 15px;
-            height: 100%;
         }
 
         div.article-detail-container > div.entry-meta .post-tag a {
@@ -382,11 +453,9 @@
         }
 
         div.article-detail-container > div#comments {
-            width: 80%;
             background-color: white;
             border: 1px solid whitesmoke;
             padding: 15px;
-            height: 100%;
 
         }
 
@@ -559,6 +628,98 @@
 
         .btn-send-huifu-ziji:hover {
             color: #4FABDF;
+        }
+
+        /* table 样式 */
+        table {
+            border-top: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+        }
+
+        table td,
+        table th {
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            padding: 3px 5px;
+        }
+
+        table th {
+            border-bottom: 2px solid #ccc;
+            text-align: center;
+        }
+
+        /* blockquote 样式 */
+        blockquote {
+            display: block;
+            border-left: 8px solid #d0e5f2;
+            padding: 5px 10px;
+            margin: 10px 0;
+            line-height: 1.4;
+            font-size: 100%;
+            background-color: #f1f1f1;
+        }
+
+        /* code 样式 */
+        code {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            background-color: #f1f1f1;
+            border-radius: 3px;
+            padding: 3px 5px;
+            margin: 0 3px;
+        }
+
+        pre code {
+            display: block;
+        }
+
+        /* ul ol 样式 */
+        ul, ol {
+            margin: 10px 0 10px 20px;
+        }
+
+        div.article-detail-container > div.main img {
+            cursor: zoom-in;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #imgViewDom {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.8);
+            overflow: auto;
+        }
+
+        #imgViewDom > img {
+            position: fixed;
+            margin: auto;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 2;
+        }
+
+        #imgViewDom > a {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            -webkit-transform: translate3d(-50%, 0, 0);
+            transform: translate3d(-50%, 0, 0);
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid #fff;
+            background-color: rgba(0, 0, 0, .4);
+            font-size: 15px;
+            color: #fff;
+            z-index: 10000001;
         }
     </style>
 {% endblock %}
