@@ -1,6 +1,181 @@
 {% extends 'front/home_index.html' %}
 {% load staticfiles %}
 {% block template %}
+    <div class="user-info">
+        <div class="user-introduce self-plate">
+            <h3 class="self-title">个人资料</h3>
+            <div class="photo">
+                <a>
+                    <img src="https://avatar.csdn.net/4/8/B/3_u011738045.jpg">
+                    <span>向勇</span>
+                </a>
+            </div>
+            <hr>
+            <div class="article-action clear_fix">
+                <dl class="text-center" title="1">
+                    <dt><a href="https://blog.csdn.net/u011738045?t=1">文章</a></dt>
+                    <dd><a href="https://blog.csdn.net/u011738045?t=1"><span class="count">1</span></a></dd>
+                </dl>
+                <dl class="text-center" title="0">
+                    <dt>粉丝</dt>
+                    <dd><span class="count" id="fan">0</span></dd>
+                </dl>
+                <dl class="text-center" title="0">
+                    <dt>喜欢</dt>
+                    <dd><span class="count">0</span></dd>
+                </dl>
+                <dl class="text-center" title="0">
+                    <dt>评论</dt>
+                    <dd><span class="count">0</span></dd>
+                </dl>
+            </div>
+        </div>
+        <div class="article-hot self-plate">
+            <h3 class="self-title">热门文章</h3>
+            <div class="self-article-list">
+                <ul>
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/details/79073454"
+                           target="_blank">颠覆BAT的新出路</a>
+                        <p class="read">阅读量：<span>47187</span></p>
+                    </li>
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/details/79073453" target="_blank">3个月从投资到退出，周黑鸭IPO背后，还有一位你不知道的“投资高手”</a>
+                        <p class="read">阅读量：<span>14431</span></p>
+                    </li>
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/details/79663877" target="_blank">完美的扎克伯格，倒霉的Facebook</a>
+                        <p class="read">阅读量：<span>9331</span></p>
+                    </li>
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/details/78941283" target="_blank">2018年，你应该向扎克伯格学习什么？</a>
+                        <p class="read">阅读量：<span>5403</span></p>
+                    </li>
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/details/79001591" target="_blank">和机器人滚床单，到底是什么感觉？</a>
+                        <p class="read">阅读量：<span>5380</span></p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="comment-hot self-plate">
+            <h3 class="self-title">最新评论</h3>
+            <div class="self-article-list">
+                <ul class="newcomment-list">
+                    <li>
+                        <a class="title text-truncate" target="_blank"
+                           href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/details/80912766#comments">詹姆斯加入湖人，杜兰特会留在勇士吗？</a>
+                        <p class="comment">
+                            <a href="https://my.csdn.net/weixin_42615251" class="user-name" target="_blank">weixin_42615251</a>：撒大苏打实打实大苏打撒旦
+                        </p>
+                    </li>
+                    <li>
+                        <a class="title text-truncate" target="_blank"
+                           href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/details/80730058#comments">谷歌5.5亿美元投资京东：乍看很壮...</a>
+                        <p class="comment">
+                            <a href="https://my.csdn.net/jbwanggz" class="user-name" target="_blank">jbwanggz</a>：赚钱的时候就有人来了，赔钱的时候没人问津
+                        </p>
+                    </li>
+                    <li>
+                        <a class="title text-truncate" target="_blank"
+                           href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/details/80754943#comments">为什么每次和 Siri
+                            聊天我都一...</a>
+                        <p class="comment">
+                            <a href="https://my.csdn.net/aioria_csdn" class="user-name" target="_blank">aioria_csdn</a>：蹭一下兄弟的热度，给奋战在一线的程序员兄弟、各位大佬、各位各种o发个福利，最近我们根据多年积累的开...
+                        </p>
+                    </li>
+                    <li>
+                        <a class="title text-truncate" target="_blank"
+                           href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/details/80649856#comments">把共和党当纳粹？谷歌：这个锅我们不...</a>
+                        <p class="comment">
+                            <a href="https://my.csdn.net/aioria_csdn" class="user-name" target="_blank">aioria_csdn</a>：蹭一下兄弟的热度，给奋战在一线的程序员兄弟、各位大佬、各位各种o发个福利，最近我们根据多年积累的开...
+                        </p>
+                    </li>
+                    <li>
+                        <a class="title text-truncate" target="_blank"
+                           href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/details/80649856#comments">把共和党当纳粹？谷歌：这个锅我们不...</a>
+                        <p class="comment">
+                            <a href="https://my.csdn.net/qq_26500807" class="user-name" target="_blank">qq_26500807</a>：妈蛋
+                            我看成了 我们的 party </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pigeonhole self-plate">
+            <h3 class="self-title">归档</h3>
+            <div class="self-article-list">
+                <ul class="archive-list">
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2018/07">
+                            2018年7月 <span class="count float-right">2篇</span>
+                        </a>
+                    </li>
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2018/06">
+                            2018年6月 <span class="count float-right">35篇</span>
+                        </a>
+                    </li>
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2018/05">
+                            2018年5月 <span class="count float-right">29篇</span>
+                        </a>
+                    </li>
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2018/04">
+                            2018年4月 <span class="count float-right">48篇</span>
+                        </a>
+                    </li>
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2018/03">
+                            2018年3月 <span class="count float-right">40篇</span>
+                        </a>
+                    </li>
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2018/02">
+                            2018年2月 <span class="count float-right">32篇</span>
+                        </a>
+                    </li>
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2018/01">
+                            2018年1月 <span class="count float-right">52篇</span>
+                        </a>
+                    </li>
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2017/12">
+                            2017年12月 <span class="count float-right">45篇</span>
+                        </a>
+                    </li>
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2017/11">
+                            2017年11月 <span class="count float-right">52篇</span>
+                        </a>
+                    </li>
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2017/10">
+                            2017年10月 <span class="count float-right">52篇</span>
+                        </a>
+                    </li>
+                    <!--归档统计-->
+                    <li>
+                        <a href="https://blog.csdn.net/kxyona63ag9zqtxx0/article/month/2017/09">
+                            2017年9月 <span class="count float-right">20篇</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
     <div class="article-detail-container">
         <header>
 
@@ -72,7 +247,7 @@
                 {% if not item.fatherComment_id %}
                     <div class="msg">
                         <div class="msgauto" style="position: relative">
-                            <img class="avatar" src="{% static 'images/logo.JPG' %}"
+                            <img class="avatar" src="{% static 'images/logo.png' %}"
                                  alt="网友昵称：{{ item.commentUser.userName }}"
                                  title="网友昵称：{{ item.commentUser.userName }}">
                             <div class="msgname">
@@ -140,9 +315,7 @@
             <span></span>
         </div>
     </div>
-    <div class="user-info">
-        <div class="user-intr"></div>
-    </div>
+
 {% endblock %}
 
 {% block script %}
@@ -338,6 +511,7 @@
                 //jQuery对象转换成功JavaScript对象
                 vdom = $("div.article-detail-container")[0]
                 if (vdom.style.width != '100%') {
+                    $("div.user-info").hide()
                     $("div.article-detail-container").animate({
                         width: ['100%', 'easeInOutQuad'],
                     }, function () {
@@ -347,7 +521,7 @@
                     $("div.article-detail-container").animate({
                         width: ['80%', 'easeInOutQuad'],
                     }, function () {
-                        console.log(vdom.style.width)
+                        $("div.user-info").show()
                     });
                 }
 
@@ -721,5 +895,68 @@
             color: #fff;
             z-index: 10000001;
         }
+
+        div.user-info {
+            width: 20%;
+            float: right;
+            margin-right: -1%;
+        }
+
+        .self-title:before {
+            display: inline-block;
+            margin-right: 8px;
+            content: '';
+            width: 4px;
+            height: 22px;
+            vertical-align: -6px;
+            background-color: #ca0c16;
+        }
+
+        .self-plate {
+            border: 1px solid #E3E3E3;
+            background-color: #FFFFFF;
+            border-radius: 2px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            margin-right: -120px;
+        }
+
+        .self-article-list > ul li p {
+            margin-top: 0px;
+            color: #8A8B8A;
+        }
+
+        .self-article-list > ul li a:hover {
+            color: #ba2a24;
+        }
+
+        div.user-introduce > div.photo img {
+            border-radius: 50%;
+        }
+
+        div.user-introduce > div.photo {
+            position: relative;
+        }
+
+        div.user-introduce > div.photo span {
+            position: absolute;
+            top: 35%;
+            left: 30%;
+        }
+
+        div.user-introduce > div.article-action dl {
+            float: left;
+            text-align: center;
+            width: 50%;
+        }
+
+        ul.archive-list li {
+            margin-top: 16px;
+        }
+
+        ul.archive-list li span {
+            margin-left: 50%;
+
+        }
+
     </style>
 {% endblock %}
