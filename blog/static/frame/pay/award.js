@@ -59,4 +59,4 @@
     PaymentUtils.hide = function () {
         $("#PAY_" + id).hide();
     }
-})(jQuery);
+})($);

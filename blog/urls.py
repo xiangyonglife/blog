@@ -36,4 +36,5 @@ urlpatterns = [
     path('article-detail-<article_id>.html/', views.article_detail, name='article-detail'),
     path('index-bar/', views.index_bar, name='index-bar'),
     path('article_comments/', views.article_comments, name='comments'),
+    path('user-main/', views.user_index, name='userHome'),
 ]

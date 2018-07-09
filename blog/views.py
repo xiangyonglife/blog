@@ -16,13 +16,14 @@ def index(request):
     """
     # 获取当前用户随机字符串
     # 根据随机字符串获取对应信息
-    user = request.session.get('is_sign')
-    article = models.Article.objects.all()  # 加载所有文章
+    login = request.session.get('is_sign')
+    user = request.session.get('user')
+    article = models.Article.objects.all().filter(status=0, saveType__gt=1)  # 加载所有文章
     article_blog_category = models.ArticleBlogCategory.objects.all()  # 加载所有一级栏目
     # request.session.clear_expired() 江所有session失效日期小于当前日期删除
     # request.session.clear() #注销的时候使用
     return render(request, 'home_main.html',
-                  {'user': user, "article": article, "article_blog_category": article_blog_category})
+                  {'login': login, 'user': user, "article": article, "article_blog_category": article_blog_category})
 
 
 def index_bar(request):
@@ -85,6 +86,18 @@ def login(request):
     else:
         text_json = {'code': '1', 'msg': '用户名或密码错误'}
         return HttpResponse(json.dumps(text_json))
+
+
+def user_index(request):
+    """
+    用户主页
+    :param request:
+    :return:
+    """
+    user_ = request.session.get('user')
+    user = models.User.objects.filter(userName=user_).first()
+    article = models.Article.objects.filter(user_id=user.userId, saveType__gt=1, status=0).all()  # 加载所有文章
+    return render(request, 'user_main.html', {'article': article, "blog_category": 2})
 
 
 # 用户装饰器
@@ -307,7 +320,10 @@ def modify_wj_del(request):
     """
     uuid = request.POST.get("uuid")
     models.ArticleCategory.objects.filter(articleUuid=uuid).update(status=1)
+    user_category = models.ArticleCategory.objects.filter(articleUuid=uuid).first()
+    models.Article.objects.filter(articleCategory_id=user_category.articleCategoryId).update(status=1)
     mongodb_con.article.update({"parent_article_id": uuid}, {"$set": {"status": 1}})
+
     json_text = {'code': '0', 'msg': '跟新成功'}
     return HttpResponse(json.dumps(json_text))
 
@@ -334,6 +350,7 @@ def modify_wz_del(request):
     """
     article_id = request.POST.get("article_id")
     mongodb_con.article.update({'article_uid': article_id}, {"$set": {"status": 1}})
+    models.Article.objects.filter(articleUrl=article_id).update(status=1)
     json_text = {'code': '0', 'msg': '跟新成功'}
     return HttpResponse(json.dumps(json_text))
 
@@ -347,10 +364,12 @@ def modify_wz_sm(request):
     article_id = request.POST.get("article_id")
     title = request.POST.get("title")
     content_html = request.POST.get("content_html")
+    content = request.POST.get("content")
     mongodb_con.article.update({'article_uid': article_id},
                                {'$set': {'content': content_html, "saveType": 1, "title": title},
                                 '$unset': {"content_push": "", "title_push": ""}})
-    json_text = {'code': '0', 'msg': '跟新成功',"data":article_id}
+    models.Article.objects.filter(articleUrl=article_id).update(saveType=1, articleName=title, articleContent=content)
+    json_text = {'code': '0', 'msg': '跟新成功', "data": article_id}
     return HttpResponse(json.dumps(json_text))
 
 
@@ -456,8 +475,10 @@ def push_article(request):
     # 判断文章是否存在
     article_count = models.Article.objects.filter(articleUrl=article_id).count()
 
-    if article_count > 0:
+    # 判断文章发布还是发布更新
+    if article_count > 0:  # 发布跟新
         models.Article.objects.filter(articleUrl=article_id).update(saveType=2)
+        mongodb_con.article.update({'article_uid': article_id}, {'$set': {"saveType": 2}})
     else:
         models.Article.objects.create(
             articleCategory=article_category,
@@ -469,12 +490,12 @@ def push_article(request):
             articleContent=content_text,
             articleUrl=article_id,
             status=article['status'],
-            saveType=article['saveType']
+            saveType=2
 
         )
-    mongodb_con.article.update({'article_uid': article_id},
-                               {'$set': {"saveType": 2, "article_category_id": article_blog_category_id,
-                                         "article_two_category_id": article_blog_category_two_id}}, True)
+        mongodb_con.article.update({'article_uid': article_id},
+                                   {'$set': {"saveType": 2, "article_category_id": article_blog_category_id,
+                                             "article_two_category_id": article_blog_category_two_id}}, True)
 
     # 添加文章标签
     article_tag = request.POST.get("article_tag")
@@ -504,10 +525,12 @@ def push_article_update(request):
     article_id = request.POST.get("article_id")
     title = request.POST.get("title")
     content_html = request.POST.get("content_html")
+    content = request.POST.get("content")
     mongodb_con.article.update({'article_uid': article_id},
                                {'$set': {'content': content_html, "saveType": 2, "title": title},
                                 '$unset': {"content_push": "", "title_push": ""}})
-    json_text = {'code': '0', 'msg': '跟新成功',"data":article_id}
+    models.Article.objects.filter(articleUrl=article_id).update(articleName=title, articleContent=content)
+    json_text = {'code': '0', 'msg': '跟新成功', "data": article_id}
     return HttpResponse(json.dumps(json_text))
 
 
@@ -529,11 +552,18 @@ def load_article_tag_category(request):
     """
     article_uid = request.GET.get("article_uid")
     tag = models.ArticleTag.objects.filter(articleId=article_uid).first()
+    article_count = models.Article.objects.filter(articleUrl=article_uid).count()
+    category = ''
+    if article_count > 0:
+        article_category = models.Article.objects.filter(articleUrl=article_uid).values('ArticleBlogCategory_id',
+                                                                                        "ArticleBlogCategoryTwo_id").first()
+        category = {"one": article_category['ArticleBlogCategory_id'],
+                    'two': article_category['ArticleBlogCategoryTwo_id']}
     data = ''
     if tag:
         data = {"tag": tag.articleTagName}
     # article_blog_cateogry=models.ArticleBlogCategory.objects.filter()
-    json_text = {'code': '0', 'msg': '成功返回', "data": data}
+    json_text = {'code': '0', 'msg': '成功返回', "data": data, "category": category}
     return HttpResponse(json.dumps(json_text))
 
 

@@ -2,254 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <title>Title</title>
-
     {% load staticfiles %}
-
-    <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'frame/font-awesome-4.7.0/css/font-awesome.css' %}">
-
-    <style>
-        a {
-            cursor: pointer;
-            text-decoration: none;
-            color: #333;
-        }
-
-        li, ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
-            background-color: #F5F6F7;
-        }
-
-        .clear_fix:after {
-            content: ".";
-            display: block;
-            height: 0;
-            clear: both;
-            visibility: hidden;
-
-        }
-
-        .clear_fix {
-            zoom: 1
-        }
-
-        .navbar {
-            background-color: #fff;
-            border-color: #f0f0f0;
-            position: fixed;
-            z-index: 1;
-            padding: 2.5px 0px;
-            width: 100%;
-            top: 30px;
-
-        }
-
-        nav .width-limit {
-            width: 1440px;
-            margin: 0 auto;
-
-        }
-
-        nav .logo {
-            float: left;
-            margin-top: 7px;
-        }
-
-        nav .write-btn {
-            float: right;
-            width: 100px;
-            line-height: 30px;
-            margin: 8px 10px 0;
-            border-radius: 20px;
-            font-size: 15px;
-            color: #fff;
-            background-color: #ea6f5a;
-            padding: 6px 5px;
-            text-align: center;
-        }
-
-        nav .sign-up {
-            float: right;
-            width: 80px;
-            height: 38px;
-            line-height: 34px;
-            margin: 9px 5px 0 15px;
-            border: 1px solid rgba(236, 97, 73, .7);
-            border-radius: 20px;
-            font-size: 15px;
-            color: #ea6f5a;
-            background-color: transparent;
-            text-indent: 15px;
-
-        }
-
-        nav .log-in {
-            float: right;
-            margin: 11px 6px 0 10px;
-            font-size: 15px;
-            border: 1px solid transparent;
-            padding: 6px 12px;
-            color: #969696;
-
-        }
-
-        nav .navbar-nav {
-            float: left;
-            list-style: none;
-        }
-
-        nav .navbar-nav li {
-            float: left;
-            padding-left: 50px;
-            font-size: 25px;
-        }
-
-        nav .container {
-            padding: 0 15px;
-            width: 930px;
-            margin: -50px auto 0px;
-        }
-
-        nav .navbar-nav .search {
-            padding-left: 15px;
-            position: relative;
-            margin-left: 50px;
-            margin-top: -5px;
-        }
-
-        nav .navbar-nav .search input {
-            padding: 0 50px 0 20px;
-            height: 38px;
-            font-size: 14px;
-            border: 1px solid #eee;
-            border-radius: 40px;
-            background: #eee;
-            outline: 0;
-
-        }
-
-        div .top-category ul li {
-            float: left;
-            padding: 10px;
-        }
-
-        nav .user {
-            float: right;
-            height: 100%;
-            text-align: center;
-            margin-right: 20px;
-            text-indent: 16px;
-            position: relative;
-        }
-
-        nav .user .avatar {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            margin: 8px 20px 8px 20px;
-        }
-
-        nav .user .avatar img {
-            height: 50px;
-            border: 1px solid #ddd;
-            border-radius: 50%;
-        }
-
-        nav .user .dropdown-menu {
-            left: auto;
-            border-radius: 0 0 4px 4px;
-        }
-
-        nav .dropdown-menu {
-            margin-top: 0;
-            border-color: transparent;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
-            position: absolute;
-            top: 80px;
-            min-width: 160px;
-            padding: 5px 0;
-            list-style: none;
-            font-size: 14px;
-            text-align: left;
-            background-color: #fff;
-            background-clip: padding-box;
-            display: none;
-        }
-
-        nav .dropdown-menu li {
-            display: list-item;
-            line-height: 50px;
-        }
-
-        nav .user .dropdown-menu li:first-child {
-            color: black;
-        }
-
-        #top-header {
-            background: #e7e7e7;
-            color: #555 !important;
-            border-bottom: 1px solid #dedede;
-            width: 100%;
-            z-index: 1;
-        }
-
-        .top-nav {
-            height: 30px;
-            width: 1220px;
-            line-height: 30px;
-            margin: 0 auto;
-            overflow: hidden;
-
-        }
-
-        #inf-d {
-            float: left;
-            width: 46%;
-            margin: -10px 0 0 5px;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .footer {
-            text-align: center;
-            background-color: #303030;
-            color: #cacaca;
-            font-size: 16px;
-            border-top: solid 3px #41abf7;
-            padding: 10px 0;
-            display: block;
-            margin-top: 100px;
-        }
-
-        .footer > div {
-            margin: 16px 0;
-        }
-
-        .footer > .first-row > a {
-            margin: 0 5px;
-        }
-
-        .footer a {
-            color: #cacaca;
-            text-decoration: none;
-        }
-    </style>
-
+    <link rel="stylesheet" href="{% static 'css/iconfont.css' %}">
     {% block style %}{% endblock %}
-
 </head>
 <body>
-<nav id="top-header" style="position: fixed;top: 0;">
-    <div class="top-nav">
-        <div class="menu-container">
-            <ul class="top-menu">
+    <header class="site-header">
+        <div id="header" class="navbar fixed-nav fixed-appear">
+        <nav id="top-header">
+            <div class="top-nav">
+                <div class="menu-container">
+                    <ul class="top-menu">
+                        {% if login %}
+                            <li>
+                                <i class="fa fa-user"></i>欢迎
+                                <a href="" title="资料编辑">{{ user }}</a>&nbsp;
+                                <i class="fa fa-gear"></i>
+                                <a target="_blank" href="{% url 'blog:userHome' %}">我的主页</a>&nbsp;
+                                <i class="fa fa-edit"></i>
+                                <a href="{% url 'blog:write' %}" title="文章管理"
+                                   target="_blank">写文章</a>&nbsp;<i class="fa fa-sign-out"></i>
+                                <a href="{% url 'blog:out' %}">登出</a>
+                            </li>
+                            {% else %}
+                                <li>
+                                    <i class="fa fa-github-square"></i>您好，欢迎到访向勇个人博客!
+                                    <a href="{% url 'blog:in' %}" target="_blank">登录</a>&nbsp;
+                                     <a href="{% url 'blog:up' %}" target="_blank">注册</a>
+                                </li>
+                        {% endif %}
+
+
+                    </ul>
+                </div>
                 <div id="inf-d">
                     <div id="inf-b">
                         Hi,
@@ -276,8 +66,21 @@
                             hello = '夜深了！ ';
                         }
 
+                        function GetCookie(sName) {
+                            var arr = document.cookie.match(new RegExp("(^| )" + sName + "=([^;]*)(;|$)"));
+                            if (arr != null) {
+                                return unescape(arr[2])
+                            }
+                            ;
+                            return null;
+                        }
+
+                        var Guest_Name = decodeURIComponent(GetCookie('author'));
+                        var webUrl = webUrl;
+                        if (Guest_Name != "null" && Guest_Name != "") {
+                            hello = Guest_Name + ' , ' + hello + ' 欢迎回来。';
+                        }
                         document.write(' ' + hello);</script>
-                        {#                        夜深了！#}
                         今天是：
                         <span id="localtime">
         <script type="text/javascript">today = new Date();
@@ -290,325 +93,252 @@
             year = (today.getYear() + 1900);
         }
         tdate = year + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日" + " " + x[today.getDay()];
-        document.write(tdate);</script>{% comment %}2018年6月20日 星期三{% endcomment %}
+        document.write(tdate);</script>2018年7月6日 星期五
       </span><!---->
                     </div>
                     <div id="inf-e"></div>
                 </div>
-            </ul>
-        </div>
-
-    </div>
-</nav>
-<nav class="navbar">
-    <div class="width-limit clear_fix">
-        <!-- 左上方 Logo -->
-        <a class="logo">
-            <img src="{% static 'images/logo.JPG' %}" width="76" height="56">
-        </a>
-        <!-- 未登录显示登录/注册/写文章 -->
-        <a class="btn write-btn" target="_blank" href="{% url 'blog:write' %}">
-            <i class="iconfont icon-combinedshapecopy2"></i>写文章
-        </a>
-        {% if user %}
-            <!-- 如果用户登录，显示下拉菜单 -->
-            <div class="clear_fix">
-                <div class="user">
-                    <div data-hover="dropdown">
-                        <a class="avatar" href="/u/d4dba3cfe3a8" style="position: relative;right: 20px"><img
-                                src="//upload.jianshu.io/users/upload_avatars/12552151/b37c7120-31c3-4b9f-90fe-72b5790a959f?imageMogr2/auto-orient/strip|imageView2/1/w/120/h/120"
-                                alt="120">
-                            <i class="iconfont icon-Down_arrow"
-                               style="font-size: 24px;color:#ea6f5a;position:absolute;top:-20px;left: 40px"></i>
-                        </a>
-                    </div>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="/u/d4dba3cfe3a8">
-                                <i class="iconfont icon-wodezhuye"
-                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a;"></i><span>我的主页</span>
-                            </a></li>
-                        <li>
-                            <!-- TODO bookmarks_path -->
-                            <a href="/bookmarks">
-                                <i class="iconfont icon-shoucangwenzhang"
-                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i><span>收藏的文章</span>
-                            </a></li>
-                        <li>
-                            <a href="/users/d4dba3cfe3a8/liked_notes">
-                                <i class="iconfont icon-xihuandewenzhang"
-                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i><span>喜欢的文章</span>
-                            </a></li>
-                        <li>
-                            <a href="/my/paid_notes">
-                                <i class="iconfont icon-wodezhuye"
-                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i><span>我上传的资源</span>
-                            </a></li>
-                        {#                <li>#}
-                        {#                    <a href="/wallet">#}
-                        {#                        <i class="iconfont icon-wodezhuye" style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i></i><span>我的钱包</span>#}
-                        {#                    </a></li>#}
-                        <li>
-                            <a href="/settings">
-                                <i class="iconfont icon-shezhi"
-                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i></i><span>设置</span>
-                            </a></li>
-                        <li>
-                            <a href="/faqs">
-                                <i class="iconfont icon-bangzhuyufankui"
-                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i></i>
-                                <span>帮助与反馈</span>
-                            </a></li>
-                        <li>
-                            <a rel="nofollow" data-method="delete" href="{% url 'blog:out' %}">
-                                <i class="iconfont icon-tuichu"
-                                   style="font-size: 20px;padding-right:20px;color:#ea6f5a"></i><span>退出</span>
-                            </a></li>
-                    </ul>
-                </div>
             </div>
-
-        {% else %}
-            <!-- 用户未登录 -->
-            <a class="btn sign-up" href="{% url 'blog:up' %}">注册</a>
-            <a class="btn log-in" href="{% url 'blog:in' %}">登录</a>
-        {% endif %}
-
-        <div class="clear_fix"></div>
-        <div class="container clear_fix">
-            <ul class="navbar-nav clear_fix">
-                <a href="{% url 'blog:index' %}">
-                    <li style="color:#ea6f5a">
-                        <i class="iconfont icon-shouye" style="font-size: 25px"></i>
-                        首页
-                    </li>
-                </a>
-                <a>
-                    <li>
-                        <i class="iconfont icon-jiaochengqianniu" style="font-size: 25px"></i>
-                        教程
-                    </li>
-                </a>
-                <a>
-                    <li>
-                        <i class="iconfont icon-fuliquan" style="font-size: 25px"></i>
-                        福利
-                    </li>
-                </a>
-                <li class="search">
-                    <form>
-                        <i class="iconfont icon-sousuo"
-                           style="font-size: 25px;position: absolute;top: 5px;right: 17px"></i>
-                        <input type="text" placeholder="搜索"/>
+        </nav>
+        <div class="header">
+            <h1 id="logo">
+                <a href="{% url 'blog:index' %}"><img
+                        src="{% static 'images/logo.png' %}" title="向勇个人博客"
+                        alt="向勇个人博客"></a>
+            </h1>
+            <div class="search">
+                <form method="post" name="search" action="" class="searchform">
+                    <input type="text" name="q" placeholder="搜索..." value="" class="text">
+                    <input type="submit" class="btn" value="搜索">
+                </form>
+            </div>
+            <!-- mobile nav -->
+            <div class="nav-sjlogo"><i class="fa fa-navicon"></i></div>
+            <div class="nav-sousuo">
+                <div class="mini_search">
+                    <form name="search" class="searchform" method="post" action="">
+                        <input class="searchInput" type="text" name="q" size="11" placeholder="请输入搜索内容..." value=""  id="ls">
+                        <button type="submit" class="btn-search dtb2" value=""><i class="fa fa-search"></i></button>
                     </form>
-                </li>
-            </ul>
+                </div>
+                <a id="mo-so" href="javascript:void(0);"><i class="fa fa-search icon-search"></i></a>
+            </div>
+            <div class="header-nav" data-type="index" data-infoid="index">
+                <aside class="mobile_aside mobile_nav">
+                    <div class="mobile-menu">
+                        <ul id="nav" class="nav-pills">
+                            <li id="nvabar-item-index"><a href="{% url 'blog:index' %}" class="on"><i class="fa fa-home"></i>首页</a></li>
+                            <li id="navbar-category-5"><a href=""><i class="fa fa-cloud"></i>互联网</a></li>
+                            <li id="navbar-category-1"><a href=""><i class="fa fa-recycle"></i>新鲜科技</a></li>
+                            <li id="navbar-category-6" class="menu-item-has-children">
+                                <a href=""><i class="fa fa-delicious"></i>主题展示</a>
+                                <span class="toggle-btn"><i class="fa fa-plus"></i></span>
+                                <ul class="dropdown-menu sub-menu">
+                                    <li class="menu-item menu-item-type-taxonomy menu-item-object-category">
+                                        <a href="">zblogPHP教程</a>
+                                    </li>
+                                    <li class="menu-item menu-item-type-taxonomy menu-item-object-category">
+                                        <a href="">zblogPHP主题</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="navbar-category-4"><a href=""><i class="fa fa-coffee"></i>胡言乱语</a></li>
+                            <li id="navbar-page-2" class="menu-item-has-children ">
+                                <a href=""><i class="fa fa-bookmark"></i>留言本</a>
+                                <span class="toggle-btn"><i class="fa fa-plus"></i></span>
+                                <ul class="dropdown-menu sub-menu">
+                                    <li id="navbar-page-68"><a href="/service/">私人订制</a></li>
+                                    <li id="navbar-page-24"><a href="https://www.talklee.com/tougao/">本站投稿</a></li>
+                                    <li id="navbar-page-54"><a href="/ads/">广告投放</a></li>
+                                    <li id="navbar-page-53"><a href="/zanzhu/" class="current-on">赞助我们</a></li>
+                                </ul>
+                            </li>
+                            <li id="nvabar-item-index">
+                                <a href="{% url 'blog:write' %}" class="">
+                                    <i class="iconfont icon-combinedshapecopy2"></i>
+                                    写文章
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
         </div>
     </div>
-</nav>
-<div class="container" style="width:1200px;margin: 0 auto;position: relative;top:110px;">
-    {% block template_banner %}{% endblock %}
+    </header>
+    <div class="container-fluid home-fluid">
+            <div class="site-content">
+                <!--轮播广告-->
+                    <nav class="gonggao navcates">
+                        <div class="bull"><i class="fa fa-volume-up"></i></div>
+                        <div id="callboard">
+                            <ul class="menu" style="margin-top: 0px;">
+                                 <li>
+                                     <a href="" style="    color:#D34A2C;" title="应政策要求，10月1日起博客评论将启用审核功能，接入实名验证后再取消审核功能。">
+                                         应政策要求，10月1日起博客评论将启用审核功能，接入实名验证后再取消审核功能。
+                                     </a>
+                                 </li>
+                                <li>
+                                    <a href="" title="购买林文正姿送Z-blogPHP主题啦，仅限10套，欲购从速（剩余：5套）">
+                                        购买林文正姿送Z-blogPHP主题啦，仅限10套，欲购从速（剩余：4套）
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <div class="site-main">
+                        <!-- 幻灯片-->
 
-    <div class="content_wrap" style="margin-top: 20px;margin-left: 50px">
-        <div class="content">
-            <!--  <div class="top-category">
-                  <ul class="clear_fix">
-                      <li><a>web前端</a></li>
-                      <li><a>linux</a></li>
-                      <li><a>数据库</a></li>
-                      <li><a>python</a></li>
-                      <li><a>IT深科技</a></li>
-                      <li><a>IT那些事</a></li>
-                      <li><a>IDE使用</a></li>
-                      <li><a>在线工具</a></li>
-                      <li><a>团队开发</a></li>
-                      <li><a>生活随笔</a></li>
-                  </ul>
-              </div>
-              -->
-            {% block template %}{% endblock %}
-        </div>
+                       {% comment %} <div class="content-wrap left">
+                            <div class="slide-main">
+                                <!-- 幻灯片-->
+                                <div class="swiper-container swiper-home swiper-container-horizontal">
+                                    <article class="swiper-slide slide-single swiper-slide-duplicate" data-swiper-slide-index="2">
+                                        <div class="swiper-image">
+                                            <a href="//www.talklee.com/blog/248.html" title="林文正姿笔优惠促销" target="_blank">
+                                                <img src="//www.talklee.com/zb_users/upload/2017/10/201710121507778833893531.jpg" alt="林文正姿笔优惠促销">
+                                            </a>
+                                        </div>
+                                        <div class="swiper-post">
+                                            <h3>
+                                                <a href="" target="_blank" title="林文正姿笔优惠促销">林文正姿笔优惠促销</a>
+                                            </h3>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+                        </div>{% endcomment %}
+
+                        {% block template%}{% endblock %}
+                    </div>
+
+                    <!--侧栏-->
+                    <aside class="sidebar-right" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 0px;">
+                          <div class="theiaStickySidebar">
+                                <div class="widget-box widget" id="zzxx-box">
+                                         <div class="topauthor">
+                                                <img alt="博客主人：非李莫属" src="https://www.talklee.com/zb_users/avatar/1.png" class="avatar-photo" title="非李莫属" height="100" width="100">
+                                                <span class="intag" title="非李莫属">博 主：</span>
+                                                <span class="names">
+                                                    <a href="https://www.talklee.com/author-1.html" title="查看 非李莫属 发布的文章" rel="author">非李莫属</a>
+                                                </span>
+                                                <span class="talk">李洋个人博客，是一个记录自己生活点滴、互联网技术的原创独立博客（Talklee.Com）。</span>
+                                        </div>
+                                         <ul>
+                                                <li class="tsina">
+                                                    <a title="新浪微博" rel="nofollow" href="http://weibo.com/523912300/" target="_blank">
+                                                        <i class="fa fa-weibo"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="weixin"><a title="微信">
+                                                    <i class="fa fa-weixin"></i>
+                                                    <span style="background-image:url(https://www.talklee.com/zb_users/theme//talklee/style/images/wxlogo_example.png);"></span>
+                                                </a>
+                                                </li>
+                                                <li class="tqq">
+                                                    <a title="QQ临时对话" rel="nofollow" href="//wpa.qq.com/msgrd?v=3&amp;uin=229693666&amp;site=qq&amp;menu=yes" target="blank">
+                                                        <i class="fa fa-qq"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="feed">
+                                                    <a title="主题交流群" href="https://shang.qq.com/wpa/qunwpa?idkey=c30722f3c9cba68d73b80ad8635ba992a9f29a0eeb127c3b789f5d4e668a6552" rel="nofollow" target="_blank">
+                                                        <i class="fa fa-users"></i>
+                                                    </a>
+                                                </li>
+                                         </ul>
+                                         <div class="butauthor ">
+                                                  <span class="bignum pn">浏览 977196 次</span>
+                                                  <span class="bignum">留言 1392 条</span>
+                                         </div>
+                               </div>
+                                <div class="widget-box widget" id="tabcelan">
+                                         <ul class="widget-content tabcelan">
+                                                <li id="con_title" class="con_post_title">
+                                                    <ul id="tab">
+                                                        <li id="one1" class="tabhover">推荐</li>
+                                                        <li id="one2">热门</li>
+                                                        <li id="one3">热评</li>
+                                                    </ul>
+                                                </li>
+                                                <li id="con_one" class="con_one_list">
+                                                        <ul id="con_one_1" style="display:block;">
+                                                                <li>
+                                                                    <span class="li-icon li-icon-1">1</span>
+                                                                    <a href="https://www.talklee.com/blog/279.html" title="李洋博客《mxlee》zblog主题-梦想家（重大更新，必看）">李洋博客《mxlee》zblog主题-梦想家（重大更新，必看）</a>
+                                                                </li>
+                                                                <li>
+                                                                    <span class="li-icon li-icon-2">2</span>
+                                                                    <a href="https://www.talklee.com/blog/254.html" title="Brieflee主题-把最好的送给你（9月更新）">Brieflee主题-把最好的送给你（9月更新）</a>
+                                                                </li>
+                                                                <li>
+                                                                    <span class="li-icon li-icon-3">3</span>
+                                                                    <a href="https://www.talklee.com/blog/248.html" title="别让近视毁了你的孩子-林文正姿笔（剩余4套）">别让近视毁了你的孩子-林文正姿笔（剩余4套）</a>
+                                                                </li>
+                                                                <li>
+                                                                    <span class="li-icon li-icon-4">4</span>
+                                                                    <a href="https://www.talklee.com/blog/290.html" title="Z-blogPHP常见问题答疑">Z-blogPHP常见问题答疑</a>
+                                                                </li>
+                                                         </ul>
+                                                </li>
+                                         </ul>
+                                </div>
+                          </div>
+                    </aside>
+            </div>
     </div>
-
-    <div class="clear_fix"></div>
-
-    {% block template_left_bar %}{% endblock %}
-</div>
-<div class="clear_fix"></div>
-
-{% comment %}<footer class="footer">
-    <div class="first-row">
-        <a href="http://haoji.me/">首页</a>
-        <a href="//about.haoji.me">关于本站</a>
-        <a href="http://haoji.me/link.html">友情链接</a>
-        <a href="http://haoji.me/msgboard.html">留言</a>
-
-        <a href="http://www.cnblogs.com/liuxianan/">博客园</a>
-        <a href="https://github.com/sxei/">github</a>
-        <a href="//demo.haoji.me">demo</a>
-        <a href="http://haoji.me/sitemap.xml">sitemap</a>
-
-        <script src="//s19.cnzz.com/z_stat.php?id=1270741665"></script>
-        <script src="http://c.cnzz.com/core.php?web_id=1270741665&amp;t=z" charset="utf-8"
-                type="text/javascript"></script>
-        <a href="http://www.cnzz.com/stat/website.php?web_id=1270741665" target="_blank" title="站长统计">站长统计</a>
-
+    <footer class="footer">
+	     <div class="container">
+		<p>© 2018 <a href="http://jspang.com">技术胖-胜洪宇关注web前端技术</a>
+            &nbsp; <a href="http://jspang.com/sitemap.xml">网站地图</a>
+        </p>
     </div>
-    <div>
-        <b>多看书，多总结，少写代码！</b>
+    </footer>
+    <div id="backtop" class="backtop">
+          <div class="bt-box tnrt">
+                <a href="javascript:translatePage();" id="zh_big">繁</a></div>
+          <div class="bt-box weixin">
+                <i class="fa fa-weixin fa-2x"></i>
+                <img class="pic" src="https://www.talklee.com/zb_users/theme//talklee/style/images/wxlogo_example.png" alt="微信二维码">
+          </div>
+          <div class="bt-box top" style="display: block;">
+                <i class="fa fa-angle-up fa-2x"></i>
+          </div>
     </div>
-    <div>
-        <span>© 2016-2018 <a href="http://haoji.me/">haoji.me</a> All Rights Reserved</span>
-        <a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备16002604-3</a>
-    </div>
-</footer>{% endcomment %}
-
+</body>
 <script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
-<script src="{% static 'frame/jquery.easing/js/jquery.easing.js' %}"></script>
-<script src="{% static 'frame/unslider-150203225543/unslider.min.js' %}"></script>
-
-
 <script>
     $(function () {
-        //用户登录显示菜单
-        $('nav .user .avatar').mouseenter(function () {
-            $('nav .user').css({
-                "background": "#eee"
-            })
-            $(this).parent().next().slideDown()
-        }).mouseleave(function () {
-            $('nav .user').css({
-                "background": "#fff"
-            })
-            // $(this).parent().next().hide()
+        $(".nav-sjlogo i").click(function () {
+            $(".mobile_aside").slideToggle(),
+                $(".header-nav").removeClass("header-nav")
+            $(".sub-menu").toggleClass("m-sub-menu")
+            $(this).toggleClass('active')
+            $(".mobile-menu .nav-pills > li:last").hide()
         })
 
-
-        //每个子菜单加上选中颜色
-        $('nav .user .dropdown-menu li').mouseenter(function () {
-            $(this).css({
-                "background": "#eee"
-            })
-        }).mouseleave(function () {
-            $(this).css({
-                "background": "#fff"
-            })
+        $("#mo-so").click(function () {
+            $(".mini_search").slideToggle()
         })
 
-        $('nav .user .dropdown-menu').mouseleave(function () {
-            $('nav .user .dropdown-menu').hide()
-        })
-
-
-        $('#menu-cover').mouseenter(function () {
-            //$('nav .user .dropdown-menu').show()
-        }).mouseleave(function () {
-            //$('nav .user .dropdown-menu').hide()
-        })
-
-        //移出用户是子菜单不显示
-        {% comment %}$(document).mousemove(function (e) {
-            if (e.pageX > 1217 && e.pageX < 1350) {
-                //$('nav .user .dropdown-menu').show()
-            } else {
-                $('nav .user .dropdown-menu').hide()
-            }
-            //console.log((e.pageX + ", " + e.pageY))
-        }){% endcomment %}
-
-        //侧边选择
-        $(".lef-bar > div.nav-com > ul>li").mouseenter(function () {
-            $(this).find(">div").slideDown()
-            var template = ''
-            var article_blog_category_id = $(this).attr("articleBlogCategoryID")
-            $(this).addClass('active').find(">a").css("color", "white")
-            if (!$(this).find("+div").is("div")) {
-                var _this = $(this)
-                $.ajax({
-                    url: "{% url 'blog:index-bar' %}",
-                    method: "GET",
-                    data: {"article_blog_category_id": article_blog_category_id},
-                    dataType: 'JSON',
-                    success: function (data) {
-                        if (data.code == 0) {
-                            console.log(data.data)
-                            $.each(data.data, function (i, v) {
-                                console.log(1)
-                                template += '<div articleBlogCategoryTwoId="' + v.articleBlogCategoryTwoId + '" style="padding: 15px 0px;"><a>' + v.articleBlogCategoryTwoName + '</a></div>'
-                            })
-                            _this.after(template)
-                        }
+        jQuery(".mobile-menu .nav-pills > li").each(function () {
+            jQuery(this).children(".mobile-menu .m-sub-menu").not(".active").css('display', 'none');
+            jQuery(this).children(".mobile-menu .toggle-btn").bind("click", function () {
+                $('.mobile-menu .m-sub-menu').addClass('active');
+                jQuery(this).children().addClass(function () {
+                    if (jQuery(this).hasClass("active")) {
+                        jQuery(this).removeClass("active");
+                        return ""
                     }
-                })
-            }
-        }).mouseleave(function () {
-            $(this).removeClass("active").find(">a").css("color", "#333")
+                    return "active"
+                });
+                jQuery(this).siblings(".mobile-menu .m-sub-menu").slideToggle()
+            })
         })
-        $(".lef-bar > div.nav-com > ul").delegate(">li~div", "mouseenter", function () {
-            $(this).addClass("active").find(">a").css("color", "white")
-        })
-        $(".lef-bar > div.nav-com > ul").delegate(">li~div", "mouseleave", function () {
-            $(this).removeClass("active").find(">a").css("color", "#333")
-        })
-
-        //top滑动效果
-        $(window).scroll(function () {
-            var before = $(window).scrollTop();
-            $(window).scroll(function () {
-                var after = $(window).scrollTop();
-                if (before < after && after > 80) {
-                    console.log('上');
-                    before = after;
-                    $("nav.navbar").stop()
-
-                    $("nav.navbar").animate({
-                        top: [-75, 'linear'],
-                    }, {duration: 'fast'});
-
-                }
-                ;
-
-                if (before > after) {
-                    console.log('下');
-                    before = after;
-                    $("nav.navbar").stop()
-
-                    $("nav.navbar").animate({
-                        top: [30, 'linear'],
-                    }, {duration: 'fast'});
-                }
-                ;
-
-
-            });
-        });
-
-        //banner初始化
-        $("div#b04>ul>li:eq(1)").css({
-            "position": "absolute",
-            "top": 0,
-            "left": "900px"
-        })
-        $("div#b04>ul>li:eq(2)").css({
-            "position": "absolute",
-            "top": 0,
-            "right": "900px"
-        })
-        $("div#b04>ul>li:eq(3)").css({
-            "position": "absolute",
-            "top": 0,
-            "left": "2700px"
-        })
-
-        var unslider04 = $('#b04').unslider({
-            dots: true
-        })
-
-
     })
-
 </script>
-
 {% block script %}{% endblock %}
-</body>
+
+
+
 </html>
