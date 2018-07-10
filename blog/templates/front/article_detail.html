@@ -1,5 +1,6 @@
 {% extends 'front/home_index.html' %}
 {% load staticfiles %}
+{% load comment %}
 {% block template %}
     <div class="widget-box post-single">
         <article class="widget-content single-post">
@@ -28,7 +29,7 @@
                     {% endautoescape %}
              </div>
              <div class="article-join">
-                <p>有好的文章希望<strong>李洋博客</strong>帮助分享和推广，猛戳这里<a href="/tougao/">我要投稿</a></p>
+                <p>有好的文章希望<strong>向勇博客</strong>帮助分享和推广，猛戳这里<a href="/tougao/">我要投稿</a></p>
             </div>
              <div class="ds-reward-stl">
                   <button id="dsRewardBtn" onclick="PaymentUtils.show();"><i class="fa fa-usd"></i>赏</button>
@@ -102,10 +103,10 @@
              </div>
 
              <div class="title" id="comments">
-                   <h3>评论 <b>24</b></h3>
+                   <h3>评论 <b>{{ article_zy.articleComment }}</b></h3>
             </div>
-             <div  class="no_webshot">
-                  <form action="http://jspang.com/wp-comments-post.php" method="post" id="commentform">
+             <div id="respond" class="no_webshot">
+                  <form  method="post" id="commentform">
                            <div class="comt">
                                     <div class="comt-title">
                                         <img data-src="https://secure.gravatar.com/avatar/?s=100&amp;d=mm" class="avatar avatar-100" height="50" width="50" src="https://secure.gravatar.com/avatar/?s=100&amp;d=mm" style="display: inline;">
@@ -128,7 +129,7 @@
                                                             <div class="comt-tip comt-loading" style="display: none;">评论提交中...</div>
                                                             <div class="comt-tip comt-error" style="display: none;">#</div>
                                                    </div>
-                                                   <button type="submit" name="submit" id="submit" tabindex="5">提交评论</button>
+                                                   <button type="button" name="submit" id="submit" tabindex="5">提交评论</button>
 
                                            </div>
                                     </div>
@@ -138,45 +139,35 @@
              </div>        <!--点击回复的时候是直接插入这个回复-->
              <div id="postcomments">
                  <ol class="commentlist">
-                       <li class="comment even thread-even depth-1" id="comment-5740">
-                                 <span class="comt-f">#16</span>
-                                 <div class="comt-avatar">
-                                     <img data-src="https://secure.gravatar.com/avatar/?s=100&amp;d=mm" class="avatar avatar-100" height="50" width="50" src="https://secure.gravatar.com/avatar/?s=100&amp;d=mm" style="display: block;">
-                                 </div>
-                                 <div class="comt-main" id="div-comment-5740">
-                                     <p>想知道技术胖是怎么做到学好一门新技术并达到实战开发的程度。<br>
-                                        比如我最近在自学vue，我把webpack、vue官方教程看完了，叫我实战肯定是做不来的，于是我就找视频教程，也就找到了您这里来，通过您的教程，达到快速提升。<br>
-                                        想知道您是怎么从 官方文档教程 跨越到 实战开发。<br>
-                                     </p>
-                                     <div class="comt-meta">
-                                        <span class="comt-author">匿名</span>
-                                        2周前 (06-25)
-                                        <a rel="nofollow" class="comment-reply-link" href="javascript:;" onclick="return addComment.moveForm( &quot;div-comment-5740&quot;, &quot;5740&quot;, &quot;respond&quot;, &quot;3557&quot; )" aria-label="回复给">
-                                            回复
-                                        </a>
+                    {% if comments.status %}
+                          {% for comment_item in comments.data %}
+                          {% if not comment_item.parentsComment_id %}
+                               <li uid="{{ comment_item.commentUUID }}" class="comment even thread-even depth-1" id="comment-5740">
+                                     <span class="comt-f" floor="{{ forloop.revcounter }}">#{{ forloop.revcounter }}</span>
+                                     <div class="comt-avatar">
+                                         <img data-src="https://secure.gravatar.com/avatar/?s=100&amp;d=mm" class="avatar avatar-100" height="50" width="50" src="https://secure.gravatar.com/avatar/?s=100&amp;d=mm" style="display: block;">
                                      </div>
-                                 </div>
-                                 <ul class="children">
-                                       <li class="comment byuser comment-author-jspang001 bypostauthor odd alt depth-2" id="comment-5744">
-                                            <div class="comt-avatar">
-                                                <img data-src="https://secure.gravatar.com/avatar/774555ea0f0ea3a59b61748c53c99fba?s=100&amp;d=mm" class="avatar avatar-100" height="50" width="50" src="https://secure.gravatar.com/avatar/774555ea0f0ea3a59b61748c53c99fba?s=100&amp;d=mm" style="display: block;">
-                                            </div>
-                                            <div class="comt-main" id="div-comment-5744">
-                                                        <p> 从基础到实战最好的学习方法，是去找一个师傅带你，当你做过一个项目之后，你会发现豁然开朗。<br>
-                                                            如果没有师傅，你可以在github上找一些开源类似的项目进行学习。</p>
-                                                        <div class="comt-meta">
-                                                            <span class="comt-author"><a href="http://jspang.com" rel="external nofollow" class="url" target="_blank">
-                                                                技术胖
-                                                            </a>
-                                                            </span>2周前 (06-25)
-                                                            <a rel="nofollow" class="comment-reply-link" href="javascript:;" onclick="return addComment.moveForm( &quot;div-comment-5744&quot;, &quot;5744&quot;, &quot;respond&quot;, &quot;3557&quot; )" aria-label="回复给技术胖">
-                                                                回复
-                                                            </a>
-                                                        </div>
-                                            </div>
-                                       </li><!-- #comment-## -->
-                                 </ul>
-                         </li><!-- .children -->
+                                     <div class="comt-main" id="div-comment-5740">
+                                         <p>
+                                             {{ comment_item.commentContent }}
+                                         </p>
+                                         <div class="comt-meta">
+                                            <span class="comt-author">{{ comment_item.commentUser.userName }}</span>
+                                           {{ comment_item.commentTime }}
+                                            <a rel="nofollow" class="comment-reply-link" href="javascript:;" aria-label="回复给">
+                                                回复
+                                            </a>
+                                         </div>
+                                     </div>
+                                     {% autoescape off %}
+                                        {% comment_tree comment_item.child %}
+                                     {% endautoescape %}
+
+                                </li>
+                          {% endif %}
+                     {% endfor %}
+                    {% endif %}
+
                  </ol>
              </div>
         </article>
@@ -185,81 +176,570 @@
 
 {% block script %}
     <script type="text/javascript"  src="{% static 'frame/pay/award.js' %}"></script>
+    <script>
+        $(function () {
+            //用户提交评论
+            $(".no_webshot #submit").click(function () {
+
+                 var floor =$("#postcomments .commentlist li:first .comt-f").attr('floor')
+                if(floor){
+                     floor=parseInt(floor)+1
+                }else{
+                     floor=1
+                }
+
+                var comment_count=$("#comments  b").text()
+                console.log(floor)
+            var content = $("#commentform #comment").val().trim()
+            var commnet_uid='comment-'+guid()
+            var template = '<li uid='+commnet_uid+' class="comment even thread-even depth-1" id="comment-5740">\n' +
+                '                                 <span floor="' + floor + '" class="comt-f">#' + floor + '</span>\n' +
+                '                                 <div class="comt-avatar">\n' +
+                '                                     <img data-src="https://secure.gravatar.com/avatar/?s=100&amp;d=mm" class="avatar avatar-100" height="50" width="50" src="https://secure.gravatar.com/avatar/?s=100&amp;d=mm" style="display: block;">\n' +
+                '                                 </div>\n' +
+                '                                 <div class="comt-main" id="div-comment-5740">\n' +
+                '                                     <p>\n' +
+                '                                         ' + content + '\n' +
+                '                                     </p>\n' +
+                '                                     <div class="comt-meta">\n' +
+                '                                        <span class="comt-author">{{ user }}</span>\n' +
+                '                                       '+getNowData()+'\n' +
+                '                                        <a rel="nofollow" class="comment-reply-link" href="javascript:;"  aria-label="回复给">\n' +
+                '                                            回复\n' +
+                '                                        </a>\n' +
+                '                                     </div>\n' +
+                '                                 </div>\n' +
+                '                                 <ul class="children">\n' +
+                '                                       \n' +
+                '                                       \n' +
+                '                                 </ul>\n' +
+                '                         </li>'
+
+                if (content == "") {
+                    $(".comt-tip.comt-error").text('内容不能为空')
+                    $(".comt-tip.comt-error").slideDown(function () {
+                        setTimeout(function () {
+                            $(".comt-tip.comt-error").hide()
+                        }, 2000)
+
+                    })
+                } else {
+                    $(".comt-tip.comt-loading").show()
+                    $.ajax(
+                        {
+                            url: "{% url 'blog:comments' %}",
+                            method: 'POST',
+                            data: {
+                                "comment": content, "comments_count": comment_count,
+                                "article_id": '{{ article.article_uid }}','commentUid':commnet_uid
+                            },
+                            dataType:'JSON',
+                            success: function (data) {
+                                if (data.code == 0) {
+                                    $(".comt-tip.comt-loading").hide()
+                                    $("#postcomments .commentlist").prepend(template)
+                                    $("#comments  b").text(parseInt(comment_count)+1)
+                                }
+                            }
+                        }
+                    )
+                }
+            })
+            //用户回复面板
+            $("#postcomments").delegate("ol li .comment-reply-link",'click',function () {
+                  $(".no_webshot").hide()
+                var template='<div style="margin-left:25px"  class="no_webshot">\n' +
+                    '                  <form  method="post" id="commentform">\n' +
+                    '                           <div class="comt">\n' +
+                    '                                    <div class="comt-title">\n' +
+                    '                                        <img data-src="https://secure.gravatar.com/avatar/?s=100&amp;d=mm" class="avatar avatar-100" height="50" width="50" src="https://secure.gravatar.com/avatar/?s=100&amp;d=mm" style="display: inline;">\n' +
+                    '                                        <p><a class="cancel-comment-reply-link" href="javascript:;">取消</a></p>\n' +
+                    '                                    </div>\n' +
+                    '                                    <div class="comt-box">\n' +
+                    '                                           <textarea placeholder="你的评论可以一针见血" class="input-block-level comt-area" name="comment" id="comment" cols="100%" rows="3" tabindex="1" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById(\'submit\').click();return false};"></textarea>\n' +
+                    '                                           <div class="comt-ctrl">\n' +
+                    '                                                   <div class="comt-tips">\n' +
+                    '                                                            <input type="hidden" name="comment_post_ID" value="3557" id="comment_post_ID">\n' +
+                    '                                                            <input type="hidden" name="comment_parent" id="comment_parent" value="0">\n' +
+                    '                                                            <p style="display: none;">\n' +
+                    '                                                                <input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="82fe5a885f">\n' +
+                    '                                                            </p>\n' +
+                    '                                                            <label for="comment_mail_notify" class="checkbox inline hide" style="padding-top:0">\n' +
+                    '                                                                <input type="checkbox" name="comment_mail_notify" id="comment_mail_notify" value="comment_mail_notify" checked="checked">\n' +
+                    '                                                                有人回复时邮件通知我\n' +
+                    '                                                            </label>\n' +
+                    '                                                            <p style="display: none;"></p>\n' +
+                    '                                                            <div class="comt-tip comt-loading" style="display: none;">评论提交中...</div>\n' +
+                    '                                                            <div class="comt-tip comt-error" style="display: none;">#</div>\n' +
+                    '                                                   </div>\n' +
+                    '                                                   <button type="button" name="submit" id="submit" tabindex="5">提交评论</button>\n' +
+                    '\n' +
+                    '                                           </div>\n' +
+                    '                                    </div>\n' +
+                    '                             </div>\n' +
+                    '                           <input type="hidden" id="ak_js" name="ak_js" value="1530877101047">\n' +
+                    '                     </form>\n' +
+                    '             </div>'
+                $(this).parents('.comt-main').after(template)
+                $("#respond").hide()
+            })
+            //用户取消回复
+            $("#postcomments").delegate('ol li .no_webshot .comt-title p','click',function () {
+                $(this).parents('.no_webshot').hide()
+                 $("#respond").show()
+
+            })
+
+            //用户提交回复
+            $("#postcomments").delegate('ol li .no_webshot #submit', 'click', function () {
+                var this_= $(this)
+                var content = $(this).parents('.comt-ctrl').prev().val()
+                var comment_count = $("#comments  b").text()
+                var commnet_uid = $(this).parents('li').attr('uid')
+                 var commnet_id='comment-'+guid()
+                var template=' <li uid='+commnet_id+' class="comment byuser comment-author-jspang001 bypostauthor odd alt depth-2" >\n' +
+                    '                                                <div class="comt-avatar">\n' +
+                    '                                                    <img data-src="https://secure.gravatar.com/avatar/774555ea0f0ea3a59b61748c53c99fba?s=100&amp;d=mm" class="avatar avatar-100" height="50" width="50" src="https://secure.gravatar.com/avatar/774555ea0f0ea3a59b61748c53c99fba?s=100&amp;d=mm" style="display: block;">\n' +
+                    '                                                </div>\n' +
+                    '                                                <div class="comt-main" id="div-comment-5744">\n' +
+                    '                                                        <p>'+content+'</p>\n' +
+                    '                                                        <div class="comt-meta">\n' +
+                    '                                                            <span class="comt-author"><a href="http://jspang.com" rel="external nofollow" class="url" target="_blank">\n' +
+                    '                                                               {{ user }}\n' +
+                    '                                                            </a>\n' +
+                    '                                                            </span> '+getNowData()+'\n' +
+                    '                                                            <a rel="nofollow" class="comment-reply-link" href="javascript:;"  aria-label="回复给技术胖">\n' +
+                    '                                                                回复\n' +
+                    '                                                            </a>\n' +
+                    '                                                        </div>\n' +
+                    '                                            </div>\n' +
+                    '                                            <ul class="children"></ul></li>'
+                if (content == "") {
+                    $(".comt-tip.comt-error").text('内容不能为空')
+                    $(".comt-tip.comt-error").slideDown(function () {
+                        setTimeout(function () {
+                            $(".comt-tip.comt-error").hide()
+                        }, 2000)
+
+                    })
+                } else {
+                    $(".comt-tip.comt-loading").show()
+                    $.ajax(
+                        {
+                            url: "{% url 'blog:comments' %}",
+                            method: 'POST',
+                            data: {
+                                "comment": content, "comments_count": comment_count,'commentUid':commnet_id,
+                                "article_id": '{{ article.article_uid }}', 'parents_comment_id': commnet_uid
+                            },
+                            dataType: 'JSON',
+                            success: function (data) {
+                                if (data.code == 0) {
+                                    $(".comt-tip.comt-loading").hide()
+                                    $(this_).parents('.no_webshot').hide()
+                                    $(this_).parents('.no_webshot').next().prepend(template)
+                                    $("#comments  b").text(parseInt(comment_count) + 1)
+                                }
+                            }
+                        }
+                    )
+                }
+            })
+        })
+         //按照自己方法生成uuid
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        function guid() {
+            return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+        }
+        function getNowData(){
+            var today = new Date();
+            var tdate, tday, x, year;
+            var x = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+            var MSIE = navigator.userAgent.indexOf("MSIE");
+            if (MSIE != -1) {
+                year = (today.getFullYear());
+            } else {
+                year = (today.getYear() + 1900);
+            }
+            tdate = year + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日" + " " +today.getHours()+":"+today.getMinutes();
+            return tdate
+        }
+    </script>
 {% endblock %}
 
 {% block style %}
     <link rel="stylesheet" href="{% static 'frame/pay/award.css' %}">
      <style>
-                #respond{padding-bottom: 25px;}
-#respond, #postcomments{position:relative;width: 95%;margin-left: 10px;}
-.comment{position: relative;}
-.comment #respond{padding:10px 0 15px 46px}
-.comment #commentform{margin-bottom:0}
-.commentnew .comt-m{margin-bottom:5px}
-.commentlist{padding:0;list-style:none;margin:0}
-.comt-avatar{width:36px;height:36px;background-color:#FFF;float:left;display:inline;position:relative;margin-top: 19px;}
-.commentnew .comt-avatar{margin-top: 0;}
-.comt-avatar .avatar{display:block;border-radius:50%;width:36px;height:36px}
-.comt-main{margin-left:46px;margin-right:60px;color:#888;line-height:22px;position:relative;font-size: 14px;padding: 0 0 15px;word-wrap: break-word;max-height: 300px;overflow: hidden;}
-.comt-main p{margin-top: 15px;margin-bottom: 0;}
-.comt-author{margin-right: 10px;}
-.url{color:#60c4fd;}
-.url:hover{color:#60c4fd;text-decoration:underline;opacity: 0.85;
-filter:alpha(opacity=85);}
-.comt-meta{font-size:12px;color:#bbb;}
-.comt-meta .signin-loader{margin-left: 10px;}
-.comment-reply-link{font-size:12px;color:#bbb;display: inline-block;margin-left: 10px;}
-.comment pre{margin:3px 0 5px;padding:7px 10px;border-radius:1px}
-.depth-1{border-bottom:#eee 1px solid}
-.comment .children{list-style:none;padding:0;}
-.comment .children .comment{margin:0;border-top:1px solid #eee}
-.commentlist > .comment .children{margin-left: 46px;}
-.comt-f{position: absolute;top:15px;right:0;font-size:16px;color:#ccc}
-.comment:hover .comt-f{color:#666}
-.comt-approved{border-radius:2px;font-size:12px;background-color:#eee;color:#999;display:inline-block;padding:1px 5px 0;margin-top:4px;line-height:20px;margin-left:5px}
-.wp-smiley{margin-bottom:2px}
+         #respond {
+             padding-bottom: 25px;
+         }
 
-.sidebarfix .comt-main{padding: 6px 0 4px;line-height: 20px;font-size: 12px;}
-.sidebarfix .depth-1{border-bottom-color: #eee;}
-.sidebarfix .comment .children .comment{border-top-color: #eee;}
+         #respond, #postcomments {
+             position: relative;
+             width: 95%;
+             margin-left: 10px;
+         }
 
-#comments{margin-bottom:15px;font-size: 16px;margin-left: 10px}
-#comments b{font-weight:normal;color:#ff5e52}
-#comments .pull-right{font-size:12px;position:relative;top:5px}
-#commentform{margin-bottom:5px;}
-.comt-count{float:right;color:#999;margin-bottom:5px}
-.comt{position:relative;padding-left: 56px;}
+         .comment {
+             position: relative;
+         }
 
-.comt-title{font-size: 12px;color: #999;float: left;margin-left: -46px;width: 36px;text-align: center;}
-.comt-title .avatar{height:36px;width:36px;border-radius:50%;margin-bottom: 5px;}
-.comt-title p{margin-bottom: 0;overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+         .comment #respond {
+             padding: 10px 0 15px 46px
+         }
 
-.comt-box{border:2px solid #ccd4d9;border-radius:2px;padding:4px 0 0 4px;background-color: #fff;position: relative;width: 95%}
-.comt-ctrl{background-color:#fbfbfb;height:36px;margin-left:-4px;border-top:solid 1px #f2f2f2;}
-#submit{position: absolute;right:-2px;bottom:-2px;background: #45B6F7;border: none;border: 2px solid;border-color: #45B6F7;border-left: none;border-top: none;padding: 0px;width:100px;height: 38px;color: #fff;outline: 0;border-radius: 0 0 2px 0;font-size: 16px;}
+         .comment #commentform {
+             margin-bottom: 0
+         }
 
-#comment{width: 100%;resize: none;overflow-x: hidden;overflow-y: auto;border: none;line-height: 22px;font-size: 14px;outline: 0;color: #666;height: 68px;}
+         .commentnew .comt-m {
+             margin-bottom: 5px
+         }
 
-.hide{display: none;}
+         .commentlist {
+             padding: 0;
+             list-style: none;
+             margin: 0
+         }
 
-.comt-tips{text-align: center;margin-right: 110px;line-height: 116px;font-size: 18px;color:#fff;}
-.comt-tip{position: absolute;top: -2px;left: -2px;background: #7AD071;right: -2px;z-index: 2;bottom: -2px;border-radius: 2px;}
-.comt-error{background: #FF5E52;}
+         .comt-avatar {
+             width: 36px;
+             height: 36px;
+             background-color: #FFF;
+             float: left;
+             display: inline;
+             position: relative;
+             margin-top: 19px;
+         }
 
-.comt-comterinfo{padding:15px 0;text-align: center;}
-.comt-comterinfo ul{padding: 0;margin: 0;list-style: none;text-align: left;display: inline-block;}
-.comt-comterinfo li{margin-bottom:5px}
-.comt-comterinfo input{margin-right:10px;position:relative;*bottom:-3px;border: 2px solid #CCD4D9;border-radius: 2px;height:34px;padding: 3px 5px;outline: none;width: 220px;box-shadow: none;*height: 20px;}
-#cancel-comment-reply-link{display:none;font-size:12px;text-align: center;margin-top: 7px;color: #999;}
-#cancel-comment-reply-link:hover{color: #FF5E52;}
-.comment #cancel-comment-reply-link{display:block}
+         .commentnew .comt-avatar {
+             margin-top: 0;
+         }
 
-.comment-signarea{background-color: #F6F6F6;border-radius: 7px;padding: 30px 20px;text-align: center;margin-bottom: 20px;}
-.comment-signarea h3{margin: 0;padding: 0;margin-bottom: 15px;font-weight: normal;font-size: 18px;}
-.comment-signarea .auth{margin: 0 5px;}
-     .title{
-         border-bottom: 1px solid #eaeaea;
-    padding-bottom: 10px;
-     }
+         .comt-avatar .avatar {
+             display: block;
+             border-radius: 50%;
+             width: 36px;
+             height: 36px
+         }
+
+         .comt-main {
+             margin-left: 46px;
+             margin-right: 60px;
+             color: #888;
+             line-height: 22px;
+             position: relative;
+             font-size: 14px;
+             padding: 0 0 15px;
+             word-wrap: break-word;
+             max-height: 300px;
+             overflow: hidden;
+         }
+
+         .comt-main p {
+             margin-top: 15px;
+             margin-bottom: 0;
+         }
+
+         .comt-author {
+             margin-right: 10px;
+         }
+
+         .url {
+             color: #60c4fd;
+         }
+
+         .url:hover {
+             color: #60c4fd;
+             text-decoration: underline;
+             opacity: 0.85;
+             filter: alpha(opacity=85);
+         }
+
+         .comt-meta {
+             font-size: 12px;
+             color: #bbb;
+         }
+
+         .comt-meta .signin-loader {
+             margin-left: 10px;
+         }
+
+         .comment-reply-link {
+             font-size: 12px;
+             color: #bbb;
+             display: inline-block;
+             margin-left: 10px;
+         }
+
+         .comment pre {
+             margin: 3px 0 5px;
+             padding: 7px 10px;
+             border-radius: 1px
+         }
+
+         .depth-1 {
+             border-bottom: #eee 1px solid
+         }
+
+         .comment .children {
+             list-style: none;
+             padding: 0;
+         }
+
+         .comment .children .comment {
+             margin: 0;
+             border-top: 1px solid #eee
+         }
+
+         .commentlist > .comment .children {
+             margin-left: 46px;
+         }
+
+         .comt-f {
+             position: absolute;
+             top: 15px;
+             right: 0;
+             font-size: 16px;
+             color: #ccc
+         }
+
+         .comment:hover .comt-f {
+             color: #666
+         }
+
+         .comt-approved {
+             border-radius: 2px;
+             font-size: 12px;
+             background-color: #eee;
+             color: #999;
+             display: inline-block;
+             padding: 1px 5px 0;
+             margin-top: 4px;
+             line-height: 20px;
+             margin-left: 5px
+         }
+
+         .wp-smiley {
+             margin-bottom: 2px
+         }
+
+         .sidebarfix .comt-main {
+             padding: 6px 0 4px;
+             line-height: 20px;
+             font-size: 12px;
+         }
+
+         .sidebarfix .depth-1 {
+             border-bottom-color: #eee;
+         }
+
+         .sidebarfix .comment .children .comment {
+             border-top-color: #eee;
+         }
+
+         #comments {
+             margin-bottom: 15px;
+             font-size: 16px;
+             margin-left: 10px
+         }
+
+         #comments b {
+             font-weight: normal;
+             color: #ff5e52
+         }
+
+         #comments .pull-right {
+             font-size: 12px;
+             position: relative;
+             top: 5px
+         }
+
+         #commentform {
+             margin-bottom: 5px;
+         }
+
+         .comt-count {
+             float: right;
+             color: #999;
+             margin-bottom: 5px
+         }
+
+         .comt {
+             position: relative;
+             padding-left: 56px;
+         }
+
+         .comt-title {
+             font-size: 12px;
+             color: #999;
+             float: left;
+             margin-left: -46px;
+             width: 36px;
+             text-align: center;
+         }
+
+         .comt-title .avatar {
+             height: 36px;
+             width: 36px;
+             border-radius: 50%;
+             margin-bottom: 5px;
+         }
+
+         .comt-title p {
+             margin-bottom: 0;
+             overflow: hidden;
+             text-overflow: ellipsis;
+             white-space: nowrap;
+         }
+
+         .comt-box {
+             border: 2px solid #ccd4d9;
+             border-radius: 2px;
+             padding: 4px 0 0 4px;
+             background-color: #fff;
+             position: relative;
+             width: 95%
+         }
+
+         .comt-ctrl {
+             background-color: #fbfbfb;
+             height: 36px;
+             margin-left: -4px;
+             border-top: solid 1px #f2f2f2;
+         }
+
+         #submit {
+             position: absolute;
+             right: -2px;
+             bottom: -2px;
+             background: #45B6F7;
+             border: none;
+             border: 2px solid;
+             border-color: #45B6F7;
+             border-left: none;
+             border-top: none;
+             padding: 0px;
+             width: 100px;
+             height: 38px;
+             color: #fff;
+             outline: 0;
+             border-radius: 0 0 2px 0;
+             font-size: 16px;
+         }
+
+         #comment {
+             width: 100%;
+             resize: none;
+             overflow-x: hidden;
+             overflow-y: auto;
+             border: none;
+             line-height: 22px;
+             font-size: 14px;
+             outline: 0;
+             color: #666;
+             height: 68px;
+         }
+
+         .hide {
+             display: none;
+         }
+
+         .comt-tips {
+             text-align: center;
+             margin-right: 110px;
+             line-height: 116px;
+             font-size: 18px;
+             color: #fff;
+         }
+
+         .comt-tip {
+             position: absolute;
+             top: -2px;
+             left: -2px;
+             background: #7AD071;
+             right: -2px;
+             z-index: 2;
+             bottom: -2px;
+             border-radius: 2px;
+         }
+
+         .comt-error {
+             background: #FF5E52;
+         }
+
+         .comt-comterinfo {
+             padding: 15px 0;
+             text-align: center;
+         }
+
+         .comt-comterinfo ul {
+             padding: 0;
+             margin: 0;
+             list-style: none;
+             text-align: left;
+             display: inline-block;
+         }
+
+         .comt-comterinfo li {
+             margin-bottom: 5px
+         }
+
+         .comt-comterinfo input {
+             margin-right: 10px;
+             position: relative;
+             *bottom: -3px;
+             border: 2px solid #CCD4D9;
+             border-radius: 2px;
+             height: 34px;
+             padding: 3px 5px;
+             outline: none;
+             width: 220px;
+             box-shadow: none;
+             *height: 20px;
+         }
+
+         #cancel-comment-reply-link {
+             display: none;
+             font-size: 12px;
+             text-align: center;
+             margin-top: 7px;
+             color: #999;
+         }
+
+         #cancel-comment-reply-link:hover {
+             color: #FF5E52;
+         }
+
+         .comment #cancel-comment-reply-link {
+             display: block
+         }
+
+         .comment-signarea {
+             background-color: #F6F6F6;
+             border-radius: 7px;
+             padding: 30px 20px;
+             text-align: center;
+             margin-bottom: 20px;
+         }
+
+         .comment-signarea h3 {
+             margin: 0;
+             padding: 0;
+             margin-bottom: 15px;
+             font-weight: normal;
+             font-size: 18px;
+         }
+
+         .comment-signarea .auth {
+             margin: 0 5px;
+         }
+
+         .title {
+             border-bottom: 1px solid #eaeaea;
+             padding-bottom: 10px;
+         }
      </style>
 {% endblock %}

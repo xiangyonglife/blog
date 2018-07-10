@@ -3,6 +3,7 @@ from blog import models
 import json
 from django.core import exceptions
 import pickle
+import collections
 from blog.utils import mongodb_con
 import socket
 
@@ -414,6 +415,7 @@ def article_cancel(request):
     """
     article_id = request.POST.get("article_id")
     mongodb_con.article.remove({"article_uid": article_id})
+
     json_text = {'code': '0', 'msg': '跟新成功'}
     return HttpResponse(json.dumps(json_text))
 
@@ -573,10 +575,41 @@ def article_detail(request, article_id):
     :return:
     """
     article = mongodb_con.article.find_one({"article_uid": article_id, "status": 0})
+    user = request.session.get("user")
     article_zy = models.Article.objects.values("articleTime", "articleClick", "articleComment").filter(
         articleUrl=article_id).first()
-    comments = models.Comment.objects.filter(commentArticle=article_id).all()
-    return render(request, 'article_detail.html', {"article": article, "article_zy": article_zy, "comments": comments})
+    comments = comment_tree(article_id)
+    print(comments)
+    return render(request, 'article_detail.html',
+                  {"article": article, "article_zy": article_zy, "comments": comments, 'user': user})
+
+
+def comment_tree(article_id):
+    res = {'status': True, 'data': None, 'msg': None}
+    try:
+        comment_list = models.Comment.objects.filter(commentArticle_id=article_id).values()
+        com_list = list(comment_list)  # 所有的评论,列表套字典
+        com_list_dict = {}  # 建立一个方便查找的数据结构字典
+        for item in com_list:  # 循环评论列表,给每一条评论加一个child:[]就是让他装对他回复的内容
+            item['commentTime'] = str(item['commentTime'])
+            item['child'] = []
+            com_list_dict[item['commentUUID']] = item
+        result = []
+        for item in com_list:
+            rid = item['parentsComment_id']
+            if rid:  # 如果reply_id不为空的话,那么就是说明他是子评论,我们要把他加入对应的评论后面
+                com_list_dict[rid]['child'].append(item)
+            else:
+                result.append(item)
+        print(result)
+        # comment_str = comment_tree(result)
+        # 这是在服务器上递归完之后,然后在传到前端,但是这样会增加服务器压力
+        # 所以这种方式我们直接就不用了
+        res['data'] = result
+    except Exception as e:
+        res['status'] = False
+        res['mag'] = str(e)
+    return res
 
 
 @auth
@@ -588,10 +621,11 @@ def article_comments(request):
     """
     user_sign = request.session.get("user")
     user = models.User.objects.filter(userName=user_sign).first()
-    content = request.POST.get("content")
+    content = request.POST.get("comment")
     article_id = request.POST.get("article_id")
     comments_count = request.POST.get("comments_count")
-    parent_id = request.POST.get("parentId")
+    parent_id = request.POST.get("parents_comment_id")
+    comment_uid = request.POST.get("commentUid")
     # 用户ip
     my_name = socket.getfqdn(socket.gethostname())
     my_addr = socket.gethostbyname(my_name)
@@ -599,8 +633,9 @@ def article_comments(request):
         commentContent=content,
         commentUser=user,
         commentIp=my_addr,
+        commentUUID=comment_uid,
         commentArticle_id=article_id,
-        fatherComment_id=parent_id
+        parentsComment_id=parent_id,
 
     )
     models.Article.objects.filter(articleUrl=article_id).update(articleComment=int(comments_count) + 1)

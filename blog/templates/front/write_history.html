@@ -40,6 +40,11 @@
             border: 1px solid #E6E6E6;
             cursor: pointer;
             font-weight: 800;
+            white-space: nowrap;
+            word-break: keep-all;
+            overflow: hidden;
+            /* width: 110%; */
+            text-overflow: ellipsis;
         }
 
         .container > div.history-list > div:last-child > ul > li:hover {
@@ -58,16 +63,25 @@
             padding: 20px 0;
             text-align: center;
             line-height: 20px;
+
+        }
+        .container > div.main > div.title>h3{
+            white-space: nowrap;
+            word-break: keep-all;
+            overflow: hidden;
+            text-overflow: ellipsis;
+           text-align: center;
+            width: 60%;
+            padding: 5px 0;
+            margin-left: 20%;
         }
 
         .container > div.main > div.content {
             position: fixed;
-            left: 20%;
-            width: 80%;
-            background-color: #F2F2F2;
+            left: 13%;
+            width: 100%;
             height: 80%;
             top: 120px;
-            text-align: center;
             overflow-y: scroll;
         }
 
@@ -82,15 +96,14 @@
         .container > div.main > div.footer {
             position: fixed;
             left: 20%;
-            width: 80%;
-            height: 10%;
+            width:80%;
             bottom: 0;
-            background-color: #FFFFFF;
+            background-color: #fff;
 
         }
 
         .container > div.main > div.footer > div {
-            padding: 8px 0px;
+            padding-bottom: 18px;
             margin-left: 40%;
             margin-top: 15px;
         }
@@ -112,6 +125,21 @@
         .container > div.main > div.footer > div > span:last-child {
             background-color: #ED7259;
         }
+
+
+          .container .tooltip {
+            position: fixed;
+            color: #FBFBFB;
+            display: none;
+            right: 50%;
+            top: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid #FBFBFB;
+            z-index: 99999999;
+            box-shadow: 5px 5px 10px #525252 inset;
+            background-color: #525252;
+        }
     </style>
 </head>
 <body>
@@ -125,7 +153,7 @@
             <ul>
                 {% for item in article %}
                     <li articlId="{{ item.article_uid }}" template="{{ item.content }}">
-                        <i class="iconfont icon-wenzhang" style="font-size: 20px"></i>
+                        <i class="iconfont icon-wenzhang" style="font-size: 20px;color:black"></i>
                         {{ item.title }}
                     </li>
                 {% endfor %}
@@ -137,7 +165,7 @@
         <div class="title">
             <h3 style="font-size: 25px"></h3>
             <i id="cha" class="iconfont icon-chadiao"
-               style="font-size: 35px;position: absolute;top: 45px;right: 40px"></i>
+               style="font-size: 35px;position: absolute;top: 45px;right: 40px;"></i>
         </div>
         <div class="content">
             <div>
@@ -149,6 +177,10 @@
                 <span id="cancel-clear">彻底删除</span>
             </div>
         </div>
+    </div>
+    <div class="tooltip">
+        <i class="iconfont icon-error"></i>
+        <span></span>
     </div>
 </div>
 <script src="{% static 'frame/PostbirdAlertBox/js/postbirdAlertBox.js' %}"></script>
@@ -174,49 +206,70 @@
 
         //彻底删除文章---这里涉及铭感操作需验证用户信息展示省略
         $("#cancel-clear").click(function () {
-            var article_id = $(".container > div.history-list>div:last-child>ul>li.li-xz").attr("articlid")
-            var name = $(".main>div.title>h3").text()
-            PostbirdAlertBox.confirm({
-                'content': '确认删除文章《' + name + '》，文章删除后不可恢复。',
-                'okBtn': '确定',
-                'contentColor': 'red',
-                'onConfirm': function () {
-                    $.ajax({
-                        url: "{% url 'blog:cancel' %}",
-                        dataType: 'JSON',
-                        method: "POST",
-                        data: {"article_id": article_id},
-                        success: function (data) {
-                            if (data.code == 0) {
-                                window.location.reload()
+            if($(".history-list div:last ul").children().is('li')){
+                var article_id = $(".container > div.history-list>div:last-child>ul>li.li-xz").attr("articlid")
+                var name = $(".main>div.title>h3").text()
+                PostbirdAlertBox.confirm({
+                    'content': '确认删除文章《' + name + '》，文章删除后不可恢复。',
+                    'okBtn': '确定',
+                    'contentColor': 'red',
+                    'onConfirm': function () {
+                        $.ajax({
+                            url: "{% url 'blog:cancel' %}",
+                            dataType: 'JSON',
+                            method: "POST",
+                            data: {"article_id": article_id},
+                            success: function (data) {
+                                if (data.code == 0) {
+                                    window.location.reload()
+                                }
                             }
-                        }
 
-                    })
-                },
-                'onCancel': function () {
+                        })
+                    },
+                    'onCancel': function () {
 
-                }
-            });
-            $(".postbird-box-content div:first-child").hide()
+                    }
+                });
+                $(".postbird-box-content div:first-child").hide()
+            }else{
+                $(".tooltip span").text('内容不能为空')
+                $(".tooltip").slideDown(function () {
+                    setTimeout(function () {
+                        $(".tooltip").hide()
+                    }, 2000)
+
+                })
+            }
 
         })
 
         //恢复文章
         $("#recover").click(function () {
-            var article_id = $(".container > div.history-list>div:last-child>ul>li.li-xz").attr("articlid")
-            $.ajax({
-                url: "{% url 'blog:recover' %}",
-                dataType: 'JSON',
-                method: "POST",
-                data: {"article_id": article_id},
-                success: function (data) {
-                    if (data.code == 0) {
-                        window.location.href = "{% url 'blog:write' %}"
-                    }
-                }
+             if($(".history-list div:last ul").children().is('li')){
+                 var article_id = $(".container > div.history-list>div:last-child>ul>li.li-xz").attr("articlid")
+                 $.ajax({
+                     url: "{% url 'blog:recover' %}",
+                     dataType: 'JSON',
+                     method: "POST",
+                     data: {"article_id": article_id},
+                     success: function (data) {
+                         if (data.code == 0) {
+                             window.location.href = "{% url 'blog:write' %}"
+                         }
+                     }
 
-            })
+                 })
+             }else{
+                 $(".tooltip span").text('内容不能为空')
+                 $(".tooltip").slideDown(function () {
+                     setTimeout(function () {
+                         $(".tooltip").hide()
+                     }, 2000)
+
+                 })
+             }
+
         })
 
         function init_set() {

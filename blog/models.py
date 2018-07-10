@@ -168,7 +168,8 @@ class Comment(models.Model):
     commentIp = models.GenericIPAddressField()  # 评论ip
     commentArticle = models.ForeignKey(to='Article', to_field='articleUrl', on_delete=models.CASCADE,
                                        null=True)  # 评论文章id
-    fatherComment = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+    commentUUID = models.CharField(null=True, unique=True, max_length=100)  # 用户评论uuid
+    parentsComment = models.ForeignKey('self', to_field='commentUUID', on_delete=models.CASCADE,null=True)  # 父评论id
 
     class Meta:  # 注意，是模型的子类，要缩进！  根据这些进行进一步删选
         ordering = ["-commentId"]
