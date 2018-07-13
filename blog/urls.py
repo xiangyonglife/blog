@@ -38,4 +38,6 @@ urlpatterns = [
     path('article_comments/', views.article_comments, name='comments'),
     path('user-<user_name>.html/', views.user_blog, name='user_blog'),
     path('articl-page/', views.article_page, name='page'),
+    path('user-setting/', views.user_home, name='user_setting'),
+    path('user-setting-base/', views.user_setting_base, name='user_setting_base'),
 ]

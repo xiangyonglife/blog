@@ -1,0 +1,482 @@
+{% extends 'front/home_index.html' %}
+{% load staticfiles %}
+{% block template %}
+    <div class="aside">
+        <ul>
+            <li index="0" class="activate">
+                <a href="javascript:void(0)">
+                    <div class="setting-icon">
+                        <i class="iconfont ic-settings-basic">
+                        </i>
+                    </div>
+                    <span>
+					基础设置
+				</span>
+                    <!---->
+                </a>
+            </li>
+            <li index="1">
+                <a href="javascript:void(0)">
+                    <div class="setting-icon">
+                        <i class="iconfont ic-settings-profile">
+                        </i>
+                    </div>
+                    <span>
+					密码修改
+				</span>
+                    <!---->
+                </a>
+            </li>
+            <li index="2">
+                <a href="javascript:void(0)">
+                    <div class="setting-icon">
+                        <i class="iconfont ic-settings-money">
+                        </i>
+                    </div>
+                    <span>
+					赞赏设置
+				</span>
+                    <!---->
+                </a>
+            </li>
+            <li index="3">
+                <a href="javascript:void(0)">
+                    <div class="setting-icon">
+                        <i class="iconfont ic-settings-account">
+                        </i>
+                    </div>
+                    <span>
+					帐号管理
+				</span>
+                    <!---->
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="main">
+        <table>
+            <tr>
+                <td>
+                    <div class="avatar">
+                        <img id="preview" width="100" height="100" src=" {% static 'images/userImage.png' %}">
+                    </div>
+                </td>
+                <td>
+
+                    <a class="btn btn-hollow changeImg" style="position: relative">
+                        更换头像
+                        <input type="file" class="hide">
+                    </a>
+                </td>
+            </tr>
+            <form>
+                <tr>
+                    <td>昵称</td>
+                    <td>
+                        <input maxlength="6" name="nickName" type="text" placeholder="请输入昵称">
+                    </td>
+                </tr>
+                <tr>
+                    <td>个人介绍</td>
+                    <td>
+                        <textarea maxlength="50" name="say" placeholder="填写你的个人简介"></textarea>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>性别</td>
+                    <td>
+                        <span>男</span>
+                        <input name="sex" style="margin-left: 10px" type="radio" value="1">
+                        <span style="margin-left: 10px">女</span>
+                        <input name="sex" style="margin-left: 10px" type="radio" value="2">
+
+                    </td>
+                </tr>
+            </form>
+
+            <tr>
+                <td style="position: relative;left: 40px;">
+                    <a class="btn-save">保存</a>
+                </td>
+
+            </tr>
+        </table>
+        <table style="display: none">
+            <tr>
+                <td>旧密码</td>
+                <td>
+                    <input type="text" placeholder="请输入密码">
+                </td>
+            </tr>
+            <tr>
+                <td>新密码</td>
+                <td>
+                    <input type="text" placeholder="请输入密码">
+                </td>
+            </tr>
+            <tr>
+                <td>确认密码</td>
+                <td>
+                    <input type="text" placeholder="请输入密码">
+                </td>
+            </tr>
+
+            <tr>
+                <td style="position: relative;left: 40px;">
+                    <a class="btn-save">保存</a>
+                </td>
+
+            </tr>
+
+        </table>
+        <table style="display: none">
+            <tr>
+                <td>赞赏功能</td>
+                <td>
+                    <span>开启</span>
+                    <input name="appreciate" style="margin-left: 10px" type="radio" value="1">
+                    <span style="margin-left: 10px">关闭</span>
+                    <input name="appreciate" style="margin-left: 10px" type="radio" value="2">
+                </td>
+            </tr>
+            <tr>
+                <td>微信</td>
+                <td>
+                    <img src="{% static 'images/userImage.png' %}">
+                </td>
+            </tr>
+            <tr>
+                <td>支付宝</td>
+                <td>
+                    <img src="{% static 'images/userImage.png' %}">
+                </td>
+            </tr>
+
+        </table>
+        <table style="display: none">
+            <tr>
+                <td>
+                    <div class="content" style="">
+                        <h4>
+                            永久删除帐号
+                        </h4>
+                        <ul style="padding: 10px">
+                            <li>
+                                删除帐号前，请确保已经没有任何公开或私密文章。
+                            </li>
+                            <li>
+                                删除帐号是不可逆的操作，删除后将无法恢复。
+                            </li>
+                        </ul>
+                        <a style="margin-right: 10px" class="btn btn-hollow">
+                            保留我的帐号
+                        </a>
+                        <a class="btn btn-delete">
+                            删除帐号
+                        </a>
+                    </div>
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+    <div class="tooltip-userhome">
+        <i class="iconfont icon-error"></i>
+        <span>sfsfwfsfsdfswefwe</span>
+    </div>
+{% endblock %}
+
+{% block style %}
+    <style>
+
+        .hide {
+            width: 82px;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .btn-delete {
+            border: 1px solid rgba(236, 97, 73, .7);
+            color: #ea6f5a !important;
+        }
+
+        .aside {
+            padding: 10px;
+            background-color: white;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .aside li a {
+            padding: 10px 15px;
+            font-size: 15px;
+            display: block;
+
+        }
+
+        .aside li:hover {
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .activate {
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .main {
+            position: relative;
+            background-color: white;
+            left: 20%;
+            bottom: 185px;
+        }
+
+        table td {
+            padding: 20px 10px;
+
+            text-align: center;
+        }
+
+        .avatar {
+            height: 100%;
+            width: 100%;
+        }
+
+        .avatar img {
+            border: 1px solid #ddd;
+            border-radius: 50%;
+        }
+
+        .btn-hollow {
+            border: 1px solid rgba(59, 194, 29, .7);
+            color: #42c02e !important;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: normal;
+            border-radius: 40px;
+            background: none;
+        }
+
+        .btn-delete {
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: normal;
+            border-radius: 40px;
+            background: none;
+        }
+
+        table td input {
+            padding: 5px 10px;
+            font-size: 15px;
+            border: 1px solid #c8c8c8;
+            border-radius: 4px;
+            background-color: hsla(0, 0%, 71%, .1);
+        }
+
+        table td textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 8px 10px;
+            font-size: 15px;
+            border: 1px solid #c8c8c8;
+            border-radius: 4px;
+            background-color: hsla(0, 0%, 71%, .1);
+            display: block;
+            resize: none;
+            outline-style: none;
+        }
+
+        .btn-save {
+            width: 100px;
+            margin: 30px 0 60px;
+            border-radius: 20px;
+            border-radius: 40px;
+            color: #fff;
+            background-color: #42c02e;
+            border-color: #42c02e;
+            display: inline-block;
+            margin-bottom: 0;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857;
+            border-radius: 4px;
+
+        }
+
+        .tooltip-userhome {
+            position: fixed;
+            color: #FBFBFB;
+            display: none;
+            right: 50%;
+            top: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid #FBFBFB;
+            z-index: 99999999;
+            box-shadow: 5px 5px 10px #525252 inset;
+            background-color: #525252;
+        }
+    </style>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(function () {
+            var newfile = ""
+            $(".aside ul li").click(function () {
+                var index = $(this).attr("index")
+                var this_ = $(this)
+                $(".main table").each(function (i) {
+                    console.log(i)
+                    if (i == index) {
+                        $(".main table").hide()
+                        $(".aside ul li").removeClass("activate")
+                        this_.addClass("activate")
+                        $(this).show()
+
+                    }
+                })
+            })
+            //上传图片
+            $("input[type='file']").change(function () {
+                var path = $(this).val()
+                var image = path.split("\\")
+                var filename = image[image.length - 1]
+                var start = filename.lastIndexOf(".")
+                var file_type = filename.substring(start, filename.length).toUpperCase()
+                var file = $(this).get(0).files[0];
+                //创建新文件对象
+                newfile = file;
+                var file_size = file.size;
+                var max_size = 1048576;
+                if (file_type != '.PNG' && file_type != '.GIF' && file_type != '.JPG' && file_type != '.JPEG') {
+                    $(".tooltip-userhome span").text('文件类型错误,请上传图片类型')
+                    $(".tooltip-userhome").slideDown(function () {
+                        setTimeout(function () {
+                            $(".tooltip-userhome").hide()
+                        }, 2000)
+
+                    })
+                    return false
+                } else if (parseInt(file_size) >= parseInt(max_size)) {
+                    $(".tooltip-userhome span").text('文件类型错误,请上传图片类型')
+                    $(".tooltip-userhome").slideDown(function () {
+                        setTimeout(function () {
+                            $(".tooltip-userhome").hide()
+                        }, 2000)
+
+                    })
+                    return false;
+                } else {
+                    //判断是否支持FileReader
+                    if (window.FileReader) {
+                        var reader = new FileReader();
+                    } else {
+                        $(".tooltip-userhome span").text('您的设备不支持图片预览功能，如需该功能请升级您的设备！')
+                        $(".tooltip-userhome").slideDown(function () {
+                            setTimeout(function () {
+                                $(".tooltip-userhome").hide()
+                            }, 2000)
+
+                        })
+                    }
+                    //读取完成
+                    reader.onload = function (e) {
+                        //获取图片dom
+                        var img = document.getElementById("preview");
+                        //图片路径设置为读取的图片
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+
+
+                console.log(file_size)
+            })
+            $(".btn-save").click(function () {
+                var formData = new FormData();
+                formData.append('file', newfile);  //添加图片信息的参数
+               {% comment %} $.ajax({
+                    url: '{% url 'blog:user_setting_base' %}',
+                    type: 'POST',
+                    cache: false, //上传文件不需要缓存
+                    data: formData,
+                    dataType: "JSON",
+                    processData: false, // 告诉jQuery不要去处理发送的数据
+                    contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+                    success: function (data) {
+                        if (data.code == "0") {
+                            $(".tooltip-userhome span").text('上传成功！')
+                            $(".tooltip-userhome").slideDown(function () {
+                                setTimeout(function () {
+                                    $(".tooltip-userhome").hide()
+                                }, 2000)
+
+                            })
+                        } else {
+                            $(".tooltip-userhome span").text('上传失败')
+                            $(".tooltip-userhome").slideDown(function () {
+                                setTimeout(function () {
+                                    $(".tooltip-userhome").hide()
+                                }, 2000)
+
+                            })
+                        }
+                    },
+                    error: function (data) {
+                        $(".tooltip-userhome span").text('上传失败')
+                        $(".tooltip-userhome").slideDown(function () {
+                            setTimeout(function () {
+                                $(".tooltip-userhome").hide()
+                            }, 2000)
+
+                        })
+                    }
+                }){% endcomment %}
+                $.ajax({
+                    url: '{% url 'blog:user_setting_base' %}',
+                    type: 'POST',
+                    data: $("form").serialize(),
+                    dataType: "JSON",
+                    success: function (data) {
+                        if (data.code == "0") {
+                            $(".tooltip-userhome span").text('上传成功！')
+                            $(".tooltip-userhome").slideDown(function () {
+                                setTimeout(function () {
+                                    $(".tooltip-userhome").hide()
+                                }, 2000)
+
+                            })
+                        } else {
+                            $(".tooltip-userhome span").text('上传失败')
+                            $(".tooltip-userhome").slideDown(function () {
+                                setTimeout(function () {
+                                    $(".tooltip-userhome").hide()
+                                }, 2000)
+
+                            })
+                        }
+                    },
+
+                })
+            })
+
+        })
+    </script>
+{% endblock %}

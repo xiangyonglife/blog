@@ -7,6 +7,8 @@ import collections
 from blog.utils import mongodb_con
 import socket
 import time
+import os
+from django.db.models import F
 
 
 # Create your views here.
@@ -141,6 +143,36 @@ def user_blog(request, user_name):
                   {'article': article, "data": data})
 
 
+def user_home(reqeust):
+    """
+    用户信息设置
+    :param reqeust:
+    :return:
+    """
+    return render(reqeust, "user_home.html")
+
+
+def user_setting_base(request):
+    """
+    用户基础设置
+    :param request:
+    :return:
+    """
+    file_obj = request.FILES.get('file')
+    nick_name = request.POST.get("nickName")
+    say = request.POST.get("say")
+    sex = request.POST.get("sex")
+    print(os.getcwd())
+    # file_path = os.path.join(os.getcwd() + '/blog/static/images', file_obj.name)
+    # with open(file_path, 'wb') as f:
+    #     for chunk in file_obj.chunks():
+    #         f.write(chunk)
+    user_name = request.session.get("user")
+    models.UserInfo.objects.filter(user__userName=user_name).update(userNickName=nick_name, userSay=say, userSex=sex)
+    text_json = {'code': '0', 'msg': '出错了'}
+    return HttpResponse(json.dumps(text_json))
+
+
 def user_blog_info(user):
     """
     加载用户博客信息
@@ -189,6 +221,10 @@ def article_view(func):
     def view(request, *args, **kwargs):
         print(kwargs)
         models.Article.objects.filter(articleUrl=kwargs['article_id']).update(articleClick=kwargs['view_count'] + 1)
+        user = models.Article.objects.filter(articleUrl=kwargs['article_id']).values("user").first()
+        user_info = models.UserInfo.objects.filter(user__userId=user["user"]).first()
+        user_info.userView = F('userView') + 1
+        user_info.save()
         return func(request, *args, **kwargs)
 
     return view
@@ -319,6 +355,10 @@ def new_article(request):
     article = {"parent_article_id": parent_article_id, 'title': title, 'title_html': title_html,
                'content': content_html, 'saveType': 0, "article_uid": uid, "status": 0, "user_id": user.userId}
     mongodb_con.article.insert(article)
+    user_name = request.session.get("user")
+    user_info = models.UserInfo.objects.filter(user__userName=user_name).first()
+    user_info.userArticle = F('userArticle') + 1
+    user_info.save()
     json_text = {'code': '0', 'msg': '创建文集成功'}
     return HttpResponse(json.dumps(json_text))
 
@@ -722,6 +762,7 @@ def article_comments(request):
 
     )
     models.Article.objects.filter(articleUrl=article_id).update(articleComment=int(comments_count) + 1)
+
     json_text = {'code': '0', 'msg': '成功返回'}
     return HttpResponse(json.dumps(json_text))
 

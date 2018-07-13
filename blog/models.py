@@ -25,7 +25,7 @@ class UserInfo(models.Model):
     user = models.ForeignKey(to='User', to_field='userId', on_delete=models.CASCADE)  # 用户id
     userInfoId = models.AutoField(primary_key=True)  # 自增id
     userPhone = models.BigIntegerField(null=True)  # 用户手机号
-    userSex = models.CharField(max_length=6, null=True)  # 用户性别
+    userSex = models.CharField(max_length=6, null=True)  # 用户性别 1男2女
     userQq = models.IntegerField(null=True)  # 用户QQ
     userEmail = models.EmailField(null=True)  # 用户邮箱
     userAddress = models.TextField(null=True)  # 用户地址
@@ -47,6 +47,7 @@ class UserInfo(models.Model):
     userFans = models.IntegerField(null=True, default=0)  # 用户粉丝
     userLike = models.IntegerField(null=True, default=0)  # 用户收获喜欢
     userArticle = models.IntegerField(null=True, default=0)  # 用户文章数
+    userNickName = models.CharField(max_length=10, null=True)  # 用户昵称
 
 
 class UserMark(models.Model):
