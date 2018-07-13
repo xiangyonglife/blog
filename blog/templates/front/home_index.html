@@ -12,29 +12,29 @@
     {% block style %}{% endblock %}
 </head>
 <body>
-    <header class="site-header">
-        <div id="header" class="navbar fixed-nav fixed-appear">
+<header class="site-header">
+    <div id="header" class="navbar fixed-nav fixed-appear">
         <nav id="top-header">
             <div class="top-nav">
                 <div class="menu-container">
                     <ul class="top-menu">
-                        {% if login %}
+                        {% if request.session.is_sign %}
                             <li>
                                 <i class="fa fa-user"></i>欢迎
-                                <a href="" title="资料编辑">{{ user }}</a>&nbsp;
+                                <a href="" title="资料编辑">{{ request.session.user }}</a>&nbsp;
                                 <i class="fa fa-gear"></i>
-                                <a target="_blank" href="{% url 'blog:userHome' %}">我的主页</a>&nbsp;
+                                <a target="_blank" href="{% url 'blog:user_blog' request.session.user %}">我的博客</a>&nbsp;
                                 <i class="fa fa-edit"></i>
                                 <a href="{% url 'blog:write' %}" title="文章管理"
                                    target="_blank">写文章</a>&nbsp;<i class="fa fa-sign-out"></i>
                                 <a href="{% url 'blog:out' %}">登出</a>
                             </li>
-                            {% else %}
-                                <li>
-                                    <i class="fa fa-github-square"></i>您好，欢迎到访向勇个人博客!
-                                    <a href="{% url 'blog:in' %}" target="_blank">登录</a>&nbsp;
-                                     <a href="{% url 'blog:up' %}" target="_blank">注册</a>
-                                </li>
+                        {% else %}
+                            <li>
+                                <i class="fa fa-github-square"></i>您好，欢迎到访向勇个人博客!
+                                <a href="{% url 'blog:in' %}" target="_blank">登录</a>&nbsp;
+                                <a href="{% url 'blog:up' %}" target="_blank">注册</a>
+                            </li>
                         {% endif %}
 
 
@@ -117,7 +117,8 @@
             <div class="nav-sousuo">
                 <div class="mini_search">
                     <form name="search" class="searchform" method="post" action="">
-                        <input class="searchInput" type="text" name="q" size="11" placeholder="请输入搜索内容..." value=""  id="ls">
+                        <input class="searchInput" type="text" name="q" size="11" placeholder="请输入搜索内容..." value=""
+                               id="ls">
                         <button type="submit" class="btn-search dtb2" value=""><i class="fa fa-search"></i></button>
                     </form>
                 </div>
@@ -127,7 +128,8 @@
                 <aside class="mobile_aside mobile_nav">
                     <div class="mobile-menu">
                         <ul id="nav" class="nav-pills">
-                            <li id="nvabar-item-index"><a href="{% url 'blog:index' %}" class="on"><i class="fa fa-home"></i>首页</a></li>
+                            <li id="nvabar-item-index"><a href="{% url 'blog:index' %}" class="on"><i
+                                    class="fa fa-home"></i>首页</a></li>
                             <li id="navbar-category-5"><a href=""><i class="fa fa-cloud"></i>互联网</a></li>
                             <li id="navbar-category-1"><a href=""><i class="fa fa-recycle"></i>新鲜科技</a></li>
                             <li id="navbar-category-6" class="menu-item-has-children">
@@ -163,33 +165,54 @@
                     </div>
                 </aside>
             </div>
+            <div class="login-ico">
+                {% if request.session.is_sign %}
+                    <img src="{% static 'images/userImage.png' %}">
+                    <ul class="userControl">
+                        <Li>
+                            <a href="{% url 'blog:user_blog' request.session.user %}">我的博客</a>
+                        </Li>
+                        <li>
+                            <a >账号设置</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'blog:out' %}">退出</a>
+                        </li>
+                    </ul>
+                {% else %}
+                    <div>
+                        <a style="font-size: 18px" href="{% url 'blog:in' %}" >登录</a>
+                    </div>
+                {% endif %}
+
+            </div>
         </div>
     </div>
-    </header>
-    <div class="container-fluid home-fluid">
-            <div class="site-content">
-                <!--轮播广告-->
-                    <nav class="gonggao navcates">
-                        <div class="bull"><i class="fa fa-volume-up"></i></div>
-                        <div id="callboard">
-                            <ul class="menu" style="margin-top: 0px;">
-                                 <li>
-                                     <a href="" style="    color:#D34A2C;" title="应政策要求，10月1日起博客评论将启用审核功能，接入实名验证后再取消审核功能。">
-                                         应政策要求，10月1日起博客评论将启用审核功能，接入实名验证后再取消审核功能。
-                                     </a>
-                                 </li>
-                                <li>
-                                    <a href="" title="购买林文正姿送Z-blogPHP主题啦，仅限10套，欲购从速（剩余：5套）">
-                                        购买林文正姿送Z-blogPHP主题啦，仅限10套，欲购从速（剩余：4套）
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                    <div class="site-main">
-                        <!-- 幻灯片-->
+</header>
+<div class="container-fluid home-fluid">
+    <div class="site-content">
+        <!--轮播广告-->
+        <nav class="gonggao navcates">
+            <div class="bull"><i class="fa fa-volume-up"></i></div>
+            <div id="callboard">
+                <ul class="menu" style="margin-top: 0px;">
+                    <li>
+                        <a href="" style="    color:#D34A2C;" title="应政策要求，10月1日起博客评论将启用审核功能，接入实名验证后再取消审核功能。">
+                            应政策要求，10月1日起博客评论将启用审核功能，接入实名验证后再取消审核功能。
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" title="购买林文正姿送Z-blogPHP主题啦，仅限10套，欲购从速（剩余：5套）">
+                            购买林文正姿送Z-blogPHP主题啦，仅限10套，欲购从速（剩余：4套）
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="site-main">
+            <!-- 幻灯片-->
 
-                       {% comment %} <div class="content-wrap left">
+            {% comment %} <div class="content-wrap left">
                             <div class="slide-main">
                                 <!-- 幻灯片-->
                                 <div class="swiper-container swiper-home swiper-container-horizontal">
@@ -210,105 +233,46 @@
                             </div>
                         </div>{% endcomment %}
 
-                        {% block template%}{% endblock %}
-                    </div>
+            {% block template %}{% endblock %}
+        </div>
 
-                    <!--侧栏-->
-                    <aside class="sidebar-right" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 0px;">
-                          <div class="theiaStickySidebar">
-                                <div class="widget-box widget" id="zzxx-box">
-                                         <div class="topauthor">
-                                                <img alt="博客主人：非李莫属" src="https://www.talklee.com/zb_users/avatar/1.png" class="avatar-photo" title="非李莫属" height="100" width="100">
-                                                <span class="intag" title="非李莫属">博 主：</span>
-                                                <span class="names">
-                                                    <a href="https://www.talklee.com/author-1.html" title="查看 非李莫属 发布的文章" rel="author">非李莫属</a>
-                                                </span>
-                                                <span class="talk">李洋个人博客，是一个记录自己生活点滴、互联网技术的原创独立博客（Talklee.Com）。</span>
-                                        </div>
-                                         <ul>
-                                                <li class="tsina">
-                                                    <a title="新浪微博" rel="nofollow" href="http://weibo.com/523912300/" target="_blank">
-                                                        <i class="fa fa-weibo"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="weixin"><a title="微信">
-                                                    <i class="fa fa-weixin"></i>
-                                                    <span style="background-image:url(https://www.talklee.com/zb_users/theme//talklee/style/images/wxlogo_example.png);"></span>
-                                                </a>
-                                                </li>
-                                                <li class="tqq">
-                                                    <a title="QQ临时对话" rel="nofollow" href="//wpa.qq.com/msgrd?v=3&amp;uin=229693666&amp;site=qq&amp;menu=yes" target="blank">
-                                                        <i class="fa fa-qq"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="feed">
-                                                    <a title="主题交流群" href="https://shang.qq.com/wpa/qunwpa?idkey=c30722f3c9cba68d73b80ad8635ba992a9f29a0eeb127c3b789f5d4e668a6552" rel="nofollow" target="_blank">
-                                                        <i class="fa fa-users"></i>
-                                                    </a>
-                                                </li>
-                                         </ul>
-                                         <div class="butauthor ">
-                                                  <span class="bignum pn">浏览 977196 次</span>
-                                                  <span class="bignum">留言 1392 条</span>
-                                         </div>
-                               </div>
-                                <div class="widget-box widget" id="tabcelan">
-                                         <ul class="widget-content tabcelan">
-                                                <li id="con_title" class="con_post_title">
-                                                    <ul id="tab">
-                                                        <li id="one1" class="tabhover">推荐</li>
-                                                        <li id="one2">热门</li>
-                                                        <li id="one3">热评</li>
-                                                    </ul>
-                                                </li>
-                                                <li id="con_one" class="con_one_list">
-                                                        <ul id="con_one_1" style="display:block;">
-                                                                <li>
-                                                                    <span class="li-icon li-icon-1">1</span>
-                                                                    <a href="https://www.talklee.com/blog/279.html" title="李洋博客《mxlee》zblog主题-梦想家（重大更新，必看）">李洋博客《mxlee》zblog主题-梦想家（重大更新，必看）</a>
-                                                                </li>
-                                                                <li>
-                                                                    <span class="li-icon li-icon-2">2</span>
-                                                                    <a href="https://www.talklee.com/blog/254.html" title="Brieflee主题-把最好的送给你（9月更新）">Brieflee主题-把最好的送给你（9月更新）</a>
-                                                                </li>
-                                                                <li>
-                                                                    <span class="li-icon li-icon-3">3</span>
-                                                                    <a href="https://www.talklee.com/blog/248.html" title="别让近视毁了你的孩子-林文正姿笔（剩余4套）">别让近视毁了你的孩子-林文正姿笔（剩余4套）</a>
-                                                                </li>
-                                                                <li>
-                                                                    <span class="li-icon li-icon-4">4</span>
-                                                                    <a href="https://www.talklee.com/blog/290.html" title="Z-blogPHP常见问题答疑">Z-blogPHP常见问题答疑</a>
-                                                                </li>
-                                                         </ul>
-                                                </li>
-                                         </ul>
-                                </div>
-                          </div>
-                    </aside>
-            </div>
+        <!--侧栏-->
+        {% block side %}{% endblock %}
     </div>
-    <footer class="footer">
-	     <div class="container">
-		<p>© 2018 <a href="http://jspang.com">技术胖-胜洪宇关注web前端技术</a>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p>© 2018 <a href="http://jspang.com">技术胖-胜洪宇关注web前端技术</a>
             &nbsp; <a href="http://jspang.com/sitemap.xml">网站地图</a>
         </p>
     </div>
-    </footer>
-    <div id="backtop" class="backtop">
-          <div class="bt-box tnrt">
-                <a href="javascript:translatePage();" id="zh_big">繁</a></div>
-          <div class="bt-box weixin">
-                <i class="fa fa-weixin fa-2x"></i>
-                <img class="pic" src="https://www.talklee.com/zb_users/theme//talklee/style/images/wxlogo_example.png" alt="微信二维码">
-          </div>
-          <div class="bt-box top" style="display: block;">
-                <i class="fa fa-angle-up fa-2x"></i>
-          </div>
+</footer>
+<div id="backtop" class="backtop">
+    <div class="bt-box tnrt">
+        <a href="javascript:translatePage();" id="zh_big">繁</a></div>
+    <div class="bt-box weixin">
+        <i class="fa fa-weixin fa-2x"></i>
+        <img class="pic" src="https://www.talklee.com/zb_users/theme//talklee/style/images/wxlogo_example.png"
+             alt="微信二维码">
     </div>
+    <div class="bt-box top" style="display: block;">
+        <i class="fa fa-angle-up fa-2x"></i>
+    </div>
+</div>
 </body>
 <script src="{% static 'frame/jquery/dist/jquery.js' %}"></script>
 <script>
     $(function () {
+        $(".login-ico").hover(function () {
+            if($(this).find(".userControl").is("ul")){
+                $(this).find(".userControl").show()
+                $(this).addClass("login-hover")
+            }
+        }, function () {
+            $(this).find(".userControl").hide()
+            $(this).removeClass("login-hover")
+
+        })
         $(".nav-sjlogo i").click(function () {
             $(".mobile_aside").slideToggle(),
                 $(".header-nav").removeClass("header-nav")
@@ -338,7 +302,6 @@
     })
 </script>
 {% block script %}{% endblock %}
-
 
 
 </html>

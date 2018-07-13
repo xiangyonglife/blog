@@ -339,6 +339,7 @@
                                     $(this_).parents('.no_webshot').hide()
                                     $(this_).parents('.no_webshot').next().prepend(template)
                                     $("#comments  b").text(parseInt(comment_count) + 1)
+                                    $("#respond").show()
                                 }
                             }
                         }
@@ -401,7 +402,8 @@
          .commentlist {
              padding: 0;
              list-style: none;
-             margin: 0
+             margin: 0;
+             margin-left: 10px;
          }
 
          .comt-avatar {

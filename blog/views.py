@@ -6,9 +6,12 @@ import pickle
 import collections
 from blog.utils import mongodb_con
 import socket
+import time
 
 
 # Create your views here.
+
+
 def index(request):
     """
     首页
@@ -17,14 +20,47 @@ def index(request):
     """
     # 获取当前用户随机字符串
     # 根据随机字符串获取对应信息
-    login = request.session.get('is_sign')
-    user = request.session.get('user')
-    article = models.Article.objects.all().filter(status=0, saveType__gt=1)  # 加载所有文章
+    # login = request.session.get('is_sign')
+    # user = request.session.get('user')
+    article = models.Article.objects.filter(status=0, saveType__gt=1).all()[0:4]  # 加载所有文章
     article_blog_category = models.ArticleBlogCategory.objects.all()  # 加载所有一级栏目
+    user = models.User.objects.filter(userName='admin').first()
+    data = user_blog_info(user)
     # request.session.clear_expired() 江所有session失效日期小于当前日期删除
     # request.session.clear() #注销的时候使用
+    # 加载图文推荐
+    article_tj = models.Article.objects.filter(status=0, saveType__gt=1).all()[Page.offset:Page.limit]  # 加载所有文章
+    if article_tj:
+        Page.offset = Page.limit
+        Page.limit = Page.limit + 4
+    else:
+        Page.offset = 0
+        Page.limit = 4
+        article_tj = models.Article.objects.filter(status=0, saveType__gt=1).all()[Page.offset:Page.limit]
+
     return render(request, 'home_main.html',
-                  {'login': login, 'user': user, "article": article, "article_blog_category": article_blog_category})
+                  {"article": article, "article_blog_category": article_blog_category, "data": data,
+                   "article_tj": article_tj})
+
+
+def article_page(request):
+    offset = request.GET.get("offset")
+    limit = request.GET.get("limit")
+    article = models.Article.objects.filter(status=0, saveType__gt=1).all()[int(offset):int(limit)]  # 加载所有文章
+    article_list = list()
+    for item in article:
+        c = item.__dict__
+
+        b = item.user.__dict__
+
+        c['user'] = b
+        c.pop("_state")
+        c["articleTime"] = c["articleTime"].strftime("%Y-%m-%d")
+        c['user'].pop("_state")
+        article_list.append(c)
+
+    text_json = {'code': '0', 'msg': '', 'data': article_list}
+    return HttpResponse(json.dumps(text_json))
 
 
 def index_bar(request):
@@ -89,16 +125,52 @@ def login(request):
         return HttpResponse(json.dumps(text_json))
 
 
-def user_index(request):
+def user_blog(request, user_name):
     """
     用户主页
     :param request:
     :return:
     """
-    user_ = request.session.get('user')
-    user = models.User.objects.filter(userName=user_).first()
-    article = models.Article.objects.filter(user_id=user.userId, saveType__gt=1, status=0).all()  # 加载所有文章
-    return render(request, 'user_main.html', {'article': article, "blog_category": 2})
+    user = models.User.objects.filter(userName=user_name).first()
+    # 加载所有文章
+    article = models.Article.objects.filter(user_id=user.userId, saveType__gt=1, status=0)
+
+    data = user_blog_info(user)
+
+    return render(request, 'user_blog.html',
+                  {'article': article, "data": data})
+
+
+def user_blog_info(user):
+    """
+    加载用户博客信息
+    :param user:
+    :return:
+    """
+    # 加载热门文章
+    article_hot = models.Article.objects.filter(user_id=user.userId, saveType__gt=1, status=0).order_by(
+        '-articleClick').values(
+        "articleName", "articleUrl", "articleClick")[0:9]
+    # 加载热评文章
+    article_hot_comment = models.Article.objects.filter(user_id=user.userId, saveType__gt=1, status=0).order_by(
+        '-articleComment').values(
+        "articleName", "articleUrl", "articleClick")[0:9]
+
+    # 所有文集
+    article_wj = models.ArticleCategory.objects.filter(user_id=user.userId, status=0).all()
+
+    # 加载最新文章
+    article_wz = models.Article.objects.filter(user_id=user.userId, saveType__gt=1, status=0).order_by(
+        "-articleTime").values("articleName", "articleUrl", "articleClick")[0:9]
+
+    # 用户信息
+    user_info = models.UserInfo.objects.filter(user_id=user.userId).values("userMark", "userArticle", "userSay",
+                                                                           "userView",
+                                                                           "userComment",
+                                                                           "userFans", "userLike").first()
+    data = {"article_hot": article_hot, "article_hot_comment": article_hot_comment,
+            "article_wj": article_wj, "user_info": user_info, "article_wz": article_wz}
+    return data
 
 
 # 用户装饰器
@@ -110,6 +182,16 @@ def auth(func):
         return func(request, *args, **kwargs)
 
     return inner
+
+
+# 文章浏览请求拦截
+def article_view(func):
+    def view(request, *args, **kwargs):
+        print(kwargs)
+        models.Article.objects.filter(articleUrl=kwargs['article_id']).update(articleClick=kwargs['view_count'] + 1)
+        return func(request, *args, **kwargs)
+
+    return view
 
 
 def logout(request):
@@ -569,7 +651,8 @@ def load_article_tag_category(request):
     return HttpResponse(json.dumps(json_text))
 
 
-def article_detail(request, article_id):
+@article_view
+def article_detail(request, article_id, view_count):
     """
     文章详情
     :return:
@@ -698,3 +781,8 @@ def session(request):
     # print(obj)
     print('11111111')
     return render(request, 'login/login.html')
+
+
+class Page(object):
+    limit = 4
+    offset = 0

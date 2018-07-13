@@ -42,6 +42,11 @@ class UserInfo(models.Model):
     userWeiBo = models.URLField(null=True)  # 用户微博
     userBloodType = models.CharField(max_length=6, null=True)  # 用户血型
     userSay = models.TextField(null=True)  # 用户语录
+    userView = models.IntegerField(null=True, default=0)  # 用户访问数
+    userComment = models.IntegerField(null=True, default=0)  # 用户评论数
+    userFans = models.IntegerField(null=True, default=0)  # 用户粉丝
+    userLike = models.IntegerField(null=True, default=0)  # 用户收获喜欢
+    userArticle = models.IntegerField(null=True, default=0)  # 用户文章数
 
 
 class UserMark(models.Model):
@@ -169,7 +174,7 @@ class Comment(models.Model):
     commentArticle = models.ForeignKey(to='Article', to_field='articleUrl', on_delete=models.CASCADE,
                                        null=True)  # 评论文章id
     commentUUID = models.CharField(null=True, unique=True, max_length=100)  # 用户评论uuid
-    parentsComment = models.ForeignKey('self', to_field='commentUUID', on_delete=models.CASCADE,null=True)  # 父评论id
+    parentsComment = models.ForeignKey('self', to_field='commentUUID', on_delete=models.CASCADE, null=True)  # 父评论id
 
     class Meta:  # 注意，是模型的子类，要缩进！  根据这些进行进一步删选
         ordering = ["-commentId"]
